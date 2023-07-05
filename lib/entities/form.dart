@@ -11,8 +11,8 @@ class GForm {
 
   Map<String, dynamic> toMap() {
     Map<String, dynamic> res = {};
-    res['info'] = {'title': title, 'description': description};
-    res['items'] = questions?.map((e) => {'title': 'test', 'description': 'test2', 'questionItem': e.toMap()}).toList();
+    res['info'] = {'title': title};
+    //res['items'] = questions?.map((e) => {'title': 'test', 'description': 'test2', 'questionItem': e.toMap()}).toList();
     return res;
   }
 }

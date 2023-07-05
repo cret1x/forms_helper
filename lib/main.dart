@@ -1,35 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:firedart/firedart.dart';
-import 'package:forms_helper/entities/answer.dart';
 import 'package:forms_helper/entities/form.dart';
-import 'package:forms_helper/entities/question.dart';
-import 'package:forms_helper/google_api/api.dart';
-import 'package:googleapis_auth/auth_io.dart';
-import 'package:http/http.dart' as http;
-import 'package:url_launcher/url_launcher.dart';
+import 'package:forms_helper/google_api/auth.dart';
+import 'package:forms_helper/google_api/forms.dart';
 
-void _launchAuthInBrowser(String url) async {
-  print(url);
-  await launchUrl(Uri.parse(url));
-}
-
-void loginWithDesktop() async {
-  var id = ClientId(
-    "120174249921-0r8bghb3a89v2j3g729ka7mq1h6bgccm.apps.googleusercontent.com",
-    "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",
-  );
-  var scopes = [
-    'https://www.googleapis.com/auth/forms.body',
-  ];
-  final client = http.Client();
-  final r = await obtainAccessCredentialsViaUserConsent(id, scopes, client, (url) => _launchAuthInBrowser(url));
-  print(r.idToken);
-  print(r.accessToken.data);
-  final api = GoogleFormsApi(url: "https://forms.googleapis.com/v1/forms", token: r.accessToken.data);
-  final f = GForm(title: "Test1", description: "Desc 1");
-  await api.create(f);
-  client.close();
-}
 
 void main() {
   //Firestore.initialize("formshelper-f0d02");
@@ -61,6 +34,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final api = GoogleFormsApi(url: "https://forms.googleapis.com/v1/forms");
+  final auth = GoogleAuthApi();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,8 +45,10 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
         child: ElevatedButton(
-          onPressed: () {
-            loginWithDesktop();
+          onPressed: () async {
+            final f = GForm(title: "Test1", description: "Desc 1");
+            final token = await auth.getAccessToken();
+            await api.create(f, token);
           },
           child: const Text("AUTH GOOGLE"),
         ),

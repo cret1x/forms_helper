@@ -41,6 +41,7 @@ dependencies:
   googleapis_auth: ^1.4.1
   firebase_core: ^2.14.0
   easy_sidemenu: ^0.4.2
+  path_provider: ^2.0.15
 
 dev_dependencies:
   flutter_test:
