@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:forms_helper/entities/answer.dart';
 import 'package:forms_helper/entities/form.dart';
+import 'package:forms_helper/entities/question.dart';
 import 'package:forms_helper/google_api/auth.dart';
 import 'package:forms_helper/google_api/forms.dart';
 import 'package:forms_helper/screens/home.dart';
 
 import 'common/themes.dart';
-
 
 void main() {
   //Firestore.initialize("formshelper-f0d02");
@@ -43,20 +44,59 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        theme: Themes.darkBlue,
-        home: Scaffold(
-          body: Center(
-            child: ElevatedButton(
-              onPressed: () async {
-                final f = GForm(title: "Test1", description: "Desc 1");
-                final token = await auth.getAccessToken();
-                //await api.create(f, token);
-                Navigator.push(context, MaterialPageRoute(builder: (_) => HomeWidget()));
-              },
-              child: const Text("AUTH GOOGLE"),
-            ),
+      theme: Themes.darkBlue,
+      home: Scaffold(
+        body: Center(
+          child: Column(
+            children: [
+              ElevatedButton(
+                onPressed: () async {
+                  final token = await auth.getAccessToken();
+                  Navigator.push(
+                      context, MaterialPageRoute(builder: (_) => HomeWidget()));
+                },
+                child: const Text("AUTH GOOGLE"),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  final token = await auth.getAccessToken();
+                  final a = Answer(value: 'A');
+                  final b = Answer(value: 'B');
+                  final c = Answer(value: 'C');
+                  final d = Answer(value: 'D');
+                  final e = Answer(value: 'E');
+                  final f = Answer(value: 'F');
+                  final q1 = Question(
+                      title: 'First',
+                      description: 'Desc 1',
+                      required: true,
+                      shuffle: true,
+                      pointValue: 1,
+                      answers: [a, b, c],
+                      correctAnswers: [a],
+                      type: QuestionType.RADIO);
+                  final q2 = Question(
+                      title: 'Second',
+                      description: 'Desc 2',
+                      required: true,
+                      shuffle: false,
+                      pointValue: 2,
+                      answers: [d, e, f],
+                      correctAnswers: [d, e],
+                      type: QuestionType.CHECKBOX);
+                  final form = GForm(
+                      title: "Test3",
+                      description: "Description",
+                      documentTitle: "Flutter Form",
+                      questions: [q1, q2]);
+                  api.create(form, token);
+                },
+                child: const Text("TEST CREATE"),
+              ),
+            ],
           ),
         ),
+      ),
     );
   }
 }

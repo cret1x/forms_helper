@@ -4,8 +4,14 @@ class Answer {
   Answer({required this.value});
 
   Map<String, dynamic> toMap() {
-    Map<String, dynamic> res = {};
-    res['value'] = value;
-    return res;
+    return {'value': value};
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (other is Answer) {
+      return value == other.value;
+    }
+    return false;
   }
 }

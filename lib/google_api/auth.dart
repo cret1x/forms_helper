@@ -71,8 +71,7 @@ class GoogleAuthApi {
     final client = http.Client();
     final r = await obtainAccessCredentialsViaUserConsent(id, scopes, client, (url) => _launchInBrowser(url));
     if (r.refreshToken != null) {
-      final success = await _saveCredentials(r);
-      print(success);
+      await _saveCredentials(r);
       return r.accessToken.data; 
     }
     client.close();
