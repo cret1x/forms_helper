@@ -1,18 +1,32 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:forms_helper/screens/side_menu.dart';
+
+import '../common/themes.dart';
 
 class HomeWidget extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return HomeState();
+    return _HomeState();
   }
 
 }
 
-class HomeState extends State<HomeWidget> {
+class _HomeState extends State<HomeWidget> {
+  final PageController _controller = PageController();
+
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return MaterialApp(
+      theme: Themes.darkBlue,
+      home: Scaffold(
+        body: Row(
+          children: [
+            MenuWidget(_controller),
+            Column(),
+          ],
+        ),
+      ),
+    );
   }
   
 }

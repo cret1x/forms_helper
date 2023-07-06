@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:forms_helper/entities/form.dart';
 import 'package:forms_helper/google_api/auth.dart';
 import 'package:forms_helper/google_api/forms.dart';
+import 'package:forms_helper/screens/home.dart';
+
+import 'common/themes.dart';
 
 
 void main() {
@@ -39,20 +42,21 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () async {
-            final f = GForm(title: "Test1", description: "Desc 1");
-            final token = await auth.getAccessToken();
-            await api.create(f, token);
-          },
-          child: const Text("AUTH GOOGLE"),
+    return MaterialApp(
+        theme: Themes.darkBlue,
+        home: Scaffold(
+          body: Center(
+            child: ElevatedButton(
+              onPressed: () async {
+                final f = GForm(title: "Test1", description: "Desc 1");
+                final token = await auth.getAccessToken();
+                //await api.create(f, token);
+                Navigator.push(context, MaterialPageRoute(builder: (_) => HomeWidget()));
+              },
+              child: const Text("AUTH GOOGLE"),
+            ),
+          ),
         ),
-      ),
     );
   }
 }
