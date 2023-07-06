@@ -44,6 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      restorationScopeId: "desktop-demo1",
       theme: Themes.darkBlue,
       home: Scaffold(
         body: Center(
