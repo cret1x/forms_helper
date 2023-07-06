@@ -4,6 +4,11 @@ class Themes {
   static ThemeData darkBlue = ThemeData(
       primaryColor: Colors.orange,
       scaffoldBackgroundColor: Color.fromRGBO(59, 63, 82, 1),
+      textTheme: const TextTheme(
+          titleMedium: TextStyle(
+              fontFamily: 'Veranda',
+          )
+      ),
       colorScheme: ColorScheme(
           brightness: Brightness.dark,
           primary: Colors.orange,

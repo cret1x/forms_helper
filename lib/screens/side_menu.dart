@@ -30,7 +30,7 @@ class _MenuWidgetState extends State<MenuWidget> {
         itemInnerSpacing: 12,
         itemOuterPadding: EdgeInsets.all(0),
         backgroundColor: Theme.of(context).colorScheme.surface,
-        openSideMenuWidth: 200,
+        openSideMenuWidth: 250,
         selectedColor: Color.fromRGBO(59, 63, 82, 1),
         hoverColor: Color.fromRGBO(59, 63, 82, 0.4),
         displayMode: SideMenuDisplayMode.auto,
