@@ -8,6 +8,7 @@ import 'package:forms_helper/screens/home.dart';
 
 import 'common/themes.dart';
 
+//TODO: set minimum window size
 void main() {
   //Firestore.initialize("formshelper-f0d02");
   runApp(const MyApp());
