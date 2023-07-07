@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:forms_helper/screens/construct.dart';
 import 'package:forms_helper/screens/side_menu.dart';
 
 import '../common/themes.dart';
@@ -28,7 +29,7 @@ class _HomeState extends State<HomeWidget> {
                 children: [
                   Container(color: Colors.red,),
                   Container(color: Colors.blue,),
-                  Container(color: Colors.yellow,),
+                  FormConstructor(),
                   Container(color: Colors.green,),
                   Container(color: Colors.orange,),
                 ],
