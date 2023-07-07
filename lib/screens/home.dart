@@ -22,7 +22,18 @@ class _HomeState extends State<HomeWidget> {
         body: Row(
           children: [
             MenuWidget(_controller),
-            Column(),
+            Expanded(
+              child: PageView(
+                controller: _controller,
+                children: [
+                  Container(color: Colors.red,),
+                  Container(color: Colors.blue,),
+                  Container(color: Colors.yellow,),
+                  Container(color: Colors.green,),
+                  Container(color: Colors.orange,),
+                ],
+              ),
+            )
           ],
         ),
       ),

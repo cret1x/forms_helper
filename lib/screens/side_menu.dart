@@ -43,31 +43,46 @@ class _MenuWidgetState extends State<MenuWidget> {
         SideMenuItem(
           priority: 0,
           title: Strings.import,
-          onTap: (index, _) => _sideMenuController.changePage(index),
+          onTap: (index, _) {
+            _sideMenuController.changePage(index);
+            widget._pageController.jumpToPage(index);
+          },
           icon: const Icon(Icons.download),
         ),
         SideMenuItem(
           priority: 1,
           title: Strings.storage,
-          onTap: (index, _) => _sideMenuController.changePage(index),
+          onTap: (index, _) {
+            _sideMenuController.changePage(index);
+            widget._pageController.jumpToPage(index);
+          },
           icon: const Icon(Icons.storage),
         ),
         SideMenuItem(
           priority: 2,
           title: Strings.construct,
-          onTap: (index, _) => _sideMenuController.changePage(index),
+          onTap: (index, _) {
+            _sideMenuController.changePage(index);
+            widget._pageController.jumpToPage(index);
+          },
           icon: const Icon(Icons.construction),
         ),
         SideMenuItem(
           priority: 3,
           title: Strings.export,
-          onTap: (index, _) => _sideMenuController.changePage(index),
+          onTap: (index, _) {
+            _sideMenuController.changePage(index);
+            widget._pageController.jumpToPage(index);
+          },
           icon: const Icon(Icons.upload),
         ),
         SideMenuItem(
           priority: 4,
           title: Strings.settings,
-          onTap: (index, _) => _sideMenuController.changePage(index),
+          onTap: (index, _) {
+            _sideMenuController.changePage(index);
+            widget._pageController.jumpToPage(index);
+          },
           icon: const Icon(Icons.settings),
         ),
       ],
