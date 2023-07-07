@@ -5,11 +5,12 @@ import 'package:forms_helper/screens/side_menu.dart';
 import '../common/themes.dart';
 
 class HomeWidget extends StatefulWidget {
+  const HomeWidget({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _HomeState();
   }
-
 }
 
 class _HomeState extends State<HomeWidget> {
@@ -40,5 +41,4 @@ class _HomeState extends State<HomeWidget> {
       ),
     );
   }
-  
 }

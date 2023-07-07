@@ -12,11 +12,12 @@ class FormConstructor extends StatefulWidget {
   }
 }
 
-class _FormConstructorState extends State<FormConstructor> {
+class _FormConstructorState extends State<FormConstructor> with AutomaticKeepAliveClientMixin<FormConstructor> {
   final TextEditingController _editingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return MaterialApp(
       theme: Themes.darkBlue,
       home: Padding(
@@ -100,4 +101,7 @@ class _FormConstructorState extends State<FormConstructor> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
