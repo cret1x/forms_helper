@@ -30,7 +30,7 @@ class _HomeState extends State<HomeWidget> {
                 children: [
                   Container(color: Colors.red,),
                   Container(color: Colors.blue,),
-                  FormConstructor(),
+                  const FormConstructor(),
                   Container(color: Colors.green,),
                   Container(color: Colors.orange,),
                 ],
