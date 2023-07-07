@@ -33,7 +33,7 @@ class _MenuWidgetState extends State<MenuWidget> {
         openSideMenuWidth: 250,
         selectedColor: Color.fromRGBO(59, 63, 82, 1),
         hoverColor: Color.fromRGBO(59, 63, 82, 0.4),
-        displayMode: SideMenuDisplayMode.auto,
+        displayMode: SideMenuDisplayMode.compact,
         unselectedIconColor: Theme.of(context).colorScheme.onSurface,
         selectedIconColor: Theme.of(context).colorScheme.onSurface,
         selectedTitleTextStyle: Theme.of(context).textTheme.titleMedium,
@@ -42,51 +42,37 @@ class _MenuWidgetState extends State<MenuWidget> {
       items: [
         SideMenuItem(
           priority: 0,
-          title: Strings.import,
-          onTap: (index, _) {
-            _sideMenuController.changePage(index);
-            widget._pageController.jumpToPage(index);
-          },
+          onTap: _itemFunc,
           icon: const Icon(Icons.download),
         ),
         SideMenuItem(
           priority: 1,
-          title: Strings.storage,
-          onTap: (index, _) {
-            _sideMenuController.changePage(index);
-            widget._pageController.jumpToPage(index);
-          },
+          onTap: _itemFunc,
           icon: const Icon(Icons.storage),
         ),
         SideMenuItem(
           priority: 2,
-          title: Strings.construct,
-          onTap: (index, _) {
-            _sideMenuController.changePage(index);
-            widget._pageController.jumpToPage(index);
-          },
+          onTap: _itemFunc,
           icon: const Icon(Icons.construction),
         ),
         SideMenuItem(
           priority: 3,
-          title: Strings.export,
-          onTap: (index, _) {
-            _sideMenuController.changePage(index);
-            widget._pageController.jumpToPage(index);
-          },
+          onTap: _itemFunc,
           icon: const Icon(Icons.upload),
         ),
         SideMenuItem(
           priority: 4,
-          title: Strings.settings,
-          onTap: (index, _) {
-            _sideMenuController.changePage(index);
-            widget._pageController.jumpToPage(index);
-          },
+          onTap: _itemFunc,
           icon: const Icon(Icons.settings),
         ),
       ],
       controller: _sideMenuController,
     );
   }
+
+  void _itemFunc(int index, SideMenuController controller) {
+    controller.changePage(index);
+    widget._pageController.jumpToPage(index);
+  }
 }
+
