@@ -12,12 +12,14 @@ class StorageWidget extends StatefulWidget {
   }
 }
 
-class _StorageWidgetState extends State<StorageWidget> {
+class _StorageWidgetState extends State<StorageWidget>
+    with AutomaticKeepAliveClientMixin<StorageWidget> {
   final TextEditingController _controller = TextEditingController();
   String? _dropdownValue;
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return MaterialApp(
       theme: Themes.darkBlue,
       home: Padding(
@@ -126,4 +128,7 @@ class _StorageWidgetState extends State<StorageWidget> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
