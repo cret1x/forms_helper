@@ -1,6 +1,6 @@
 import 'package:forms_helper/entities/answer.dart';
 
-enum QuestionType {RADIO, CHECKBOX, DROP_DOWN}
+enum QuestionType { RADIO, CHECKBOX, DROP_DOWN }
 
 class Question {
   final String title;
@@ -45,5 +45,33 @@ class Question {
       },
     };
     return questionJson;
+  }
+
+  factory Question.fromJson(Map<String, dynamic> json) {
+    String title = json['title'];
+    String desc = json['description'];
+    bool required = json['questionItem']['question']['required'];
+    int pointValue = json['questionItem']['question']['grading']['pointValue'];
+    List<Answer> correctAnswers = (json['questionItem']['question']['grading']
+            ['correctAnswers']['answers'] as Iterable)
+        .map((e) => Answer(value: e['value']))
+        .toList();
+    QuestionType type = QuestionType.values
+        .byName(json['questionItem']['question']['choiceQuestion']['type']);
+    List<Answer> answers = (json['questionItem']['question']['choiceQuestion']
+            ['options'] as Iterable)
+        .map((e) => Answer(value: e['value']))
+        .toList();
+    bool shuffle =
+        json['questionItem']['question']['choiceQuestion']['shuffle'] ?? false;
+    return Question(
+        title: title,
+        description: desc,
+        required: required,
+        shuffle: shuffle,
+        pointValue: pointValue,
+        answers: answers,
+        correctAnswers: correctAnswers,
+        type: type);
   }
 }

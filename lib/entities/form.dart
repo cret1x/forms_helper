@@ -12,4 +12,13 @@ class GForm {
 
   Map<String, dynamic> get baseInfo => {'title': title, 'documentTitle': documentTitle};
   Map<String, dynamic> get info => {'title': title, 'documentTitle': documentTitle, 'description': description};
+
+  factory GForm.fromJson(Map<String, dynamic> json) {
+    String title = json['info']['title'];
+    String desc = json['info']['description'];
+    String documentTitle = json['info']['documentTitle'];
+    bool isQuiz = json['settings']['quizSettings']['isQuiz'] ?? false;
+    List<Question> questions = (json['items'] as Iterable).map((e) => Question.fromJson(e)).toList();
+    return GForm(title: title, description: desc, documentTitle: documentTitle, questions: questions);
+  }
 }

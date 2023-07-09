@@ -7,7 +7,7 @@ class GoogleFormsApi {
 
   GoogleFormsApi({required this.url});
 
-  Future<http.Response> _makePost(
+  Future<http.Response> _post(
       String endpoint, Map<String, dynamic> json, String token) async {
     final resp = await http.post(
       Uri.parse(endpoint),
@@ -20,8 +20,18 @@ class GoogleFormsApi {
     return resp;
   }
 
+  Future<http.Response> _get(String endpoint, String token) async {
+    final resp = await http.get(Uri.parse(endpoint),
+      headers: <String, String> {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      }
+    );
+    return resp;
+  }
+
   Future<String> _create(GForm form, String token) async {
-    final resp = await _makePost(url, {'info': form.baseInfo}, token);
+    final resp = await _post(url, {'info': form.baseInfo}, token);
     final jsonResponse = jsonDecode(resp.body);
     return jsonResponse['formId'];
   }
@@ -58,7 +68,25 @@ class GoogleFormsApi {
       'includeFormInResponse': false,
       'requests': [updateInfoJson, updateSettingJson, ...items],
     };
-    final res = await _makePost(formUrl, batchJson, token);
-    print(res.body);
+    final res = await _post(formUrl, batchJson, token);
+    print(res.statusCode);
+  }
+
+  Future<GForm?> get(String formUrl, String token) async {
+    final re = RegExp(r'd\/(.*)\/');
+    RegExpMatch? match = re.firstMatch(formUrl);
+    if (match == null) {
+      return null;
+    }
+    if (match.groupCount < 1) {
+      return null;
+    }
+    final formId = match.group(1);
+    final resp = await _get("${this.url}/$formId", token);
+    if (resp.statusCode != 200) {
+      return null;
+    }
+    Map<String, dynamic> rawJson = jsonDecode(resp.body);
+    return GForm.fromJson(rawJson);
   }
 }

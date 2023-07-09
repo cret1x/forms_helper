@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:forms_helper/entities/answer.dart';
 import 'package:forms_helper/entities/form.dart';
 import 'package:forms_helper/entities/question.dart';
@@ -41,6 +42,13 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final api = GoogleFormsApi(url: "https://forms.googleapis.com/v1/forms");
   final auth = GoogleAuthApi();
+  final urlController = TextEditingController();
+
+  @override
+  void dispose() {
+    urlController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +102,22 @@ class _MyHomePageState extends State<MyHomePage> {
                   api.create(form, token);
                 },
                 child: const Text("TEST CREATE"),
+              ),
+              TextField(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Enter a search term',
+                ),
+                controller: urlController,
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  final token = await auth.getAccessToken();
+                  final form = await api.get(urlController.text, token);
+                  print(form?.info);
+                  print(form?.questions);
+                },
+                child: const Text("GET"),
               ),
             ],
           ),
