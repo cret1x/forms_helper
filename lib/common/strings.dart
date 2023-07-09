@@ -18,4 +18,6 @@ class Strings {
   static const String yes = "Да";
   static const String no = "Нет";
   static const String noQuestions = "Пока не добавлено ни одного вопроса";
+  static const String findQuestion = "Начните вводить вопрос";
+  static const String discipline = "Дисциплина";
 }
