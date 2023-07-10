@@ -2,6 +2,15 @@ import 'package:forms_helper/entities/form.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+enum FormsError {OK, AUTH_REQUIRED, INVALID_URL}
+
+class FormResult {
+  FormsError? error = FormsError.OK;
+  GForm? form;
+
+  FormResult(this.form, this.error);
+}
+
 class GoogleFormsApi {
   final String url;
 
@@ -72,21 +81,21 @@ class GoogleFormsApi {
     print(res.statusCode);
   }
 
-  Future<GForm?> get(String formUrl, String token) async {
+  Future<FormResult> get(String formUrl, String token) async {
     final re = RegExp(r'd\/(.*)\/');
     RegExpMatch? match = re.firstMatch(formUrl);
     if (match == null) {
-      return null;
+      return FormResult(null, FormsError.INVALID_URL);
     }
     if (match.groupCount < 1) {
-      return null;
+      return FormResult(null, FormsError.INVALID_URL);
     }
     final formId = match.group(1);
-    final resp = await _get("${this.url}/$formId", token);
+    final resp = await _get("$url/$formId", token);
     if (resp.statusCode != 200) {
-      return null;
+      return FormResult(null, FormsError.AUTH_REQUIRED);
     }
     Map<String, dynamic> rawJson = jsonDecode(resp.body);
-    return GForm.fromJson(rawJson);
+    return FormResult(GForm.fromJson(rawJson), FormsError.OK);
   }
 }
