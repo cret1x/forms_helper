@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../common/strings.dart';
-import '../entities/form.dart';
+import '../../common/strings.dart';
+import '../../entities/form.dart';
 
 class FormView extends StatefulWidget {
   final GForm _form;

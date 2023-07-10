@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:forms_helper/entities/form.dart';
 import 'package:forms_helper/google_api/auth.dart';
 import 'package:forms_helper/google_api/forms.dart';
-import 'package:forms_helper/screens/form_view.dart';
-import '../common/strings.dart';
-import '../common/themes.dart';
+import 'package:forms_helper/screens/import/form_view.dart';
+import '../../common/strings.dart';
+import '../../common/themes.dart';
 
 class ImportWidget extends StatefulWidget {
   const ImportWidget({super.key});
