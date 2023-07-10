@@ -24,4 +24,7 @@ class Strings {
   static const String download = "Загрузить";
   static const String name = "Название";
   static const String importCommon = "Загрузите форму, чтобы посмотреть её содержимое";
+  static const String selectAll = "Выделить все";
+  static const String unselectAll = "Снять выделение";
+  static const String saveSelected = "Сохранить выделенные";
 }

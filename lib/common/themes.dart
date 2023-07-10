@@ -20,6 +20,10 @@ class Themes {
         fontFamily: 'Verdana',
         color: Colors.grey[100],
       ),
+      titleLarge: TextStyle(
+        fontFamily: 'Verdana',
+        color: Colors.grey[100],
+      ),
       labelLarge: const TextStyle(
         fontFamily: 'Verdana',
         fontSize: 14,
