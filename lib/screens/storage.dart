@@ -75,7 +75,7 @@ class _StorageWidgetState extends State<StorageWidget>
                 Flexible(
                   child: DropdownButtonFormField(
                     decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.all(17),
+                      contentPadding: EdgeInsets.all(16),
                       border: OutlineInputBorder(
                         borderSide: BorderSide.none,
                         borderRadius: BorderRadius.all(

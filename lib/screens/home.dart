@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:forms_helper/screens/construct.dart';
+import 'package:forms_helper/screens/import.dart';
 import 'package:forms_helper/screens/side_menu.dart';
 import 'package:forms_helper/screens/storage.dart';
 
@@ -29,7 +30,7 @@ class _HomeState extends State<HomeWidget> {
               child: PageView(
                 controller: _controller,
                 children: [
-                  Container(color: Colors.red,),
+                  const ImportWidget(),
                   const StorageWidget(),
                   const FormConstructor(),
                   Container(color: Colors.green,),

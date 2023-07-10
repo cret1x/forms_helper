@@ -20,4 +20,8 @@ class Strings {
   static const String noQuestions = "Пока не добавлено ни одного вопроса";
   static const String findQuestion = "Начните вводить вопрос";
   static const String discipline = "Дисциплина";
+  static const String insertLink = "Вставьте ссылку на редактирование формы";
+  static const String download = "Загрузить";
+  static const String name = "Название";
+  static const String importCommon = "Загрузите форму, чтобы посмотреть её содержимое";
 }
