@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:forms_helper/screens/import/question_widget.dart';
 
 import '../../common/strings.dart';
 import '../../entities/form.dart';
@@ -123,9 +124,9 @@ class _FormViewState extends State<FormView> {
                       children: [
                         ElevatedButton(
                           onPressed: () {
-                             setState(() {
-                               _allSelected = !_allSelected;
-                             });
+                            setState(() {
+                              _allSelected = !_allSelected;
+                            });
                           },
                           child: Text(
                             _allSelected
@@ -137,8 +138,7 @@ class _FormViewState extends State<FormView> {
                           width: 12,
                         ),
                         ElevatedButton(
-                          onPressed: () {
-                          },
+                          onPressed: () {},
                           child: const Text(
                             Strings.saveSelected,
                           ),
@@ -148,11 +148,15 @@ class _FormViewState extends State<FormView> {
                   ],
                 ),
                 Expanded(
-                  child:
-                      ListView(
-                        shrinkWrap: true,
-                        children: widget._form.questions?.map((e) => Column(children: [Text(e.title), Text(e.description)],)).toList() ?? [],
-                      ),
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    itemCount: widget._form.questions!.length,
+                    separatorBuilder: (context, index) => const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 12),
+                      child: Divider(),
+                    ),
+                    itemBuilder: (context, index) => QuestionWidget(widget._form.questions![index]),
+                  ),
                 ),
               ],
             ),

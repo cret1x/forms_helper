@@ -7,12 +7,19 @@ class Themes {
       selectionHandleColor: Colors.white,
       selectionColor: Colors.grey[850]!,
     ),
+    checkboxTheme: CheckboxThemeData(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+    ),
     textTheme: TextTheme(
       headlineLarge: TextStyle(
         fontFamily: 'Verdana',
         color: Colors.grey[100],
       ),
       headlineSmall: TextStyle(
+        fontFamily: 'Verdana',
+        color: Colors.grey[100],
+      ),
+      titleSmall: TextStyle(
         fontFamily: 'Verdana',
         color: Colors.grey[100],
       ),
@@ -69,8 +76,8 @@ class Themes {
       brightness: Brightness.dark,
       primary: Color.fromRGBO(73, 73, 73, 1),
       onPrimary: Colors.white,
-      secondary: Colors.orange,
-      onSecondary: Colors.orange,
+      secondary: Colors.green,
+      onSecondary: Colors.white,
       error: Colors.redAccent,
       onError: Colors.grey[100]!,
       background: Colors.orange,
