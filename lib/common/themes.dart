@@ -80,7 +80,7 @@ class Themes {
       onSecondary: Colors.white,
       error: Colors.redAccent,
       onError: Colors.grey[100]!,
-      background: Colors.orange,
+      background: Color.fromRGBO(79, 83, 100, 1),
       onBackground: Colors.grey[100]!,
       surface: Colors.grey[850]!,
       onSurface: Colors.grey[400]!,

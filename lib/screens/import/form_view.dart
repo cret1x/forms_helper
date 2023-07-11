@@ -148,13 +148,9 @@ class _FormViewState extends State<FormView> {
                   ],
                 ),
                 Expanded(
-                  child: ListView.separated(
+                  child: ListView.builder(
                     shrinkWrap: true,
                     itemCount: widget._form.questions!.length,
-                    separatorBuilder: (context, index) => const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 12),
-                      child: Divider(),
-                    ),
                     itemBuilder: (context, index) => QuestionWidget(widget._form.questions![index]),
                   ),
                 ),

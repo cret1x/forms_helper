@@ -18,27 +18,40 @@ class _QuestionWidgetState extends State<QuestionWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        widget._isContained
-            ? const Icon(Icons.download_done)
-            : Checkbox(
-                value: _isSelected,
-                onChanged: (_) {
-                  setState(() {
-                    _isSelected = !_isSelected;
-                  });
-                },
-              ),
-        Padding(
-          padding: const EdgeInsets.only(top: 1, left: 24),
+    return Padding(
+      padding: const EdgeInsets.only(top: 24),
+      child: ElevatedButton(
+        onPressed: () {},
+        style: ButtonStyle(
+          fixedSize: MaterialStatePropertyAll(Size.infinite),
+          backgroundColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.background),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(6, 16, 0, 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                widget._question.title,
-                style: Theme.of(context).textTheme.headlineSmall,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    widget._question.title,
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 6),
+                    child: widget._isContained
+                        ? const Icon(Icons.download_done)
+                        : Checkbox(
+                            value: _isSelected,
+                            onChanged: (_) {
+                              setState(() {
+                                _isSelected = !_isSelected;
+                              });
+                            },
+                          ),
+                  )
+                ],
               ),
               const SizedBox(
                 height: 12,
@@ -47,8 +60,9 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                 widget._question.description,
                 style: Theme.of(context).textTheme.titleMedium,
               ),
-              const SizedBox(
-                height: 8,
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 8),
+                child: Divider(),
               ),
               Column(
                 children: widget._question.answers
@@ -59,11 +73,13 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                             ? Row(
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.only(left: 1, right: 13),
+                                    padding: const EdgeInsets.only(
+                                        left: 1, right: 13),
                                     child: Text(
                                       "-",
-                                      style:
-                                          Theme.of(context).textTheme.titleMedium,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium,
                                     ),
                                   ),
                                   Text(
@@ -99,7 +115,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
             ],
           ),
         ),
-      ],
+      ),
     );
   }
 }
