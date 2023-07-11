@@ -1,8 +1,10 @@
+import 'package:firedart/firestore/firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:forms_helper/entities/answer.dart';
 import 'package:forms_helper/entities/form.dart';
 import 'package:forms_helper/entities/question.dart';
+import 'package:forms_helper/firebase_functions/storage.dart';
 import 'package:forms_helper/google_api/auth.dart';
 import 'package:forms_helper/google_api/forms.dart';
 import 'package:forms_helper/screens/home.dart';
@@ -11,7 +13,7 @@ import 'common/themes.dart';
 
 //TODO: set minimum window size
 void main() {
-  //Firestore.initialize("formshelper-f0d02");
+  Firestore.initialize("formshelper-f0d02");
   runApp(const MyApp());
 }
 
@@ -66,58 +68,23 @@ class _MyHomePageState extends State<MyHomePage> {
                       context, MaterialPageRoute(builder: (_) => HomeWidget()));
                 },
                 child: const Text("AUTH GOOGLE"),
+              ),ElevatedButton(
+                onPressed: () async {
+                  final fapi = FirestoreManager();
+                  List<Answer> ans = [Answer(value: "A"), Answer(value: "B"), Answer(value: "c")];
+                  List<Question> q = [Question(title: "1", description: "11", required: true, shuffle: false, pointValue: 1, answers: ans, correctAnswers: [ans.first], type: QuestionType.RADIO)];
+                  fapi.saveQuestions(q);
+                  print(q.firstOrNull?.title);
+                },
+                child: const Text("1"),
               ),
               ElevatedButton(
                 onPressed: () async {
-                  final token = await auth.getAccessToken();
-                  final a = Answer(value: 'A');
-                  final b = Answer(value: 'B');
-                  final c = Answer(value: 'C');
-                  final d = Answer(value: 'D');
-                  final e = Answer(value: 'E');
-                  final f = Answer(value: 'F');
-                  final q1 = Question(
-                      title: 'First',
-                      description: 'Desc 1',
-                      required: true,
-                      shuffle: true,
-                      pointValue: 1,
-                      answers: [a, b, c],
-                      correctAnswers: [a],
-                      type: QuestionType.RADIO);
-                  final q2 = Question(
-                      title: 'Second',
-                      description: 'Desc 2',
-                      required: true,
-                      shuffle: false,
-                      pointValue: 2,
-                      answers: [d, e, f],
-                      correctAnswers: [d, e],
-                      type: QuestionType.CHECKBOX);
-                  final form = GForm(
-                      title: "Test3",
-                      description: "Description",
-                      documentTitle: "Flutter Form",
-                      questions: [q1, q2]);
-                  api.create(form, token);
+                  final fapi = FirestoreManager();
+                  final q = await fapi.getQuestions();
+                  print(q.firstOrNull?.title);
                 },
-                child: const Text("TEST CREATE"),
-              ),
-              TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Enter a search term',
-                ),
-                controller: urlController,
-              ),
-              ElevatedButton(
-                onPressed: () async {
-                  final token = await auth.getAccessToken();
-                  final form = await api.get(urlController.text, token);
-                  //print(form?.info);
-                  //print(form?.questions);
-                },
-                child: const Text("GET"),
+                child: const Text("2"),
               ),
             ],
           ),

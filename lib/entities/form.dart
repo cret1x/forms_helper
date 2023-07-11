@@ -21,4 +21,20 @@ class GForm {
     List<Question> questions = (json['items'] as Iterable).map((e) => Question.fromJson(e)).toList();
     return GForm(title: title, description: desc, documentTitle: documentTitle, questions: questions);
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'info': {
+        'title': title,
+        'description': description,
+        'documentTitle': documentTitle,
+      },
+      'settings': {
+        'quizSettings': {
+          'isQuiz': isQuiz,
+        },
+      },
+      'items': questions?.map((e) => e.toMap()).toList(),
+    };
+  }
 }

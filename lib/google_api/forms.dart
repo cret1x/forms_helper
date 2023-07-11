@@ -92,6 +92,7 @@ class GoogleFormsApi {
     }
     final formId = match.group(1);
     final resp = await _get("$url/$formId", token);
+    print(resp.body);
     if (resp.statusCode != 200) {
       return FormResult(null, FormsError.AUTH_REQUIRED);
     }
