@@ -5,7 +5,7 @@ import 'dart:convert';
 enum FormsError {OK, AUTH_REQUIRED, INVALID_URL}
 
 class FormResult {
-  FormsError? error = FormsError.OK;
+  FormsError error = FormsError.OK;
   GForm? form;
 
   FormResult(this.form, this.error);

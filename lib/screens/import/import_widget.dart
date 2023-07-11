@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:forms_helper/entities/form.dart';
 import 'package:forms_helper/google_api/auth.dart';
@@ -18,8 +20,10 @@ class ImportWidget extends StatefulWidget {
 class _ImportWidgetState extends State<ImportWidget>
     with AutomaticKeepAliveClientMixin<ImportWidget> {
   final TextEditingController _linkController = TextEditingController();
-  final api = GoogleFormsApi(url: "https://forms.googleapis.com/v1/forms");
-  Future<GForm?>? _content;
+  final _formsApi =
+      GoogleFormsApi(url: "https://forms.googleapis.com/v1/forms");
+  final _authApi = GoogleAuthApi();
+  GForm? _content;
 
   @override
   Widget build(BuildContext context) {
@@ -70,9 +74,87 @@ class _ImportWidgetState extends State<ImportWidget>
                 ),
                 ElevatedButton(
                   onPressed: () async {
-                    _content = api.get(_linkController.text,
-                        await GoogleAuthApi().getAccessToken());
-                    setState(() {});
+                    final token = await _authApi.getAccessToken();
+                    final result =
+                        await _formsApi.get(_linkController.text, token);
+                    switch (result.error) {
+                      case FormsError.OK:
+                        setState(() {
+                          _content = result.form;
+                        });
+                        break;
+                      case FormsError.AUTH_REQUIRED:
+                        await showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              actionsPadding: const EdgeInsets.all(12),
+                              title: const Text(
+                                Strings.accessError,
+                                style: TextStyle(
+                                  fontFamily: 'Verdana',
+                                ),
+                              ),
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(15),
+                                ),
+                              ),
+                              content: Text(
+                                Strings.reauth,
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text(Strings.ok),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                        break;
+                      case FormsError.INVALID_URL:
+                        await showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              actionsPadding: const EdgeInsets.all(12),
+                              title: const Text(
+                                Strings.wrongLink,
+                                style: TextStyle(
+                                  fontFamily: 'Verdana',
+                                ),
+                              ),
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(15),
+                                ),
+                              ),
+                              content: Text(
+                                Strings.checkLink,
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text(Strings.ok),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                    }
                   },
                   child: const Text(
                     Strings.download,
@@ -83,22 +165,17 @@ class _ImportWidgetState extends State<ImportWidget>
             const SizedBox(
               height: 24,
             ),
-            FutureBuilder(
-              future: _content,
-              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                return snapshot.hasData
-                    ? FormView(snapshot.data)
-                    : Padding(
-                        padding: const EdgeInsets.only(top: 82),
-                        child: Center(
-                          child: Text(
-                            Strings.importCommon,
-                            style: Theme.of(context).textTheme.displaySmall,
-                          ),
-                        ),
-                      );
-              },
-            ),
+            _content != null
+                ? FormView(_content!)
+                : Padding(
+                    padding: const EdgeInsets.only(top: 82),
+                    child: Center(
+                      child: Text(
+                        Strings.importCommon,
+                        style: Theme.of(context).textTheme.displaySmall,
+                      ),
+                    ),
+                  ),
           ],
         ),
       ),

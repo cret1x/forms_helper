@@ -1,4 +1,5 @@
 class Strings {
+  static const String ok = "ОК";
   static const String menu = "Меню";
   static const String import = "Импорт";
   static const String export = "Экспорт";
@@ -27,4 +28,11 @@ class Strings {
   static const String selectAll = "Выделить все";
   static const String unselectAll = "Снять выделение";
   static const String saveSelected = "Сохранить выделенные";
+  static const String accessError = "Ошибка доступа";
+  static const String reauth = "У авторизованного пользователя нет доступа к "
+      "редактированию этой формы.\n"
+      "Попробуйте сменить пользователя и загрузить её ещё раз.";
+  static const String wrongLink = "Некорректная ссылка";
+  static const String checkLink = "Введённая ссылка не является корректной "
+      "ссылкой на РЕДАКТИРОВАНИЕ формы.";
 }

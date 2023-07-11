@@ -114,8 +114,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () async {
                   final token = await auth.getAccessToken();
                   final form = await api.get(urlController.text, token);
-                  print(form?.info);
-                  print(form?.questions);
+                  //print(form?.info);
+                  //print(form?.questions);
                 },
                 child: const Text("GET"),
               ),
