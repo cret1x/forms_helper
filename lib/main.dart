@@ -71,8 +71,8 @@ class _MyHomePageState extends State<MyHomePage> {
               ),ElevatedButton(
                 onPressed: () async {
                   final fapi = FirestoreManager();
-                  List<Answer> ans = [Answer(value: "A"), Answer(value: "B"), Answer(value: "c")];
-                  List<Question> q = [Question(title: "1", description: "11", required: true, shuffle: false, pointValue: 1, answers: ans, correctAnswers: [ans.first], type: QuestionType.RADIO)];
+                  List<Answer> ans = [Answer(value: "A"), Answer(value: "B"), Answer(value: "C")];
+                  List<Question> q = [Question(title: "First", description: "11", required: true, shuffle: false, pointValue: 1, answers: ans, correctAnswers: [ans.first], type: QuestionType.RADIO)];
                   fapi.saveQuestions(q);
                   print(q.firstOrNull?.title);
                 },
@@ -81,7 +81,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ElevatedButton(
                 onPressed: () async {
                   final fapi = FirestoreManager();
-                  final q = await fapi.getQuestions();
+                  final q = (await fapi.getQuestions(prefix: "Sec"));
+                  final q2 = await fapi.isQuestionExist(q.first);
+                  print(q2);
                   print(q.firstOrNull?.title);
                 },
                 child: const Text("2"),
