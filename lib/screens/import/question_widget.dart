@@ -1,11 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:forms_helper/entities/question.dart';
 
+class QuestionWidgetInfo {
+  late final bool _isContained = false;
+  bool _isSelected = false;
+
+  bool get selected {
+    return _isSelected;
+  }
+
+  void _toggle() {
+    _isSelected = !_isSelected;
+  }
+
+  void select() {
+    _isSelected = true;
+  }
+
+  void unselect() {
+    _isSelected = false;
+  }
+}
+
 class QuestionWidget extends StatefulWidget {
   final Question _question;
-  final bool _isContained = false;
+  final QuestionWidgetInfo info = QuestionWidgetInfo();
 
-  const QuestionWidget(this._question, {super.key});
+  QuestionWidget(this._question, {super.key});
 
   @override
   State<StatefulWidget> createState() {
@@ -14,8 +35,6 @@ class QuestionWidget extends StatefulWidget {
 }
 
 class _QuestionWidgetState extends State<QuestionWidget> {
-  bool _isSelected = false;
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -23,7 +42,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
       child: ElevatedButton(
         onPressed: () {},
         style: ButtonStyle(
-          fixedSize: MaterialStatePropertyAll(Size.infinite),
+          fixedSize: const MaterialStatePropertyAll(Size.infinite),
           backgroundColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.background),
         ),
         child: Padding(
@@ -40,13 +59,13 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 6),
-                    child: widget._isContained
+                    child: widget.info._isContained
                         ? const Icon(Icons.download_done)
                         : Checkbox(
-                            value: _isSelected,
+                            value: widget.info.selected,
                             onChanged: (_) {
                               setState(() {
-                                _isSelected = !_isSelected;
+                                widget.info._toggle();
                               });
                             },
                           ),
