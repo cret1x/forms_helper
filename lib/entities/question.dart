@@ -49,9 +49,9 @@ class Question {
 
   factory Question.fromJson(Map<String, dynamic> json) {
     String title = json['title'];
-    String desc = json['description'];
-    bool required = json['questionItem']['question']['required'];
-    int pointValue = json['questionItem']['question']['grading']['pointValue'];
+    String desc = json['description'] ?? "";
+    bool required = json['questionItem']['question']['required'] ?? false;
+    int pointValue = json['questionItem']['question']['grading']['pointValue'] ?? 0;
     List<Answer> correctAnswers = (json['questionItem']['question']['grading']
             ['correctAnswers']['answers'] as Iterable)
         .map((e) => Answer(value: e['value']))

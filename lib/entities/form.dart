@@ -15,8 +15,8 @@ class GForm {
 
   factory GForm.fromJson(Map<String, dynamic> json) {
     String title = json['info']['title'];
-    String desc = json['info']['description'];
-    String documentTitle = json['info']['documentTitle'];
+    String desc = json['info']['description'] ?? "";
+    String documentTitle = json['info']['documentTitle'] ?? "Unnamed";
     bool isQuiz = json['settings']['quizSettings']['isQuiz'] ?? false;
     List<Question> questions = (json['items'] as Iterable).map((e) => Question.fromJson(e)).toList();
     return GForm(title: title, description: desc, documentTitle: documentTitle, questions: questions);

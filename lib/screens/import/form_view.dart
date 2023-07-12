@@ -22,6 +22,7 @@ class _FormViewState extends State<FormView> {
   @override
   Widget build(BuildContext context) {
     _qWidgets ??= widget._form.questions!.map((e) => QuestionWidget(e)).toList();
+    print(_qWidgets?.map((e) => e.info.selected).join(','));
     return Expanded(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -126,15 +127,13 @@ class _FormViewState extends State<FormView> {
                       children: [
                         ElevatedButton(
                           onPressed: () {
-                            if (_allSelected) {
-                              for (var w in _qWidgets!) {
-                                w.info.unselect();
-                              }
-                            } else {
-                              for (var w in _qWidgets!) {
-                                w.info.select();
-                              }
-                            }
+                              _qWidgets?.forEach((w) {
+                                if (_allSelected) {
+                                  w.info.unselect();
+                                } else {
+                                  w.info.select();
+                                }
+                              });
                             setState(() {
                               _allSelected = !_allSelected;
                             });
@@ -161,6 +160,7 @@ class _FormViewState extends State<FormView> {
                 Expanded(
                   child: ListView(
                     shrinkWrap: true,
+                    key: UniqueKey(),
                     children: _qWidgets!,
                   ),
                 ),

@@ -24,6 +24,7 @@ class _ImportWidgetState extends State<ImportWidget>
       GoogleFormsApi(url: "https://forms.googleapis.com/v1/forms");
   final _authApi = GoogleAuthApi();
   GForm? _content;
+  bool _importButtonPressed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -72,11 +73,17 @@ class _ImportWidgetState extends State<ImportWidget>
                 const SizedBox(
                   width: 24,
                 ),
-                ElevatedButton(
+                _importButtonPressed ? CircularProgressIndicator() : ElevatedButton(
                   onPressed: () async {
+                    setState(() {
+                      _importButtonPressed = true;
+                    });
                     final token = await _authApi.getAccessToken();
                     final result =
                         await _formsApi.get(_linkController.text, token);
+                    setState(() {
+                      _importButtonPressed = false;
+                    });
                     switch (result.error) {
                       case FormsError.OK:
                         setState(() {
