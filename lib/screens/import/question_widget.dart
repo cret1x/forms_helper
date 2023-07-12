@@ -69,7 +69,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                     .map(
                       (e) => Padding(
                         padding: const EdgeInsets.only(top: 4),
-                        child: widget._question.correctAnswers.contains(e)
+                        child: !widget._question.correctAnswers.contains(e)
                             ? Row(
                                 children: [
                                   Padding(
