@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:forms_helper/entities/choice_question.dart';
 import 'package:forms_helper/screens/import/question_widget.dart';
 
 import '../../common/strings.dart';
@@ -21,7 +22,7 @@ class _FormViewState extends State<FormView> {
 
   @override
   Widget build(BuildContext context) {
-    _qWidgets ??= widget._form.questions!.map((e) => QuestionWidget(e)).toList();
+    _qWidgets ??= widget._form.items!.whereType<ChoiceQuestion>().map((e) => QuestionWidget(e)).toList();
     print(_qWidgets?.map((e) => e.info.selected).join(','));
     return Expanded(
       child: Row(

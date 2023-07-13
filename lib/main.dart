@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:forms_helper/entities/answer.dart';
 import 'package:forms_helper/entities/form.dart';
-import 'package:forms_helper/entities/question.dart';
+import 'package:forms_helper/entities/choice_question.dart';
 import 'package:forms_helper/firebase_functions/storage.dart';
 import 'package:forms_helper/google_api/auth.dart';
 import 'package:forms_helper/google_api/forms.dart';
@@ -72,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () async {
                   final fapi = FirestoreManager();
                   List<Answer> ans = [Answer(value: "A"), Answer(value: "B"), Answer(value: "C")];
-                  List<Question> q = [Question(title: "First", description: "11", required: true, shuffle: false, pointValue: 1, answers: ans, correctAnswers: [ans.first], type: QuestionType.RADIO)];
+                  List<ChoiceQuestion> q = [ChoiceQuestion(title: "First", description: "11", required: true, shuffle: false, pointValue: 1, options: ans, correctAnswers: [ans.first], type: QuestionType.RADIO)];
                   fapi.saveQuestions(q);
                   print(q.firstOrNull?.title);
                 },

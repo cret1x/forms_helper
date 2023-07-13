@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:forms_helper/entities/question.dart';
+import 'package:forms_helper/entities/choice_question.dart';
 
 class QuestionWidgetInfo {
   late final bool _isContained = false;
@@ -23,7 +23,7 @@ class QuestionWidgetInfo {
 }
 
 class QuestionWidget extends StatefulWidget {
-  final Question _question;
+  final ChoiceQuestion _question;
   final QuestionWidgetInfo info = QuestionWidgetInfo();
 
   QuestionWidget(this._question, {super.key});
@@ -84,7 +84,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                 child: Divider(),
               ),
               Column(
-                children: widget._question.answers
+                children: widget._question.options
                     .map(
                       (e) => Padding(
                         padding: const EdgeInsets.only(top: 4),

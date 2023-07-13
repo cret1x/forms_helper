@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:forms_helper/common/strings.dart';
 
 import '../common/themes.dart';
-import '../entities/question.dart';
+import '../entities/choice_question.dart';
 
 class FormConstructor extends StatefulWidget {
   const FormConstructor({super.key});
@@ -17,7 +17,7 @@ class _FormConstructorState extends State<FormConstructor>
     with AutomaticKeepAliveClientMixin<FormConstructor> {
   final TextEditingController _headerController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  final List<Question> _questions = [];
+  final List<ChoiceQuestion> _questions = [];
 
   @override
   Widget build(BuildContext context) {

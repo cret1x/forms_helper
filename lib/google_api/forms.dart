@@ -63,10 +63,10 @@ class GoogleFormsApi {
       },
     };
     final List<Map<String, dynamic>> items = [];
-    for (int i = 0; i < (form.questions?.length ?? 0); i++) {
+    for (int i = 0; i < (form.items?.length ?? 0); i++) {
       items.add({
         'createItem': {
-          'item': form.questions![i].toMap(),
+          'item': form.items![i].toMap(),
           'location': {
             'index': i,
           },
@@ -97,6 +97,6 @@ class GoogleFormsApi {
       return FormResult(null, FormsError.AUTH_REQUIRED);
     }
     Map<String, dynamic> rawJson = jsonDecode(resp.body);
-    return FormResult(GForm.fromJson(rawJson), FormsError.OK);
+    return FormResult(GForm.fromMap(rawJson), FormsError.OK);
   }
 }
