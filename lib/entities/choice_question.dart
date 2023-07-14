@@ -4,7 +4,7 @@ import 'package:forms_helper/entities/question_item.dart';
 
 enum QuestionType { RADIO, CHECKBOX, DROP_DOWN }
 
-class ChoiceQuestion extends QuestionItem{
+class ChoiceQuestion extends QuestionItem {
   final bool shuffle;
   final List<Answer> options;
   final QuestionType type;
@@ -18,12 +18,13 @@ class ChoiceQuestion extends QuestionItem{
     required this.options,
     required super.correctAnswers,
     required this.type,
-  });
+    required super.tag,
+  }) : super(questionType: 'choiceQuestion');
 
   @override
   Map<String, dynamic> toMap() {
     final questionJson = super.toMap();
-    questionJson['choiceQuestion'] = {
+    questionJson['question']['choiceQuestion'] = {
       'type': type.name,
       'options': options.map((e) => e.toMap()).toList(),
       'shuffle': shuffle,
@@ -31,25 +32,63 @@ class ChoiceQuestion extends QuestionItem{
     return questionJson;
   }
 
-  factory ChoiceQuestion.fromMap(Map<String, dynamic> json) {
+  @override
+  Map<String, dynamic> toGoogleFormJson() {
+    final questionJson = super.toGoogleFormJson();
+    questionJson['questionItem']['question']['choiceQuestion'] = {
+      'type': type.name,
+      'options': options.map((e) => e.toMap()).toList(),
+      'shuffle': shuffle,
+    };
+    return questionJson;
+  }
+
+  factory ChoiceQuestion.fromGoogleFormJson(Map<String, dynamic> json) {
     QuestionType type = QuestionType.values
-        .byName(json['questionItem']['question']['choiceQuestion']['type'] ?? 'RADIO');
+        .byName(
+        json['questionItem']['question']['choiceQuestion']['type'] ?? 'RADIO');
     List<Answer> options = (json['questionItem']['question']['choiceQuestion']
-            ['options'] as Iterable)
+    ['options'] as Iterable)
         .map((e) => Answer(value: e['value']))
         .toList();
     bool shuffle =
         json['questionItem']['question']['choiceQuestion']['shuffle'] ?? false;
+    final item = FormItem.fromGoogleFormJson(json);
+    final questionItem = QuestionItem.fromGoogleFormJson(json);
+    return ChoiceQuestion(
+      title: item.title,
+      description: item.description,
+      required: questionItem.required,
+      shuffle: shuffle,
+      pointValue: questionItem.pointValue,
+      options: options,
+      correctAnswers: questionItem.correctAnswers,
+      type: type,
+      tag: questionItem.tag,
+    );
+  }
+
+  factory ChoiceQuestion.fromMap(Map<String, dynamic> json) {
+    QuestionType type = QuestionType.values
+        .byName(json['question']['choiceQuestion']['type'] ?? 'RADIO');
+    List<Answer> options = (json['question']['choiceQuestion']
+    ['options'] as Iterable)
+        .map((e) => Answer(value: e['value']))
+        .toList();
+    bool shuffle =
+        json['question']['choiceQuestion']['shuffle'] ?? false;
     final item = FormItem.fromMap(json);
     final questionItem = QuestionItem.fromMap(json);
     return ChoiceQuestion(
-        title: item.title,
-        description: item.description,
-        required: questionItem.required,
-        shuffle: shuffle,
-        pointValue: questionItem.pointValue,
-        options: options,
-        correctAnswers: questionItem.correctAnswers,
-        type: type);
+      title: item.title,
+      description: item.description,
+      required: questionItem.required,
+      shuffle: shuffle,
+      pointValue: questionItem.pointValue,
+      options: options,
+      correctAnswers: questionItem.correctAnswers,
+      type: type,
+      tag: questionItem.tag,
+    );
   }
 }

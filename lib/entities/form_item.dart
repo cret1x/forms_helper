@@ -19,4 +19,16 @@ class FormItem {
     String description = json['description'] ?? "";
     return FormItem(title: title, description: description);
   }
+
+  Map<String, dynamic> toGoogleFormJson() {
+    return {
+      'title': title,
+      'description': description,
+    };
+  }
+  factory FormItem.fromGoogleFormJson(Map<String, dynamic> json) {
+    String title = json['title'] ?? "unnamed";
+    String description = json['description'] ?? "";
+    return FormItem(title: title, description: description);
+  }
 }

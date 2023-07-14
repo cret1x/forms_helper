@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:convert';
 
+import 'package:path/path.dart';
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -26,7 +27,7 @@ class GoogleAuthApi {
 
   Future<File> get _localTokenFile async {
     final path = (await getApplicationDocumentsDirectory()).path;
-    return File('$path/$refreshTokenPath');
+    return File(join(path, refreshTokenPath));
   }
 
   Future<AccessCredentials?> _getCredentials() async {

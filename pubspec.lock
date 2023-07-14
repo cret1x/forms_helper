@@ -424,6 +424,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
+  sembast:
+    dependency: "direct main"
+    description:
+      name: sembast
+      sha256: da8dd3774b6001bde09378da28e94c40bd4daecde32adb44837517c12e991321
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.4.9"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -461,6 +469,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  synchronized:
+    dependency: transitive
+    description:
+      name: synchronized
+      sha256: "5fcbd27688af6082f5abd611af56ee575342c30e87541d0245f7ff99faa02c60"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.0"
   term_glyph:
     dependency: transitive
     description:

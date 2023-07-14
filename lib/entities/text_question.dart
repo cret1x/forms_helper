@@ -11,28 +11,57 @@ class TextQuestion extends QuestionItem {
     required super.pointValue,
     required super.correctAnswers,
     required this.paragraph,
-  });
+    required super.tag,
+  }) : super(questionType: 'textQuestion');
+
 
   @override
-  Map<String, dynamic> toMap() {
-    final questionJson = super.toMap();
-    questionJson['textQuestion'] = {
+  Map<String, dynamic> toGoogleFormJson() {
+    final questionJson = super.toGoogleFormJson();
+    questionJson['questionItem']['question']['textQuestion'] = {
       'paragraph': paragraph,
     };
     return questionJson;
   }
 
-  factory TextQuestion.fromMap(Map<String, dynamic> json) {
+
+  @override
+  Map<String, dynamic> toMap() {
+    final questionJson = super.toMap();
+    questionJson['question']['textQuestion'] = {
+      'paragraph': paragraph,
+    };
+    return questionJson;
+  }
+
+  factory TextQuestion.fromGoogleFormJson(Map<String, dynamic> json) {
     bool paragraph =
         json['questionItem']['question']['textQuestion']['paragraph'] ?? false;
-    final item = FormItem.fromMap(json);
-    final questionItem = QuestionItem.fromMap(json);
+    final item = FormItem.fromGoogleFormJson(json);
+    final questionItem = QuestionItem.fromGoogleFormJson(json);
     return TextQuestion(
         title: item.title,
         description: item.description,
         required: questionItem.required,
         pointValue: questionItem.pointValue,
         correctAnswers: questionItem.correctAnswers,
-        paragraph: paragraph);
+        paragraph: paragraph,
+        tag: questionItem.tag,
+    );
+  }
+
+  factory TextQuestion.fromMap(Map<String, dynamic> json) {
+    bool paragraph = json['question']['textQuestion']['paragraph'] ?? false;
+    final item = FormItem.fromMap(json);
+    final questionItem = QuestionItem.fromMap(json);
+    return TextQuestion(
+      title: item.title,
+      description: item.description,
+      required: questionItem.required,
+      pointValue: questionItem.pointValue,
+      correctAnswers: questionItem.correctAnswers,
+      paragraph: paragraph,
+      tag: questionItem.tag,
+    );
   }
 }

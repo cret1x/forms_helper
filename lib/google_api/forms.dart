@@ -66,7 +66,7 @@ class GoogleFormsApi {
     for (int i = 0; i < (form.items?.length ?? 0); i++) {
       items.add({
         'createItem': {
-          'item': form.items![i].toMap(),
+          'item': form.items![i].toGoogleFormJson(),
           'location': {
             'index': i,
           },
@@ -97,6 +97,6 @@ class GoogleFormsApi {
       return FormResult(null, FormsError.AUTH_REQUIRED);
     }
     Map<String, dynamic> rawJson = jsonDecode(resp.body);
-    return FormResult(GForm.fromMap(rawJson), FormsError.OK);
+    return FormResult(GForm.fromGoogleFormJson(rawJson), FormsError.OK);
   }
 }

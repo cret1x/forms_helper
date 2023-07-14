@@ -42,6 +42,7 @@ dependencies:
   firebase_core: ^2.14.0
   easy_sidemenu: ^0.4.2
   path_provider: ^2.0.15
+  sembast: ^3.4.9
 
 dev_dependencies:
   flutter_test:

@@ -4,10 +4,14 @@ import 'package:flutter/services.dart';
 import 'package:forms_helper/entities/answer.dart';
 import 'package:forms_helper/entities/form.dart';
 import 'package:forms_helper/entities/choice_question.dart';
+import 'package:forms_helper/entities/form_item.dart';
+import 'package:forms_helper/entities/question_item.dart';
+import 'package:forms_helper/entities/text_question.dart';
 import 'package:forms_helper/firebase_functions/storage.dart';
 import 'package:forms_helper/google_api/auth.dart';
 import 'package:forms_helper/google_api/forms.dart';
 import 'package:forms_helper/screens/home.dart';
+import 'package:forms_helper/sqlite/local_storage.dart';
 
 import 'common/themes.dart';
 
@@ -45,11 +49,18 @@ class _MyHomePageState extends State<MyHomePage> {
   final api = GoogleFormsApi(url: "https://forms.googleapis.com/v1/forms");
   final auth = GoogleAuthApi();
   final urlController = TextEditingController();
+  final local = LocalStorage();
 
   @override
   void dispose() {
     urlController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    local.init();
+    super.initState();
   }
 
   @override
@@ -70,21 +81,46 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: const Text("AUTH GOOGLE"),
               ),ElevatedButton(
                 onPressed: () async {
+                  if (!local.isInitialized) {
+                    print('Not ready!');
+                    return;
+                  }
                   final fapi = FirestoreManager();
                   List<Answer> ans = [Answer(value: "A"), Answer(value: "B"), Answer(value: "C")];
-                  List<ChoiceQuestion> q = [ChoiceQuestion(title: "First", description: "11", required: true, shuffle: false, pointValue: 1, options: ans, correctAnswers: [ans.first], type: QuestionType.RADIO)];
-                  fapi.saveQuestions(q);
-                  print(q.firstOrNull?.title);
+                  List<QuestionItem> q = [TextQuestion(title: "ZZZ tExt Question", description: "Lorem ipsum sim", required: false, pointValue: 0, correctAnswers: [], paragraph: false, tag: 'A')];
+                  //await local.saveQuestions(q);
+                  print('Saved!');
+                  final t1 = await local.getQuestions();
+                  final t2 = await local.getQuestions(searchText: 'sim');
+                  final t3 = await local.getQuestions(tag: 'A');
+                  print(t1.join(', '));
+                  print(t2.join(', '));
+                  print(t3.join(', '));
                 },
                 child: const Text("1"),
               ),
               ElevatedButton(
                 onPressed: () async {
-                  final fapi = FirestoreManager();
-                  final q = (await fapi.getQuestions(prefix: "Sec"));
-                  final q2 = await fapi.isQuestionExist(q.first);
-                  print(q2);
-                  print(q.firstOrNull?.title);
+                  List<Answer> options = [
+                    Answer(value: 'Вариант 1'),
+                    Answer(value: 'Вариант 2'),
+                    Answer(value: 'Вариант 3'),
+                    Answer(value: 'Вариант 4'),
+                  ];
+                  List<Answer> correct = [
+                    Answer(value: 'Вариант 1'),
+                    Answer(value: 'Вариант 3'),
+                  ];
+                  List<FormItem> questions = [
+                    TextQuestion(title: "Почта", description: "", required: true, pointValue: 0, correctAnswers: [], paragraph: false, tag: ''),
+                    TextQuestion(title: "Группа", description: "", required: true, pointValue: 0, correctAnswers: [], paragraph: false, tag: ''),
+                    ChoiceQuestion(title: "Вопрос с выбором", description: '', required: true, shuffle: false, pointValue: 1, options: options, correctAnswers: correct, type: QuestionType.RADIO, tag: 'Мозг'),
+                  ];
+                  final form = GForm(title: "Тест по чему то", description: "Бла бла бла", documentTitle: "test", items: questions);
+
+                    final token = await auth.getAccessToken();
+                    await api.create(form, token);
+                 // print('Done!');
                 },
                 child: const Text("2"),
               ),
