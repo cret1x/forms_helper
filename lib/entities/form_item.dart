@@ -31,4 +31,12 @@ class FormItem {
     String description = json['description'] ?? "";
     return FormItem(title: title, description: description);
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (other is FormItem) {
+      return title == other.title;
+    }
+    return false;
+  }
 }

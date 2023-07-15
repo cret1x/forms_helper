@@ -2,6 +2,16 @@ import 'package:firedart/firestore/firestore.dart';
 import 'package:firedart/firestore/models.dart';
 import 'package:forms_helper/entities/form.dart';
 import 'package:forms_helper/entities/choice_question.dart';
+import 'package:forms_helper/entities/question_item.dart';
+import 'package:forms_helper/entities/text_question.dart';
+
+
+class QuestionItemPage {
+  List<QuestionItem> questions;
+  String? nextPageToken;
+
+  QuestionItemPage(this.questions, this.nextPageToken);
+}
 
 class FirestoreManager {
   static final FirestoreManager _firestoreManager = FirestoreManager._internal();
@@ -11,27 +21,40 @@ class FirestoreManager {
   }
   FirestoreManager._internal();
 
-
-  Future<List<ChoiceQuestion>> getQuestions({String? prefix}) async {
+  Future<QuestionItemPage> _getPage({String? nextPageToken}) async {
     final questionsCollection = Firestore.instance.collection('questions');
-    final questions = <ChoiceQuestion>[];
-    late List<Document> questionsDocuments;
-    if (prefix == null || prefix.isEmpty) {
-      questionsDocuments = await questionsCollection.limit(pageSize).get();
+    final questions = <QuestionItem>[];
+    Page<Document> questionDocuments;
+    if (nextPageToken == null) {
+      questionDocuments = await questionsCollection.get(pageSize: pageSize);
     } else {
-      var next = prefix.codeUnitAt(0);
-      next++;
-      String nextPrefix = String.fromCharCode(next);
-      final query = questionsCollection.where('title', isGreaterThanOrEqualTo: prefix).where('title', isLessThan: nextPrefix).limit(pageSize);
-      questionsDocuments = await query.get();
+      questionDocuments = await questionsCollection.get(pageSize: pageSize, nextPageToken: nextPageToken);
     }
-    for (var doc in questionsDocuments) {
-      questions.add(ChoiceQuestion.fromMap(doc.map));
+    for (var doc in questionDocuments) {
+      if (QuestionItem.fromMap(doc.map).questionType == 'choiceQuestion') {
+        questions.add(ChoiceQuestion.fromMap(doc.map));
+      } else {
+        questions.add(TextQuestion.fromMap(doc.map));
+      }
     }
-    return questions;
+    if (questionDocuments.length < pageSize) {
+      return QuestionItemPage(questions, null);
+    } else {
+      return QuestionItemPage(questions, questionDocuments.nextPageToken);
+    }
+  }
+
+
+  Stream<List<QuestionItem>> getQuestions() async* {
+    var page = await _getPage();
+    yield page.questions;
+    while(page.nextPageToken != null) {
+      page = await _getPage();
+      yield page.questions;
+    }
   }
   
-  Future<void> saveQuestions(List<ChoiceQuestion> questions) async {
+  Future<void> saveQuestions(List<QuestionItem> questions) async {
     final questionsCollection = Firestore.instance.collection('questions');
     for (var question in questions) {
       questionsCollection.add(question.toMap());

@@ -104,6 +104,6 @@ class QuestionItem extends FormItem {
 
   @override
   String toString() {
-    return '$title, $questionType, $pointValue, $tag';
+    return '[$title, $questionType, $pointValue, $tag]';
   }
 }

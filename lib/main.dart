@@ -79,23 +79,20 @@ class _MyHomePageState extends State<MyHomePage> {
                       context, MaterialPageRoute(builder: (_) => HomeWidget()));
                 },
                 child: const Text("AUTH GOOGLE"),
-              ),ElevatedButton(
+              ),
+              ElevatedButton(
                 onPressed: () async {
                   if (!local.isInitialized) {
                     print('Not ready!');
                     return;
                   }
-                  final fapi = FirestoreManager();
-                  List<Answer> ans = [Answer(value: "A"), Answer(value: "B"), Answer(value: "C")];
-                  List<QuestionItem> q = [TextQuestion(title: "ZZZ tExt Question", description: "Lorem ipsum sim", required: false, pointValue: 0, correctAnswers: [], paragraph: false, tag: 'A')];
-                  //await local.saveQuestions(q);
-                  print('Saved!');
                   final t1 = await local.getQuestions();
                   final t2 = await local.getQuestions(searchText: 'sim');
                   final t3 = await local.getQuestions(tag: 'A');
                   print(t1.join(', '));
                   print(t2.join(', '));
                   print(t3.join(', '));
+                  print(local.questionsCount);
                 },
                 child: const Text("1"),
               ),
@@ -111,16 +108,37 @@ class _MyHomePageState extends State<MyHomePage> {
                     Answer(value: 'Вариант 1'),
                     Answer(value: 'Вариант 3'),
                   ];
-                  List<FormItem> questions = [
-                    TextQuestion(title: "Почта", description: "", required: true, pointValue: 0, correctAnswers: [], paragraph: false, tag: ''),
-                    TextQuestion(title: "Группа", description: "", required: true, pointValue: 0, correctAnswers: [], paragraph: false, tag: ''),
-                    ChoiceQuestion(title: "Вопрос с выбором", description: '', required: true, shuffle: false, pointValue: 1, options: options, correctAnswers: correct, type: QuestionType.RADIO, tag: 'Мозг'),
+                  List<QuestionItem> questions = [
+                    TextQuestion(
+                        title: "Почта",
+                        description: "",
+                        required: true,
+                        pointValue: 0,
+                        correctAnswers: [],
+                        paragraph: false,
+                        tag: ''),
+                    TextQuestion(
+                        title: "Группа",
+                        description: "",
+                        required: true,
+                        pointValue: 0,
+                        correctAnswers: [],
+                        paragraph: false,
+                        tag: ''),
+                    ChoiceQuestion(
+                        title: "Вопрос с выбором",
+                        description: '',
+                        required: true,
+                        shuffle: false,
+                        pointValue: 1,
+                        options: options,
+                        correctAnswers: correct,
+                        type: QuestionType.RADIO,
+                        tag: 'Мозг'),
                   ];
-                  final form = GForm(title: "Тест по чему то", description: "Бла бла бла", documentTitle: "test", items: questions);
-
-                    final token = await auth.getAccessToken();
-                    await api.create(form, token);
-                 // print('Done!');
+                  final fapi = FirestoreManager();
+                  await fapi.saveQuestions(questions);
+                  print('Done!');
                 },
                 child: const Text("2"),
               ),

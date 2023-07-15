@@ -51,7 +51,7 @@ class TextQuestion extends QuestionItem {
   }
 
   factory TextQuestion.fromMap(Map<String, dynamic> json) {
-    bool paragraph = json['question']['textQuestion']['paragraph'] ?? false;
+    bool paragraph = json['question']?['textQuestion']?['paragraph'] ?? false;
     final item = FormItem.fromMap(json);
     final questionItem = QuestionItem.fromMap(json);
     return TextQuestion(
