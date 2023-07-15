@@ -6,9 +6,14 @@ import '../common/strings.dart';
 import '../common/themes.dart';
 
 class MenuWidget extends StatefulWidget {
-  final PageController _pageController;
+  final PageController pageController;
+  final SideMenuController menuController;
 
-  const MenuWidget(this._pageController, {super.key});
+  const MenuWidget({
+    required this.pageController,
+    required this.menuController,
+    super.key,
+  });
 
   @override
   State<StatefulWidget> createState() {
@@ -17,7 +22,6 @@ class MenuWidget extends StatefulWidget {
 }
 
 class _MenuWidgetState extends State<MenuWidget> {
-  final SideMenuController _sideMenuController = SideMenuController();
 
   @override
   Widget build(BuildContext context) {
@@ -66,13 +70,12 @@ class _MenuWidgetState extends State<MenuWidget> {
           icon: const Icon(Icons.settings),
         ),
       ],
-      controller: _sideMenuController,
+      controller: widget.menuController,
     );
   }
 
   void _itemFunc(int index, SideMenuController controller) {
     controller.changePage(index);
-    widget._pageController.jumpToPage(index);
+    widget.pageController.jumpToPage(index);
   }
 }
-

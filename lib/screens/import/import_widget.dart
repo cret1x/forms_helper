@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';
 import 'package:forms_helper/entities/form.dart';
 import 'package:forms_helper/google_api/auth.dart';
@@ -9,7 +10,14 @@ import '../../common/strings.dart';
 import '../../common/themes.dart';
 
 class ImportWidget extends StatefulWidget {
-  const ImportWidget({super.key});
+  final PageController pageController;
+  final SideMenuController menuController;
+
+  const ImportWidget({
+    required this.pageController,
+    required this.menuController,
+    super.key,
+  });
 
   @override
   State<StatefulWidget> createState() {
@@ -177,7 +185,11 @@ class _ImportWidgetState extends State<ImportWidget>
               height: 24,
             ),
             _content != null
-                ? FormView(_content!)
+                ? FormView(
+                    form: _content!,
+                    pageController: widget.pageController,
+                    menuController: widget.menuController,
+                  )
                 : Padding(
                     padding: const EdgeInsets.only(top: 82),
                     child: Center(

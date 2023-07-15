@@ -1,3 +1,4 @@
+import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';
 import 'package:forms_helper/screens/construct.dart';
 import 'package:forms_helper/screens/import/import_widget.dart';
@@ -16,7 +17,8 @@ class HomeWidget extends StatefulWidget {
 }
 
 class _HomeState extends State<HomeWidget> {
-  final PageController _controller = PageController();
+  final PageController _pageController = PageController();
+  final SideMenuController _menuController = SideMenuController();
 
   @override
   Widget build(BuildContext context) {
@@ -25,16 +27,26 @@ class _HomeState extends State<HomeWidget> {
       home: Scaffold(
         body: Row(
           children: [
-            MenuWidget(_controller),
+            MenuWidget(
+              pageController: _pageController,
+              menuController: _menuController,
+            ),
             Expanded(
               child: PageView(
-                controller: _controller,
+                controller: _pageController,
                 children: [
-                  const ImportWidget(),
+                  ImportWidget(
+                    pageController: _pageController,
+                    menuController: _menuController,
+                  ),
                   const StorageWidget(),
                   const FormConstructor(),
-                  Container(color: Colors.green,),
-                  Container(color: Colors.orange,),
+                  Container(
+                    color: Colors.green,
+                  ),
+                  Container(
+                    color: Colors.orange,
+                  ),
                 ],
               ),
             )
