@@ -28,7 +28,7 @@ class FormView extends StatefulWidget {
 
 class _FormViewState extends State<FormView> {
   bool _allSelected = false;
-  List<QuestionWidget>? _qWidgets;
+  List<QuestionItemWidget>? _qWidgets;
   final LocalStorage _storage = LocalStorage();
 
   final List<String> _disciplines = [
@@ -43,7 +43,7 @@ class _FormViewState extends State<FormView> {
   Widget build(BuildContext context) {
     _qWidgets ??= widget.form.items!
         .whereType<QuestionItem>()
-        .map((e) => QuestionWidget(e))
+        .map((e) => QuestionItemWidget(e))
         .toList();
     return Expanded(
       child: Row(

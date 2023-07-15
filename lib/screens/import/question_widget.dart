@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:forms_helper/entities/choice_question.dart';
-import 'package:forms_helper/entities/text_question.dart';
 import 'package:forms_helper/screens/import/choice_question_answers.dart';
 
 import '../../common/strings.dart';
@@ -27,19 +26,19 @@ class QuestionWidgetInfo {
   }
 }
 
-class QuestionWidget extends StatefulWidget {
+class QuestionItemWidget extends StatefulWidget {
   final QuestionItem question;
   final QuestionWidgetInfo info = QuestionWidgetInfo();
 
-  QuestionWidget(this.question, {super.key});
+  QuestionItemWidget(this.question, {super.key});
 
   @override
   State<StatefulWidget> createState() {
-    return _QuestionWidgetState();
+    return _QuestionItemWidgetState();
   }
 }
 
-class _QuestionWidgetState extends State<QuestionWidget> {
+class _QuestionItemWidgetState extends State<QuestionItemWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
