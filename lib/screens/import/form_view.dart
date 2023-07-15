@@ -2,7 +2,7 @@ import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';
 import 'package:forms_helper/entities/choice_question.dart';
 import 'package:forms_helper/screens/import/question_widget.dart';
-import 'package:forms_helper/screens/no_discipline_selected_dialog.dart';
+import 'package:forms_helper/screens/import/no_discipline_selected_dialog.dart';
 import 'package:forms_helper/sqlite/local_storage.dart';
 
 import '../../common/strings.dart';
@@ -14,10 +14,11 @@ class FormView extends StatefulWidget {
   final PageController pageController;
   final SideMenuController menuController;
 
-  const FormView({required this.form,
-                  required this.pageController,
-                  required this.menuController,
-                  super.key});
+  const FormView(
+      {required this.form,
+      required this.pageController,
+      required this.menuController,
+      super.key});
 
   @override
   State<StatefulWidget> createState() {
@@ -228,7 +229,50 @@ class _FormViewState extends State<FormView> {
                     ),
                     Expanded(
                       child: ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
+                          bool? res = await showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                actionsPadding: const EdgeInsets.all(12),
+                                title: const Text(
+                                  Strings.transfer,
+                                  style: TextStyle(
+                                    fontFamily: 'Verdana',
+                                  ),
+                                ),
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(15),
+                                  ),
+                                ),
+                                content: Text(
+                                  Strings.transferQuestions,
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context, true);
+                                    },
+                                    child: const Text(Strings.all),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context, false);
+                                    },
+                                    child: const Text(Strings.onlySelected),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                          if (res == null) {
+                            return;
+                          }
                           widget.pageController.jumpToPage(2);
                           widget.menuController.changePage(2);
                         },
@@ -290,7 +334,8 @@ class _FormViewState extends State<FormView> {
                               }
                             }
                             List<QuestionItem> _questionItems = [];
-                            if (_dropdownValue == Strings.noDisciplineSelected) {
+                            if (_dropdownValue ==
+                                Strings.noDisciplineSelected) {
                               for (var widget in _qWidgets!) {
                                 if (widget.info.selected) {
                                   _questionItems.add(widget.question);

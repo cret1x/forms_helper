@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../common/strings.dart';
+import '../../common/strings.dart';
 
 class NoDisciplineSelectedDialog extends StatelessWidget {
   const NoDisciplineSelectedDialog({super.key});

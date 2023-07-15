@@ -42,4 +42,8 @@ class Strings {
   static const String notSelected = "Не выбрано";
   static const String sure = "Вы уверены, что хотите продолжить?";
   static const String noDisciplineSelected = "Дисциплина не выбрана";
+  static const String transfer = "Переход в конструктор";
+  static const String transferQuestions = "Какие вопросы Вы хотите перенести в конструктор?";
+  static const String all = "Все";
+  static const String onlySelected = "Только выделенные";
 }
