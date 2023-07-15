@@ -1,7 +1,7 @@
 import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';
 import 'package:forms_helper/entities/choice_question.dart';
-import 'package:forms_helper/screens/import/question_widget.dart';
+import 'package:forms_helper/screens/import/question_item_widget.dart';
 import 'package:forms_helper/screens/import/no_discipline_selected_dialog.dart';
 import 'package:forms_helper/sqlite/local_storage.dart';
 

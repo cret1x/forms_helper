@@ -46,4 +46,5 @@ class Strings {
   static const String transferQuestions = "Какие вопросы Вы хотите перенести в конструктор?";
   static const String all = "Все";
   static const String onlySelected = "Только выделенные";
+  static const String back = "Назад";
 }

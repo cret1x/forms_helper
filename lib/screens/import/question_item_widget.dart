@@ -4,6 +4,7 @@ import 'package:forms_helper/screens/import/choice_question_answers.dart';
 
 import '../../common/strings.dart';
 import '../../entities/question_item.dart';
+import '../question_widget.dart';
 
 class QuestionWidgetInfo {
   late final bool contained = false;
@@ -44,7 +45,12 @@ class _QuestionItemWidgetState extends State<QuestionItemWidget> {
     return Padding(
       padding: const EdgeInsets.only(top: 15),
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => QuestionWidget(widget.question)));
+        },
         style: ButtonStyle(
           fixedSize: const MaterialStatePropertyAll(Size.infinite),
           backgroundColor: MaterialStatePropertyAll(
@@ -63,11 +69,12 @@ class _QuestionItemWidgetState extends State<QuestionItemWidget> {
                         ? Strings.choiceQuestion
                         : Strings.textQuestion,
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        color: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .color!
-                            .withOpacity(0.6)),
+                          color: Theme.of(context)
+                              .textTheme
+                              .titleMedium!
+                              .color!
+                              .withOpacity(0.6),
+                        ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 6),
