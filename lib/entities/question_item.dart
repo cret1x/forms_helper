@@ -71,11 +71,11 @@ class QuestionItem extends FormItem {
   }
 
   factory QuestionItem.fromGoogleFormJson(Map<String, dynamic> json) {
-    bool required = json['questionItem']['question']['required'] ?? false;
+    bool required = json['questionItem']?['question']?['required'] ?? false;
     int pointValue =
-        json['questionItem']['question']['grading']['pointValue'] ?? 0;
+        json['questionItem']?['question']?['grading']?['pointValue'] ?? 0;
     late List<Answer> correctAnswers;
-    if (json['questionItem']['question']['grading']['correctAnswers'] != null) {
+    if (json['questionItem']?['question']?['grading']?['correctAnswers'] != null) {
       correctAnswers = (json['questionItem']['question']['grading']
               ['correctAnswers']['answers'] as Iterable)
           .map((e) => Answer(value: e['value']))
@@ -84,9 +84,9 @@ class QuestionItem extends FormItem {
       correctAnswers = [];
     }
     String questionType = "";
-    if (json['questionItem']['question']['choiceQuestion'] != null) {
+    if (json['questionItem']?['question']['choiceQuestion'] != null) {
       questionType = 'choiceQuestion';
-    } else if (json['questionItem']['question']['textQuestion'] != null) {
+    } else if (json['questionItem']?['question']['textQuestion'] != null) {
       questionType = 'textQuestion';
     }
 
