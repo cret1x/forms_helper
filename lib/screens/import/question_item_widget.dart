@@ -47,9 +47,11 @@ class _QuestionItemWidgetState extends State<QuestionItemWidget> {
       child: ElevatedButton(
         onPressed: () {
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => QuestionWidget(widget.question)));
+            context,
+            MaterialPageRoute(
+              builder: (context) => QuestionWidget(widget.question),
+            ),
+          );
         },
         style: ButtonStyle(
           fixedSize: const MaterialStatePropertyAll(Size.infinite),
