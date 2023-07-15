@@ -47,4 +47,13 @@ class Strings {
   static const String all = "Все";
   static const String onlySelected = "Только выделенные";
   static const String back = "Назад";
+  static const String options = "Варианты ответов";
+  static const String points = "Баллы за правильный ответ";
+  static const String paragraph = "Многострочный ответ";
+  static const String required = "Обязательный вопрос";
+  static const String answerType = "Тип ответа";
+  static const String checkbox = "Множественный выбор";
+  static const String dropdown = "Выпадающий список";
+  static const String radio = "Одиночный выбор";
+  static const String shuffle = "Перемешать ответы";
 }

@@ -1,6 +1,9 @@
 import 'package:forms_helper/entities/answer.dart';
 import 'package:forms_helper/entities/form_item.dart';
 import 'package:forms_helper/entities/question_item.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+
+import '../common/strings.dart';
 
 enum QuestionType { RADIO, CHECKBOX, DROP_DOWN }
 
@@ -90,5 +93,16 @@ class ChoiceQuestion extends QuestionItem {
       type: type,
       tag: questionItem.tag,
     );
+  }
+
+  String getType() {
+    switch (type) {
+      case QuestionType.CHECKBOX:
+        return Strings.checkbox;
+      case QuestionType.DROP_DOWN:
+        return Strings.dropdown;
+      case QuestionType.RADIO:
+        return Strings.radio;
+    }
   }
 }
