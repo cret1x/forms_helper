@@ -165,7 +165,7 @@ class QuestionWidget extends StatelessWidget {
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Text(
-                      _question.required ? Strings.no : Strings.yes,
+                      _question.required ? Strings.yes : Strings.no,
                       style: Theme.of(context).textTheme.displaySmall,
                     )
                   ],
