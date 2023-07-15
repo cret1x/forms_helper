@@ -35,4 +35,6 @@ class Strings {
   static const String wrongLink = "Некорректная ссылка";
   static const String checkLink = "Введённая ссылка не является корректной "
       "ссылкой на РЕДАКТИРОВАНИЕ формы.";
+  static const String choiceQuestion = "Вопрос с выбором ответа";
+  static const String textQuestion = "Вопрос с развернутым ответом";
 }

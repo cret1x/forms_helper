@@ -4,6 +4,7 @@ import 'package:forms_helper/screens/import/question_widget.dart';
 
 import '../../common/strings.dart';
 import '../../entities/form.dart';
+import '../../entities/question_item.dart';
 
 class FormView extends StatefulWidget {
   final GForm _form;
@@ -22,8 +23,7 @@ class _FormViewState extends State<FormView> {
 
   @override
   Widget build(BuildContext context) {
-    _qWidgets ??= widget._form.items!.whereType<ChoiceQuestion>().map((e) => QuestionWidget(e)).toList();
-    print(_qWidgets?.map((e) => e.info.selected).join(','));
+    _qWidgets ??= widget._form.items!.whereType<QuestionItem>().map((e) => QuestionWidget(e)).toList();
     return Expanded(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
