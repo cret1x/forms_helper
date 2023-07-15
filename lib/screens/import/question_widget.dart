@@ -28,10 +28,10 @@ class QuestionWidgetInfo {
 }
 
 class QuestionWidget extends StatefulWidget {
-  final QuestionItem _question;
+  final QuestionItem question;
   final QuestionWidgetInfo info = QuestionWidgetInfo();
 
-  QuestionWidget(this._question, {super.key});
+  QuestionWidget(this.question, {super.key});
 
   @override
   State<StatefulWidget> createState() {
@@ -60,7 +60,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    widget._question is ChoiceQuestion
+                    widget.question is ChoiceQuestion
                         ? Strings.choiceQuestion
                         : Strings.textQuestion,
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(
@@ -86,16 +86,16 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                 ],
               ),
               Text(
-                widget._question.title,
+                widget.question.title,
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
-              if (widget._question.description.isNotEmpty)
+              if (widget.question.description.isNotEmpty)
                 Text(
-                  widget._question.description,
+                  widget.question.description,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
-              if (widget._question is ChoiceQuestion)
-                ChoiceQuestionAnswersWidget(widget._question as ChoiceQuestion),
+              if (widget.question is ChoiceQuestion)
+                ChoiceQuestionAnswersWidget(widget.question as ChoiceQuestion),
             ],
           ),
         ),

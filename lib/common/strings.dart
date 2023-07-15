@@ -2,7 +2,8 @@ class Strings {
   static const String ok = "ОК";
   static const String menu = "Меню";
   static const String import = "Импорт";
-  static const String export = "Экспорт";
+  static const String export = "Экспортировать";
+  static const String edit = "Редактировать";
   static const String construct = "Конструктор форм";
   static const String storage = "Хранилище";
   static const String settings = "Настройки";
@@ -37,4 +38,8 @@ class Strings {
       "ссылкой на РЕДАКТИРОВАНИЕ формы.";
   static const String choiceQuestion = "Вопрос с выбором ответа";
   static const String textQuestion = "Вопрос с развернутым ответом";
+  static const String quiz = "Квиз";
+  static const String notSelected = "Не выбрано";
+  static const String sure = "Вы уверены, что хотите продолжить?";
+  static const String noDisciplineSelected = "Дисциплина не выбрана";
 }

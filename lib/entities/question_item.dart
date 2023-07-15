@@ -6,7 +6,7 @@ class QuestionItem extends FormItem {
   final int pointValue;
   final List<Answer> correctAnswers;
   final String questionType;
-  final String tag;
+  String? tag;
 
   QuestionItem({
     required super.title,
@@ -15,7 +15,7 @@ class QuestionItem extends FormItem {
     required this.pointValue,
     required this.correctAnswers,
     required this.questionType,
-    required this.tag,
+    this.tag,
   });
 
   @override
