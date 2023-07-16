@@ -43,7 +43,9 @@ class _FormViewState extends State<FormView> {
   Widget build(BuildContext context) {
     _qWidgets ??= widget.form.items!
         .whereType<QuestionItem>()
-        .map((e) => QuestionItemWidget(question: e,))
+        .map((e) => QuestionItemWidget(
+              question: e,
+            ))
         .toList();
     return Expanded(
       child: Row(
@@ -356,7 +358,9 @@ class _FormViewState extends State<FormView> {
                                   actions: [
                                     TextButton(
                                       onPressed: () {
-                                        Navigator.of(context, rootNavigator: true).pop(context);
+                                        Navigator.of(context,
+                                                rootNavigator: true)
+                                            .pop(context);
                                       },
                                       child: const Text(Strings.ok),
                                     ),
@@ -378,7 +382,8 @@ class _FormViewState extends State<FormView> {
                             if (_dropdownValue ==
                                 Strings.noDisciplineSelected) {
                               for (var widget in _qWidgets!) {
-                                if (widget.info.selected && !widget.info.contained!) {
+                                if (widget.info.selected &&
+                                    !widget.info.contained!) {
                                   _questionItems.add(widget.question);
                                   widget.info.contained = true;
                                   widget.info.unselect();
@@ -386,7 +391,9 @@ class _FormViewState extends State<FormView> {
                               }
                             } else {
                               for (var widget in _qWidgets!) {
-                                if (widget.info.selected && !widget.info.contained!) {
+                                if (widget.info.selected &&
+                                    (widget.info.contained == null ||
+                                        !widget.info.contained!)) {
                                   _questionItems.add(widget.question);
                                   _questionItems.last.tag = _dropdownValue;
                                   widget.info.contained = true;
@@ -408,7 +415,9 @@ class _FormViewState extends State<FormView> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 12,),
+                const SizedBox(
+                  height: 12,
+                ),
                 Expanded(
                   child: ListView(
                     shrinkWrap: true,
