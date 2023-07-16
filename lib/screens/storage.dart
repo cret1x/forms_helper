@@ -1,7 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:forms_helper/screens/import/question_item_widget.dart';
 
 import '../common/strings.dart';
 import '../common/themes.dart';
+import '../entities/question_item.dart';
+import '../sqlite/local_storage.dart';
 
 class StorageWidget extends StatefulWidget {
   const StorageWidget({super.key});
@@ -13,13 +18,46 @@ class StorageWidget extends StatefulWidget {
 }
 
 class _StorageWidgetState extends State<StorageWidget>
-    with AutomaticKeepAliveClientMixin<StorageWidget> {
+    with
+        AutomaticKeepAliveClientMixin<StorageWidget>,
+        SingleTickerProviderStateMixin {
   final TextEditingController _controller = TextEditingController();
+  final LocalStorage _storage = LocalStorage();
   String? _dropdownValue;
+  int page = 0;
+  late Animation<double> _animation;
+  late AnimationController _animationController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
+    );
+
+    setRotation(360);
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  void setRotation(int degrees) {
+    final angle = degrees * pi / 180;
+
+    _animation =
+        Tween<double>(begin: 0, end: angle).animate(_animationController);
+  }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    Future<List<QuestionItem>> _questions = _storage.getQuestions(
+        searchText: _controller.text, page: page, tag: _dropdownValue);
     return MaterialApp(
       theme: Themes.darkBlue,
       home: Padding(
@@ -70,7 +108,7 @@ class _StorageWidgetState extends State<StorageWidget>
                   ),
                 ),
                 const SizedBox(
-                  width: 28,
+                  width: 14,
                 ),
                 Flexible(
                   child: DropdownButtonFormField(
@@ -113,7 +151,7 @@ class _StorageWidgetState extends State<StorageWidget>
                   ),
                 ),
                 const SizedBox(
-                  width: 28,
+                  width: 14,
                 ),
                 ElevatedButton(
                   onPressed: () {},
@@ -121,7 +159,40 @@ class _StorageWidgetState extends State<StorageWidget>
                     Strings.add,
                   ),
                 ),
+                const SizedBox(
+                  width: 14,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    _animationController.forward(from: 0);
+                    setState(() {});
+                  },
+                  child: AnimatedBuilder(
+                    animation: _animation,
+                    child: const Icon(Icons.refresh),
+                    builder: (context, child) => Transform.rotate(
+                      angle: _animation.value,
+                      child: child,
+                    ),
+                  ),
+                ),
               ],
+            ),
+            FutureBuilder(
+              future: _questions,
+              builder: (context, snapshot) {
+                print(snapshot.data);
+                return snapshot.hasData
+                    ? ListView(
+                        shrinkWrap: true,
+                        children: snapshot.data!
+                            .map((e) => QuestionItemWidget(e))
+                            .toList(),
+                      )
+                    : CircularProgressIndicator(
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      );
+              },
             ),
           ],
         ),
