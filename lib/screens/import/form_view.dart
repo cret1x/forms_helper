@@ -378,15 +378,19 @@ class _FormViewState extends State<FormView> {
                             if (_dropdownValue ==
                                 Strings.noDisciplineSelected) {
                               for (var widget in _qWidgets!) {
-                                if (widget.info.selected) {
+                                if (widget.info.selected && !widget.info.contained!) {
                                   _questionItems.add(widget.question);
+                                  widget.info.contained = true;
+                                  widget.info.unselect();
                                 }
                               }
                             } else {
                               for (var widget in _qWidgets!) {
-                                if (widget.info.selected) {
+                                if (widget.info.selected && !widget.info.contained!) {
                                   _questionItems.add(widget.question);
                                   _questionItems.last.tag = _dropdownValue;
+                                  widget.info.contained = true;
+                                  widget.info.unselect();
                                 }
                               }
                             }
