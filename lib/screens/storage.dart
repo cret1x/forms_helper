@@ -181,14 +181,15 @@ class _StorageWidgetState extends State<StorageWidget>
             FutureBuilder(
               future: _questions,
               builder: (context, snapshot) {
-                print(snapshot.data);
                 return snapshot.hasData
-                    ? ListView(
-                        shrinkWrap: true,
-                        children: snapshot.data!
-                            .map((e) => QuestionItemWidget(e))
-                            .toList(),
-                      )
+                    ? Expanded(
+                      child: ListView(
+                          shrinkWrap: true,
+                          children: snapshot.data!
+                              .map((e) => QuestionItemWidget(e))
+                              .toList(),
+                        ),
+                    )
                     : CircularProgressIndicator(
                         color: Theme.of(context).colorScheme.onPrimary,
                       );
