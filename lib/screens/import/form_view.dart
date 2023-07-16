@@ -406,6 +406,7 @@ class _FormViewState extends State<FormView> {
                               await _storage.init();
                             }
                             _storage.saveQuestions(_questionItems);
+                            setState(() {});
                           },
                           child: const Text(
                             Strings.saveSelected,
