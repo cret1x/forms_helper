@@ -78,6 +78,9 @@ class _StorageWidgetState extends State<StorageWidget>
                   child: TextField(
                     controller: _controller,
                     cursorColor: Theme.of(context).colorScheme.onPrimary,
+                    onChanged: (_) {
+                      setState(() {});
+                    },
                     decoration: InputDecoration(
                       prefixIcon: Icon(
                         Icons.search,
@@ -178,6 +181,7 @@ class _StorageWidgetState extends State<StorageWidget>
                 ),
               ],
             ),
+            const SizedBox(height: 24,),
             FutureBuilder(
               future: _questions,
               builder: (context, snapshot) {
@@ -186,7 +190,7 @@ class _StorageWidgetState extends State<StorageWidget>
                       child: ListView(
                           shrinkWrap: true,
                           children: snapshot.data!
-                              .map((e) => QuestionItemWidget(e))
+                              .map((e) => QuestionItemWidget(question: e, fromStorage: true,))
                               .toList(),
                         ),
                     )

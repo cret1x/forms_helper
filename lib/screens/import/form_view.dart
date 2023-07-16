@@ -43,7 +43,7 @@ class _FormViewState extends State<FormView> {
   Widget build(BuildContext context) {
     _qWidgets ??= widget.form.items!
         .whereType<QuestionItem>()
-        .map((e) => QuestionItemWidget(e))
+        .map((e) => QuestionItemWidget(question: e,))
         .toList();
     return Expanded(
       child: Row(
@@ -408,6 +408,7 @@ class _FormViewState extends State<FormView> {
                     ),
                   ],
                 ),
+                const SizedBox(height: 12,),
                 Expanded(
                   child: ListView(
                     shrinkWrap: true,

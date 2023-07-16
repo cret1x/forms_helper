@@ -10,6 +10,7 @@ import '../question_widget.dart';
 class QuestionWidgetInfo {
   bool? contained;
   bool _isSelected = false;
+  late final bool _storage;
 
   bool get selected {
     return _isSelected;
@@ -33,7 +34,10 @@ class QuestionItemWidget extends StatefulWidget {
   final QuestionWidgetInfo info = QuestionWidgetInfo();
   final LocalStorage _storage = LocalStorage();
 
-  QuestionItemWidget(this.question, {super.key});
+  QuestionItemWidget(
+      {required this.question, bool fromStorage = false, super.key}) {
+    info._storage = fromStorage;
+  }
 
   @override
   State<StatefulWidget> createState() {
@@ -45,7 +49,7 @@ class _QuestionItemWidgetState extends State<QuestionItemWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 15),
+      padding: const EdgeInsets.only(bottom: 15),
       child: ElevatedButton(
         onPressed: () {
           Navigator.push(
@@ -85,26 +89,36 @@ class _QuestionItemWidgetState extends State<QuestionItemWidget> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 6),
-                    child: FutureBuilder(
-                      future: widget._storage.exists(widget.question),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return CircularProgressIndicator(
-                            color: Theme.of(context).colorScheme.onPrimary,
-                          );
-                        }
-                        return snapshot.data!
-                            ? const Icon(Icons.download_done)
-                            : Checkbox(
-                                value: widget.info.selected,
-                                onChanged: (_) {
-                                  setState(() {
-                                    widget.info._toggle();
-                                  });
-                                },
-                              );
-                      },
-                    ),
+                    child: !widget.info._storage
+                        ? FutureBuilder(
+                            future: widget._storage.exists(widget.question),
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData) {
+                                return CircularProgressIndicator(
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                );
+                              }
+                              return snapshot.data! && !widget.info._storage
+                                  ? const Icon(Icons.download_done)
+                                  : Checkbox(
+                                      value: widget.info.selected,
+                                      onChanged: (_) {
+                                        setState(() {
+                                          widget.info._toggle();
+                                        });
+                                      },
+                                    );
+                            },
+                          )
+                        : Checkbox(
+                            value: widget.info.selected,
+                            onChanged: (_) {
+                              setState(() {
+                                widget.info._toggle();
+                              });
+                            },
+                          ),
                   )
                 ],
               ),
