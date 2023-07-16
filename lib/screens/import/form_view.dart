@@ -237,9 +237,6 @@ class _FormViewState extends State<FormView> {
                                 actionsPadding: const EdgeInsets.all(12),
                                 title: const Text(
                                   Strings.transfer,
-                                  style: TextStyle(
-                                    fontFamily: 'Verdana',
-                                  ),
                                 ),
                                 shape: const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.all(
@@ -254,6 +251,12 @@ class _FormViewState extends State<FormView> {
                                           .onSurface),
                                 ),
                                 actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text(Strings.cancel),
+                                  ),
                                   TextButton(
                                     onPressed: () {
                                       Navigator.pop(context, true);
@@ -324,6 +327,44 @@ class _FormViewState extends State<FormView> {
                         ),
                         ElevatedButton(
                           onPressed: () async {
+                            if (_qWidgets!.every((e) =>
+                                (e.info.contained != null &&
+                                    e.info.contained!) ||
+                                !e.info.selected)) {
+                              await showDialog(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                  actionsPadding: const EdgeInsets.all(12),
+                                  title: const Text(
+                                    Strings.noQuestionsSelected,
+                                    style: TextStyle(
+                                      fontFamily: 'Verdana',
+                                    ),
+                                  ),
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(15),
+                                    ),
+                                  ),
+                                  content: Text(
+                                    Strings.selectToSave,
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text(Strings.ok),
+                                    ),
+                                  ],
+                                ),
+                              );
+                              return;
+                            }
                             if (_dropdownValue == Strings.notSelected) {
                               bool? res = await showDialog(
                                   context: context,

@@ -56,4 +56,7 @@ class Strings {
   static const String dropdown = "Выпадающий список";
   static const String radio = "Одиночный выбор";
   static const String shuffle = "Перемешать ответы";
+  static const String cancel = "Отменить";
+  static const String noQuestionsSelected = "Не выбрано ни одного вопроса";
+  static const String selectToSave = "Для того, чтобы сохранить вопрос(-ы) его(их) необходимо сначала выделить";
 }

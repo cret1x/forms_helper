@@ -7,9 +7,16 @@ import '../entities/question_item.dart';
 import '../entities/text_question.dart';
 
 class QuestionWidget extends StatelessWidget {
-  final QuestionItem _question;
+  final QuestionItem question;
+  final bool? imported;
+  final bool? stored;
 
-  const QuestionWidget(this._question, {super.key});
+  const QuestionWidget({
+    required this.question,
+    this.imported,
+    this.stored,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +35,7 @@ class QuestionWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    _question is ChoiceQuestion
+                    question is ChoiceQuestion
                         ? Strings.choiceQuestion
                         : Strings.textQuestion,
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(
@@ -48,18 +55,18 @@ class QuestionWidget extends StatelessWidget {
                 ],
               ),
               SelectableText(
-                _question.title,
+                question.title,
                 style: Theme.of(context).textTheme.headlineLarge,
                 minLines: 1,
                 maxLines: 18,
               ),
-              if (_question.description.isNotEmpty)
+              if (question.description.isNotEmpty)
                 const SizedBox(
                   height: 12,
                 ),
-              if (_question.description.isNotEmpty)
+              if (question.description.isNotEmpty)
                 SelectableText(
-                  _question.description,
+                  question.description,
                   style: Theme.of(context).textTheme.titleLarge,
                   minLines: 1,
                   maxLines: 18,
@@ -68,7 +75,7 @@ class QuestionWidget extends StatelessWidget {
                 padding: EdgeInsets.symmetric(vertical: 12),
                 child: Divider(),
               ),
-              if (_question is ChoiceQuestion)
+              if (question is ChoiceQuestion)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8),
                   child: Text(
@@ -76,14 +83,14 @@ class QuestionWidget extends StatelessWidget {
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ),
-              if (_question is ChoiceQuestion)
+              if (question is ChoiceQuestion)
                 Column(
-                  children: (_question as ChoiceQuestion)
+                  children: (question as ChoiceQuestion)
                       .options
                       .map(
                         (e) => Padding(
                           padding: const EdgeInsets.symmetric(vertical: 4),
-                          child: !_question.correctAnswers.contains(e)
+                          child: !question.correctAnswers.contains(e)
                               ? Row(
                                   children: [
                                     Padding(
@@ -128,7 +135,7 @@ class QuestionWidget extends StatelessWidget {
                       )
                       .toList(),
                 ),
-              if (_question is ChoiceQuestion)
+              if (question is ChoiceQuestion)
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 12),
                   child: Divider(),
@@ -145,9 +152,9 @@ class QuestionWidget extends StatelessWidget {
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Text(
-                      _question.tag == null || _question.tag!.isEmpty
+                      question.tag == null || question.tag!.isEmpty
                           ? Strings.no
-                          : _question.tag!,
+                          : question.tag!,
                       style: Theme.of(context).textTheme.displaySmall,
                     )
                   ],
@@ -165,7 +172,7 @@ class QuestionWidget extends StatelessWidget {
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Text(
-                      _question.required ? Strings.yes : Strings.no,
+                      question.required ? Strings.yes : Strings.no,
                       style: Theme.of(context).textTheme.displaySmall,
                     )
                   ],
@@ -183,7 +190,7 @@ class QuestionWidget extends StatelessWidget {
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Text(
-                      _question.pointValue.toString(),
+                      question.pointValue.toString(),
                       style: Theme.of(context).textTheme.displaySmall,
                     )
                   ],
@@ -193,7 +200,7 @@ class QuestionWidget extends StatelessWidget {
                 padding: EdgeInsets.symmetric(vertical: 12),
                 child: Divider(),
               ),
-              if (_question is ChoiceQuestion)
+              if (question is ChoiceQuestion)
                 Padding(
                   padding: const EdgeInsets.only(
                     bottom: 4,
@@ -206,13 +213,13 @@ class QuestionWidget extends StatelessWidget {
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       Text(
-                        (_question as ChoiceQuestion).getType(),
+                        (question as ChoiceQuestion).getType(),
                         style: Theme.of(context).textTheme.displaySmall,
                       )
                     ],
                   ),
                 ),
-              if (_question is ChoiceQuestion)
+              if (question is ChoiceQuestion)
                 Padding(
                   padding: const EdgeInsets.only(
                     top: 4,
@@ -225,7 +232,7 @@ class QuestionWidget extends StatelessWidget {
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       Text(
-                        (_question as ChoiceQuestion).shuffle
+                        (question as ChoiceQuestion).shuffle
                             ? Strings.yes
                             : Strings.no,
                         style: Theme.of(context).textTheme.displaySmall,
@@ -233,7 +240,7 @@ class QuestionWidget extends StatelessWidget {
                     ],
                   ),
                 ),
-              if (_question is TextQuestion)
+              if (question is TextQuestion)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -242,7 +249,7 @@ class QuestionWidget extends StatelessWidget {
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Text(
-                      (_question as TextQuestion).paragraph
+                      (question as TextQuestion).paragraph
                           ? Strings.yes
                           : Strings.no,
                       style: Theme.of(context).textTheme.displaySmall,

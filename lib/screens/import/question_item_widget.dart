@@ -4,10 +4,11 @@ import 'package:forms_helper/screens/import/choice_question_answers.dart';
 
 import '../../common/strings.dart';
 import '../../entities/question_item.dart';
+import '../../sqlite/local_storage.dart';
 import '../question_widget.dart';
 
 class QuestionWidgetInfo {
-  late final bool contained = false;
+  bool? contained;
   bool _isSelected = false;
 
   bool get selected {
@@ -30,6 +31,7 @@ class QuestionWidgetInfo {
 class QuestionItemWidget extends StatefulWidget {
   final QuestionItem question;
   final QuestionWidgetInfo info = QuestionWidgetInfo();
+  final LocalStorage _storage = LocalStorage();
 
   QuestionItemWidget(this.question, {super.key});
 
@@ -49,7 +51,10 @@ class _QuestionItemWidgetState extends State<QuestionItemWidget> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => QuestionWidget(widget.question),
+              builder: (context) => QuestionWidget(
+                question: widget.question,
+                imported: true,
+              ),
             ),
           );
         },
@@ -80,16 +85,26 @@ class _QuestionItemWidgetState extends State<QuestionItemWidget> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 6),
-                    child: widget.info.contained
-                        ? const Icon(Icons.download_done)
-                        : Checkbox(
-                            value: widget.info.selected,
-                            onChanged: (_) {
-                              setState(() {
-                                widget.info._toggle();
-                              });
-                            },
-                          ),
+                    child: FutureBuilder(
+                      future: widget._storage.exists(widget.question),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return CircularProgressIndicator(
+                            color: Theme.of(context).colorScheme.onPrimary,
+                          );
+                        }
+                        return snapshot.data!
+                            ? const Icon(Icons.download_done)
+                            : Checkbox(
+                                value: widget.info.selected,
+                                onChanged: (_) {
+                                  setState(() {
+                                    widget.info._toggle();
+                                  });
+                                },
+                              );
+                      },
+                    ),
                   )
                 ],
               ),
