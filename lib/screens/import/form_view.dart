@@ -356,7 +356,7 @@ class _FormViewState extends State<FormView> {
                                   actions: [
                                     TextButton(
                                       onPressed: () {
-                                        Navigator.pop(context);
+                                        Navigator.of(context, rootNavigator: true).pop(context);
                                       },
                                       child: const Text(Strings.ok),
                                     ),
