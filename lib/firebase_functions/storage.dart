@@ -61,12 +61,22 @@ class FirestoreManager {
     }
   }
 
+  Future<void> updateQuestion(QuestionItem questionItem) async {
+    if (!await exists(questionItem)) {
+      return;
+    }
+    final questionsCollection = Firestore.instance.collection('questions');
+    final document = await questionsCollection.where('title', isEqualTo: questionItem.title).get();
+    final key = document.first.id;
+    await questionsCollection.document(key).update(questionItem.toMap());
+  }
+
   Future<void> saveForm(GForm form) async {
     final formsCollection = Firestore.instance.collection('forms');
     formsCollection.add(form.toMap());
   }
 
-  Future<bool> isQuestionExist(ChoiceQuestion question) async {
+  Future<bool> exists(QuestionItem question) async {
     final questionsCollection = Firestore.instance.collection('questions');
     final questionsDocuments = await questionsCollection.where('title', isEqualTo: question.title).get();
     return questionsDocuments.isNotEmpty;

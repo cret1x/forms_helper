@@ -76,7 +76,7 @@ class LocalStorage {
         sortOrders: [SortOrder('title', ascending)]);
     final records = await store.find(_db, finder: finder);
     for (var record in records) {
-      if (record.value['questionType'] == 'choiceQuestion') {
+      if (QuestionItem.fromMap(record.value).questionType == 'choiceQuestion') {
         items.add(ChoiceQuestion.fromMap(record.value));
       } else {
         items.add(TextQuestion.fromMap(record.value));
@@ -100,15 +100,19 @@ class LocalStorage {
     });
   }
 
-  Future<void> updateQuestions(List<QuestionItem> questions) async {
+  Future<void> updateQuestion(QuestionItem questionItem) async {
     final store = intMapStoreFactory.store('questions');
+    final filter = Filter.equals('title', questionItem.title);
+    final finder = Finder(filter: filter);
+    await store.update(_db, questionItem.toMap(), finder: finder);
+    await _firestoreManager.updateQuestion(questionItem);
   }
 
   Future<bool> exists(QuestionItem questionItem) async {
     final store = intMapStoreFactory.store('questions');
     final filter = Filter.equals('title', questionItem.title);
     final finder = Finder(filter: filter);
-    final  record = await store.findFirst(_db, finder: finder);
+    final record = await store.findFirst(_db, finder: finder);
     return record != null;
   }
 }

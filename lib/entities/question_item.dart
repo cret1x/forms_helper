@@ -90,7 +90,7 @@ class QuestionItem extends FormItem {
       questionType = 'textQuestion';
     }
 
-    final item = FormItem.fromMap(json);
+    final item = FormItem.fromGoogleFormJson(json);
     return QuestionItem(
       title: item.title,
       description: item.description,
