@@ -1,6 +1,9 @@
 import 'dart:math';
 
+import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:forms_helper/screens/construct.dart';
 import 'package:forms_helper/screens/import/question_item_widget.dart';
 
 import '../common/strings.dart';
@@ -8,16 +11,45 @@ import '../common/themes.dart';
 import '../entities/question_item.dart';
 import '../sqlite/local_storage.dart';
 
-class StorageWidget extends StatefulWidget {
-  const StorageWidget({super.key});
+final storageProvider = StateNotifierProvider<
+    ConstructorQuestionsStateNotifier,
+    List<QuestionItem>>((ref) => ConstructorQuestionsStateNotifier());
+
+class StorageQuestionsStateNotifier
+    extends StateNotifier<List<QuestionItem>> {
+  StorageQuestionsStateNotifier() : super([]);
+
+  void addQuestion(QuestionItem questionItem) {
+    if (!state.contains(questionItem)) {
+      state = [...state, questionItem];
+    }
+  }
+
+  void deleteQuestion(QuestionItem questionItem) {
+    state = [
+      for (final q in state)
+        if (questionItem != q) q,
+    ];
+  }
+}
+
+class StorageWidget extends ConsumerStatefulWidget {
+  final PageController pageController;
+  final SideMenuController menuController;
+
+  const StorageWidget({
+    required this.pageController,
+    required this.menuController,
+    super.key,
+  });
 
   @override
-  State<StatefulWidget> createState() {
+  ConsumerState<ConsumerStatefulWidget> createState() {
     return _StorageWidgetState();
   }
 }
 
-class _StorageWidgetState extends State<StorageWidget>
+class _StorageWidgetState extends ConsumerState<StorageWidget>
     with
         AutomaticKeepAliveClientMixin<StorageWidget>,
         SingleTickerProviderStateMixin {
@@ -27,6 +59,8 @@ class _StorageWidgetState extends State<StorageWidget>
   int page = 0;
   late Animation<double> _animation;
   late AnimationController _animationController;
+  List<QuestionItemWidget>? _qWidgets;
+  late List<QuestionItem> _constructQuestions;
 
   @override
   void initState() {
@@ -157,6 +191,29 @@ class _StorageWidgetState extends State<StorageWidget>
                   width: 14,
                 ),
                 ElevatedButton(
+                  onPressed: () {
+                    _constructQuestions = ref.read(constructorProvider);
+                    final selectedQuestions = ref.read(storageProvider);
+
+                    for (var q in selectedQuestions) {
+                      if (!_constructQuestions.contains(q)) {
+                        ref
+                            .read(constructorProvider.notifier)
+                            .addQuestion(q);
+                      }
+                    }
+
+                    widget.pageController.jumpToPage(2);
+                    widget.menuController.changePage(2);
+                  },
+                  child: const Text(
+                    Strings.toConstructor,
+                  ),
+                ),
+                const SizedBox(
+                  width: 14,
+                ),
+                ElevatedButton(
                   onPressed: () {},
                   child: const Text(
                     Strings.add,
@@ -181,22 +238,29 @@ class _StorageWidgetState extends State<StorageWidget>
                 ),
               ],
             ),
-            const SizedBox(height: 24,),
+            const SizedBox(
+              height: 24,
+            ),
             FutureBuilder(
               future: _questions,
               builder: (context, snapshot) {
-                return snapshot.hasData
-                    ? Expanded(
-                      child: ListView(
-                          shrinkWrap: true,
-                          children: snapshot.data!
-                              .map((e) => QuestionItemWidget(question: e, fromStorage: true,))
-                              .toList(),
-                        ),
-                    )
-                    : CircularProgressIndicator(
-                        color: Theme.of(context).colorScheme.onPrimary,
-                      );
+                if (snapshot.hasData) {
+                  _qWidgets = snapshot.data!
+                      .map((e) => QuestionItemWidget(
+                            question: e,
+                            fromStorageScreen: true,
+                          ))
+                      .toList();
+                  return Expanded(
+                    child: ListView(
+                      shrinkWrap: true,
+                      children: _qWidgets!,
+                    ),
+                  );
+                }
+                return CircularProgressIndicator(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                );
               },
             ),
           ],

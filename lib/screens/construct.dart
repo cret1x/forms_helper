@@ -1,27 +1,70 @@
 import 'package:flutter/material.dart';
 import 'package:forms_helper/common/strings.dart';
-
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:forms_helper/entities/question_item.dart';
+import 'package:forms_helper/screens/import/question_item_widget.dart';
 import '../common/themes.dart';
 import '../entities/choice_question.dart';
 
-class FormConstructor extends StatefulWidget {
+final constructorProvider = StateNotifierProvider<
+    ConstructorQuestionsStateNotifier,
+    List<QuestionItem>>((ref) => ConstructorQuestionsStateNotifier());
+
+class ConstructorQuestionsStateNotifier
+    extends StateNotifier<List<QuestionItem>> {
+  ConstructorQuestionsStateNotifier() : super([]);
+
+  void addQuestion(QuestionItem questionItem) {
+    if (!state.contains(questionItem)) {
+      state = [...state, questionItem];
+    }
+  }
+
+  void deleteQuestion(QuestionItem questionItem) {
+    state = [
+      for (final q in state)
+        if (questionItem != q) q,
+    ];
+  }
+
+  void moveQuestion(QuestionItem questionItem, int newIndex) {
+    int index = 0;
+    List<QuestionItem> newList = [];
+    for (var q in state) {
+      if (index == newIndex) {
+        newList.add(questionItem);
+        ++index;
+      } else if (q != questionItem) {
+        newList.add(q);
+        ++index;
+      }
+    }
+    state = newList;
+  }
+}
+
+class FormConstructor extends ConsumerStatefulWidget {
   const FormConstructor({super.key});
 
   @override
-  State<StatefulWidget> createState() {
+  ConsumerState<ConsumerStatefulWidget> createState() {
     return _FormConstructorState();
   }
 }
 
-class _FormConstructorState extends State<FormConstructor>
+class _FormConstructorState extends ConsumerState<FormConstructor>
     with AutomaticKeepAliveClientMixin<FormConstructor> {
+  final TextEditingController _filenameController = TextEditingController();
   final TextEditingController _headerController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  final List<ChoiceQuestion> _questions = [];
+  late List<QuestionItem> _questions;
+  late List<QuestionItemWidget> _qWidgets;
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    _questions = ref.watch(constructorProvider);
+    _qWidgets = _questions.map((e) => QuestionItemWidget(question: e)).toList();
     return MaterialApp(
       theme: Themes.darkBlue,
       home: Padding(
@@ -36,12 +79,44 @@ class _FormConstructorState extends State<FormConstructor>
             const SizedBox(
               height: 24,
             ),
-            IntrinsicHeight(
+            Expanded(
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    child: Column(
+                    child: ListView(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      shrinkWrap: true,
                       children: [
+                        TextField(
+                          controller: _filenameController,
+                          cursorColor: Theme.of(context).colorScheme.onPrimary,
+                          decoration: InputDecoration(
+                            hintText: Strings.name,
+                            hintStyle: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium!
+                                      .color!
+                                      .withOpacity(0.4),
+                                ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: const BorderSide(
+                                width: 0,
+                                style: BorderStyle.none,
+                              ),
+                            ),
+                            filled: true,
+                            contentPadding: const EdgeInsets.all(16),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 18,
+                        ),
                         TextField(
                           controller: _headerController,
                           cursorColor: Theme.of(context).colorScheme.onPrimary,
@@ -69,7 +144,7 @@ class _FormConstructorState extends State<FormConstructor>
                           ),
                         ),
                         const SizedBox(
-                          height: 24,
+                          height: 18,
                         ),
                         TextFormField(
                           controller: _descriptionController,
@@ -137,13 +212,13 @@ class _FormConstructorState extends State<FormConstructor>
                                           onPressed: () {
                                             Navigator.pop(context, true);
                                           },
-                                          child: Text(Strings.yes),
+                                          child: const Text(Strings.yes),
                                         ),
                                         TextButton(
                                           onPressed: () {
                                             Navigator.pop(context, false);
                                           },
-                                          child: Text(Strings.no),
+                                          child: const Text(Strings.no),
                                         ),
                                       ],
                                     ),
@@ -217,7 +292,11 @@ class _FormConstructorState extends State<FormConstructor>
                                       Theme.of(context).textTheme.displaySmall,
                                 ),
                               ))
-                            : Container(),
+                            : Expanded(
+                                child: ListView(
+                                  children: _qWidgets,
+                                ),
+                              ),
                       ],
                     ),
                   ),

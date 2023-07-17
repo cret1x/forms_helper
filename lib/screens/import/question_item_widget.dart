@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:forms_helper/entities/choice_question.dart';
+import 'package:forms_helper/screens/construct.dart';
 import 'package:forms_helper/screens/import/choice_question_answers.dart';
+import 'package:forms_helper/screens/storage.dart';
 
 import '../../common/strings.dart';
 import '../../entities/question_item.dart';
@@ -10,7 +13,8 @@ import '../question_widget.dart';
 class QuestionWidgetInfo {
   bool? contained;
   bool _isSelected = false;
-  late final bool _storage;
+  late final bool _fromImportScreen;
+  late final bool _fromStorageScreen;
 
   bool get selected {
     return _isSelected;
@@ -29,25 +33,35 @@ class QuestionWidgetInfo {
   }
 }
 
-class QuestionItemWidget extends StatefulWidget {
+class QuestionItemWidget extends ConsumerStatefulWidget {
   final QuestionItem question;
   final QuestionWidgetInfo info = QuestionWidgetInfo();
   final LocalStorage _storage = LocalStorage();
 
-  QuestionItemWidget(
-      {required this.question, bool fromStorage = false, super.key}) {
-    info._storage = fromStorage;
+  QuestionItemWidget({
+    required this.question,
+    bool fromImportScreen = false,
+    bool fromStorageScreen = false,
+    super.key,
+  }) {
+    info._fromImportScreen = fromImportScreen;
+    info._fromStorageScreen = fromStorageScreen;
   }
 
   @override
-  State<StatefulWidget> createState() {
+  ConsumerState<ConsumerStatefulWidget> createState() {
     return _QuestionItemWidgetState();
   }
 }
 
-class _QuestionItemWidgetState extends State<QuestionItemWidget> {
+class _QuestionItemWidgetState extends ConsumerState<QuestionItemWidget> {
+  late List<QuestionItem> _constructQuestions;
+
   @override
   Widget build(BuildContext context) {
+    if (widget.info._fromStorageScreen) {
+      _constructQuestions = ref.watch(constructorProvider);
+    }
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
       child: ElevatedButton(
@@ -57,7 +71,7 @@ class _QuestionItemWidgetState extends State<QuestionItemWidget> {
             MaterialPageRoute(
               builder: (context) => QuestionWidget(
                 question: widget.question,
-                imported: true,
+                imported: widget.info._fromImportScreen,
               ),
             ),
           );
@@ -89,7 +103,7 @@ class _QuestionItemWidgetState extends State<QuestionItemWidget> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 6),
-                    child: !widget.info._storage
+                    child: widget.info._fromImportScreen
                         ? FutureBuilder(
                             future: widget._storage.exists(widget.question),
                             builder: (context, snapshot) {
@@ -99,7 +113,7 @@ class _QuestionItemWidgetState extends State<QuestionItemWidget> {
                                       Theme.of(context).colorScheme.onPrimary,
                                 );
                               }
-                              return snapshot.data! && !widget.info._storage
+                              return snapshot.data!
                                   ? const Icon(Icons.download_done)
                                   : Checkbox(
                                       value: widget.info.selected,
@@ -111,14 +125,37 @@ class _QuestionItemWidgetState extends State<QuestionItemWidget> {
                                     );
                             },
                           )
-                        : Checkbox(
-                            value: widget.info.selected,
-                            onChanged: (_) {
-                              setState(() {
-                                widget.info._toggle();
-                              });
-                            },
-                          ),
+                        : widget.info._fromStorageScreen
+                            ? !_constructQuestions.contains(widget.question)
+                                ? Checkbox(
+                                    value: widget.info.selected,
+                                    onChanged: (_) {
+                                      setState(() {
+                                        if (!widget.info.selected) {
+                                          ref
+                                              .read(storageProvider.notifier)
+                                              .addQuestion(widget.question);
+                                        } else {
+                                          ref
+                                              .read(storageProvider.notifier)
+                                              .deleteQuestion(widget.question);
+                                        }
+                                        widget.info._toggle();
+                                      });
+                                    },
+                                  )
+                                : const Checkbox(
+                                    value: true,
+                                    onChanged: null,
+                                  )
+                            : Checkbox(
+                                value: widget.info.selected,
+                                onChanged: (_) {
+                                  setState(() {
+                                    widget.info._toggle();
+                                  });
+                                },
+                              ),
                   )
                 ],
               ),

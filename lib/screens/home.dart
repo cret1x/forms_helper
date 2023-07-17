@@ -39,7 +39,10 @@ class _HomeState extends State<HomeWidget> {
                     pageController: _pageController,
                     menuController: _menuController,
                   ),
-                  const StorageWidget(),
+                  StorageWidget(
+                    pageController: _pageController,
+                    menuController: _menuController,
+                  ),
                   const FormConstructor(),
                   Container(
                     color: Colors.green,
