@@ -11,6 +11,7 @@ import 'package:forms_helper/entities/text_question.dart';
 import 'package:forms_helper/firebase_functions/storage.dart';
 import 'package:forms_helper/google_api/auth.dart';
 import 'package:forms_helper/google_api/forms.dart';
+import 'package:forms_helper/screens/export/export.dart';
 import 'package:forms_helper/screens/home.dart';
 import 'package:forms_helper/sqlite/local_storage.dart';
 
@@ -137,9 +138,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         type: QuestionType.RADIO,
                         tag: 'Мозг'),
                   ];
-                  final fapi = FirestoreManager();
-                  await fapi.saveQuestions(questions);
-                  print('Done!');
+                  PDFExport.export(GForm(title: 'a', description: 'b', documentTitle: 'c', items: questions));
                 },
                 child: const Text("2"),
               ),
