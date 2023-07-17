@@ -1,6 +1,7 @@
 import 'package:firedart/firestore/firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:forms_helper/entities/answer.dart';
 import 'package:forms_helper/entities/form.dart';
 import 'package:forms_helper/entities/choice_question.dart';
@@ -18,7 +19,7 @@ import 'common/themes.dart';
 //TODO: set minimum window size
 void main() {
   Firestore.initialize("formshelper-f0d02");
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
