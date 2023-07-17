@@ -43,9 +43,12 @@ class _FormViewState extends State<FormView> {
   Widget build(BuildContext context) {
     _qWidgets ??= widget.form.items!
         .whereType<QuestionItem>()
-        .map((e) => QuestionItemWidget(
-              question: e,
-            ))
+        .map(
+          (e) => QuestionItemWidget(
+            question: e,
+            fromImportScreen: true,
+          ),
+        )
         .toList();
     return Expanded(
       child: Row(
@@ -281,7 +284,7 @@ class _FormViewState extends State<FormView> {
                           widget.pageController.jumpToPage(2);
                           widget.menuController.changePage(2);
                         },
-                        child: const Text(Strings.edit),
+                        child: const Text(Strings.toConstructor),
                       ),
                     ),
                   ],

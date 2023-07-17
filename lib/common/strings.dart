@@ -59,4 +59,5 @@ class Strings {
   static const String cancel = "Отменить";
   static const String noQuestionsSelected = "Не выбрано ни одного вопроса";
   static const String selectToSave = "Для того, чтобы сохранить вопрос(-ы) его(их) необходимо сначала выделить";
+  static const String toConstructor = "В конструктор";
 }
