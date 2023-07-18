@@ -1,6 +1,8 @@
 import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:forms_helper/entities/choice_question.dart';
+import 'package:forms_helper/global_providers.dart';
 import 'package:forms_helper/screens/import/question_item_widget.dart';
 import 'package:forms_helper/screens/import/no_discipline_selected_dialog.dart';
 import 'package:forms_helper/sqlite/local_storage.dart';
@@ -9,7 +11,7 @@ import '../../common/strings.dart';
 import '../../entities/form.dart';
 import '../../entities/question_item.dart';
 
-class FormView extends StatefulWidget {
+class FormView extends ConsumerStatefulWidget {
   final GForm form;
   final PageController pageController;
   final SideMenuController menuController;
@@ -21,13 +23,12 @@ class FormView extends StatefulWidget {
       super.key});
 
   @override
-  State<StatefulWidget> createState() {
+  ConsumerState<ConsumerStatefulWidget> createState() {
     return _FormViewState();
   }
 }
 
-class _FormViewState extends State<FormView> {
-  bool _allSelected = false;
+class _FormViewState extends ConsumerState<FormView> {
   List<QuestionItemWidget>? _qWidgets;
   final LocalStorage _storage = LocalStorage();
 
@@ -310,19 +311,11 @@ class _FormViewState extends State<FormView> {
                       children: [
                         ElevatedButton(
                           onPressed: () {
-                            _qWidgets?.forEach((w) {
-                              if (_allSelected) {
-                                w.info.unselect();
-                              } else {
-                                w.info.select();
-                              }
-                            });
-                            setState(() {
-                              _allSelected = !_allSelected;
-                            });
+                            ref.read(importSelectionProvider.notifier).toggle();
+                            setState(() {});
                           },
                           child: Text(
-                            _allSelected
+                            ref.read(importSelectionProvider)
                                 ? Strings.unselectAll
                                 : Strings.selectAll,
                           ),
@@ -425,7 +418,6 @@ class _FormViewState extends State<FormView> {
                 Expanded(
                   child: ListView(
                     shrinkWrap: true,
-                    key: UniqueKey(),
                     children: _qWidgets!,
                   ),
                 ),
