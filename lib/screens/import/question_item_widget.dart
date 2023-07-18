@@ -38,11 +38,13 @@ class QuestionItemWidget extends ConsumerStatefulWidget {
   final QuestionItem question;
   final QuestionWidgetInfo info = QuestionWidgetInfo();
   final LocalStorage _storage = LocalStorage();
+  final bool noPadding;
 
   QuestionItemWidget({
     required this.question,
     bool fromImportScreen = false,
     bool fromStorageScreen = false,
+    this.noPadding = false,
     super.key,
   }) {
     info._fromImportScreen = fromImportScreen;
@@ -85,7 +87,7 @@ class _QuestionItemWidgetState extends ConsumerState<QuestionItemWidget> {
       _constructQuestions = ref.watch(constructorProvider);
     }
     return Padding(
-      padding: const EdgeInsets.only(bottom: 15),
+      padding: EdgeInsets.symmetric(vertical: (widget.noPadding ? 0 : 4)),
       child: ElevatedButton(
         onPressed: () {
           Navigator.push(
