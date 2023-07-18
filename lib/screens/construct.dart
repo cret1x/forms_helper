@@ -7,6 +7,7 @@ import 'package:forms_helper/entities/question_item.dart';
 import 'package:forms_helper/screens/import/question_item_widget.dart';
 import '../common/themes.dart';
 import '../global_providers.dart';
+import 'package:reorderables/reorderables.dart';
 
 class MyReorderableDragStartListener extends ReorderableDragStartListener {
   const MyReorderableDragStartListener({
@@ -333,23 +334,13 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
                                 ),
                               ))
                             : Expanded(
-                                child: ReorderableListView.builder(
-                                  buildDefaultDragHandles: false,
-                                  dragStartBehavior: DragStartBehavior.start,
-                                  shrinkWrap: true,
+                                child: ReorderableColumn(
                                   onReorder: (int oldIndex, int newIndex) {
                                     ref
                                         .read(constructorProvider.notifier)
                                         .moveQuestion(oldIndex, newIndex);
                                   },
-                                  itemCount: _qWidgets!.length,
-                                  onReorderStart: (_) {},
-                                  itemBuilder: (context, index) =>
-                                      ReorderableDelayedDragStartListener(
-                                          index: index,
-                                          key: UniqueKey(),
-                                          child: _qWidgets![index],
-                                      ),
+                                  children: _qWidgets!,
                                 ),
                               ),
                       ],
