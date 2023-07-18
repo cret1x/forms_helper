@@ -233,9 +233,16 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
                                   );
                                   if (result != null && result == true) {
                                     setState(() {
+                                      _filenameController.text = "";
                                       _headerController.text = "";
                                       _descriptionController.text = "";
-                                      _questions.clear();
+                                      ref
+                                          .read(constructorProvider.notifier)
+                                          .clear();
+                                      ref
+                                          .read(constructorSelectedProvider
+                                              .notifier)
+                                          .clear();
                                     });
                                   }
                                 },
@@ -299,6 +306,10 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
                                       ref
                                           .read(constructorProvider.notifier)
                                           .deleteQuestion(q);
+                                      ref
+                                          .read(constructorSelectedProvider
+                                              .notifier)
+                                          .deleteQuestion(q);
                                     }
                                   },
                                   child: const Text(
@@ -336,7 +347,10 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
                             : Expanded(
                                 child: ReorderableColumn(
                                   draggedItemBuilder: (context, index) {
-                                    var w = QuestionItemWidget(question: _qWidgets![index].question, noPadding: true,);
+                                    var w = QuestionItemWidget(
+                                      question: _qWidgets![index].question,
+                                      noPadding: true,
+                                    );
                                     if (_qWidgets![index].info.selected) {
                                       w.info.select();
                                     }
