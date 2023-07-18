@@ -19,18 +19,16 @@ class ConstructorQuestionsStateNotifier
     ];
   }
 
-  void moveQuestion(QuestionItem questionItem, int newIndex) {
-    int index = 0;
+  void moveQuestion(int oldIndex, int newIndex) {
     List<QuestionItem> newList = [];
     for (var q in state) {
-      if (index == newIndex) {
-        newList.add(questionItem);
-        ++index;
-      } else if (q != questionItem) {
-        newList.add(q);
-        ++index;
-      }
+      newList.add(q);
     }
+    var q = newList.removeAt(oldIndex);
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+    newList.insert(newIndex, q);
     state = newList;
   }
 }

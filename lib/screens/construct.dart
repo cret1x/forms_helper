@@ -1,4 +1,5 @@
 import 'package:easy_sidemenu/easy_sidemenu.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:forms_helper/common/strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,6 +7,23 @@ import 'package:forms_helper/entities/question_item.dart';
 import 'package:forms_helper/screens/import/question_item_widget.dart';
 import '../common/themes.dart';
 import '../global_providers.dart';
+
+class MyReorderableDragStartListener extends ReorderableDragStartListener {
+  const MyReorderableDragStartListener({
+    required super.child,
+    required super.index,
+    super.key,
+    super.enabled,
+  });
+
+  @override
+  MultiDragGestureRecognizer createRecognizer() {
+    return DelayedMultiDragGestureRecognizer(
+      debugOwner: this,
+      delay: Duration.zero,
+    );
+  }
+}
 
 class FormConstructor extends ConsumerStatefulWidget {
   final PageController pageController;
@@ -35,11 +53,19 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
   Widget build(BuildContext context) {
     super.build(context);
     _questions = ref.read(constructorProvider);
-    _qWidgets ??= _questions.map((e) => QuestionItemWidget(question: e)).toList();
+    _qWidgets ??= _questions
+        .map((e) => QuestionItemWidget(
+              question: e,
+              key: UniqueKey(),
+            ))
+        .toList();
     ref.listen(constructorProvider, (previous, next) {
       _qWidgets = [];
       for (var q in next) {
-        _qWidgets!.add(QuestionItemWidget(question: q));
+        _qWidgets!.add(QuestionItemWidget(
+          question: q,
+          key: UniqueKey(),
+        ));
         if (ref.read(constructorSelectedProvider).contains(q)) {
           _qWidgets!.last.info.select();
         }
@@ -254,19 +280,24 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
                               children: [
                                 ElevatedButton(
                                   onPressed: () {
-                                    ref.read(constructorSelectionProvider.notifier).toggle();
+                                    ref
+                                        .read(constructorSelectionProvider
+                                            .notifier)
+                                        .toggle();
                                     setState(() {});
                                   },
                                   child: Text(
-                                    ref.read(constructorSelectionProvider)
-                                      ? Strings.unselectAll
-                                      : Strings.selectAll
-                                  ),
+                                      ref.read(constructorSelectionProvider)
+                                          ? Strings.unselectAll
+                                          : Strings.selectAll),
                                 ),
                                 ElevatedButton(
                                   onPressed: () {
-                                    for (var q in ref.read(constructorSelectedProvider)) {
-                                      ref.read(constructorProvider.notifier).deleteQuestion(q);
+                                    for (var q in ref
+                                        .read(constructorSelectedProvider)) {
+                                      ref
+                                          .read(constructorProvider.notifier)
+                                          .deleteQuestion(q);
                                     }
                                   },
                                   child: const Text(
@@ -302,9 +333,23 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
                                 ),
                               ))
                             : Expanded(
-                                child: ListView(
+                                child: ReorderableListView.builder(
+                                  buildDefaultDragHandles: false,
+                                  dragStartBehavior: DragStartBehavior.start,
                                   shrinkWrap: true,
-                                  children: _qWidgets!,
+                                  onReorder: (int oldIndex, int newIndex) {
+                                    ref
+                                        .read(constructorProvider.notifier)
+                                        .moveQuestion(oldIndex, newIndex);
+                                  },
+                                  itemCount: _qWidgets!.length,
+                                  onReorderStart: (_) {},
+                                  itemBuilder: (context, index) =>
+                                      ReorderableDelayedDragStartListener(
+                                          index: index,
+                                          key: UniqueKey(),
+                                          child: _qWidgets![index],
+                                      ),
                                 ),
                               ),
                       ],
