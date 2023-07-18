@@ -28,4 +28,8 @@ class ConstructorQuestionsStateNotifier
     newList.insert(newIndex, q);
     state = newList;
   }
+
+  void clear() {
+    state = [];
+  }
 }
