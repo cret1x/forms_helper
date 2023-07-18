@@ -69,9 +69,16 @@ class _QuestionItemWidgetState extends ConsumerState<QuestionItemWidget> {
     } else if (!widget.info._fromStorageScreen) {
       ref.listen(constructorSelectionProvider, (previous, next) {
         widget.info._isSelected = next;
-        setState(() {
-          print(widget.info.selected);
-        });
+        if (widget.info.selected) {
+          ref.read(
+              constructorSelectedProvider.notifier)
+              .addQuestion(widget.question);
+        } else {
+          ref.read(
+              constructorSelectedProvider.notifier)
+              .deleteQuestion(widget.question);
+        }
+        setState(() {});
       });
     }
     if (widget.info._fromStorageScreen) {
@@ -168,6 +175,15 @@ class _QuestionItemWidgetState extends ConsumerState<QuestionItemWidget> {
                                 onChanged: (_) {
                                   setState(() {
                                     widget.info._toggle();
+                                    if (widget.info.selected) {
+                                      ref.read(
+                                          constructorSelectedProvider.notifier)
+                                          .addQuestion(widget.question);
+                                    } else {
+                                      ref.read(
+                                          constructorSelectedProvider.notifier)
+                                          .deleteQuestion(widget.question);
+                                    }
                                   });
                                 },
                               ),

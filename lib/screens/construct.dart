@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:forms_helper/entities/question_item.dart';
 import 'package:forms_helper/screens/import/question_item_widget.dart';
 import '../common/themes.dart';
-import '../entities/choice_question.dart';
 import '../global_providers.dart';
 
 class FormConstructor extends ConsumerStatefulWidget {
@@ -30,15 +29,23 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
   final TextEditingController _headerController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   late List<QuestionItem> _questions;
-  late List<QuestionItemWidget> _qWidgets;
-  bool _allSelected = false;
+  List<QuestionItemWidget>? _qWidgets;
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    _questions = ref.watch(constructorProvider);
-    _allSelected = ref.watch(constructorSelectionProvider);
-    _qWidgets = _questions.map((e) => QuestionItemWidget(question: e)).toList();
+    _questions = ref.read(constructorProvider);
+    _qWidgets ??= _questions.map((e) => QuestionItemWidget(question: e)).toList();
+    ref.listen(constructorProvider, (previous, next) {
+      _qWidgets = [];
+      for (var q in next) {
+        _qWidgets!.add(QuestionItemWidget(question: q));
+        if (ref.read(constructorSelectedProvider).contains(q)) {
+          _qWidgets!.last.info.select();
+        }
+      }
+      setState(() {});
+    });
     return MaterialApp(
       theme: Themes.darkBlue,
       home: Padding(
@@ -248,17 +255,18 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
                                 ElevatedButton(
                                   onPressed: () {
                                     ref.read(constructorSelectionProvider.notifier).toggle();
+                                    setState(() {});
                                   },
                                   child: Text(
-                                    _allSelected
+                                    ref.read(constructorSelectionProvider)
                                       ? Strings.unselectAll
                                       : Strings.selectAll
                                   ),
                                 ),
                                 ElevatedButton(
                                   onPressed: () {
-                                    for (var w in _qWidgets) {
-                                      ref.read(constructorProvider.notifier).deleteQuestion(w.question);
+                                    for (var q in ref.read(constructorSelectedProvider)) {
+                                      ref.read(constructorProvider.notifier).deleteQuestion(q);
                                     }
                                   },
                                   child: const Text(
@@ -295,9 +303,8 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
                               ))
                             : Expanded(
                                 child: ListView(
-                                  key: UniqueKey(),
                                   shrinkWrap: true,
-                                  children: _qWidgets,
+                                  children: _qWidgets!,
                                 ),
                               ),
                       ],

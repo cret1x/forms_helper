@@ -9,9 +9,13 @@ final constructorProvider = StateNotifierProvider<
     ConstructorQuestionsStateNotifier,
     List<QuestionItem>>((ref) => ConstructorQuestionsStateNotifier());
 
+final constructorSelectedProvider = StateNotifierProvider<
+    SelectedQuestionsStateNotifier,
+    List<QuestionItem>>((ref) => SelectedQuestionsStateNotifier());
+
 final storageProvider = StateNotifierProvider<
-    StorageQuestionsStateNotifier,
-    List<QuestionItem>>((ref) => StorageQuestionsStateNotifier());
+    SelectedQuestionsStateNotifier,
+    List<QuestionItem>>((ref) => SelectedQuestionsStateNotifier());
 
 final constructorSelectionProvider = StateNotifierProvider<
     SelectionStateNotifier,
