@@ -1,3 +1,4 @@
+import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';
 import 'package:forms_helper/common/strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,46 +6,17 @@ import 'package:forms_helper/entities/question_item.dart';
 import 'package:forms_helper/screens/import/question_item_widget.dart';
 import '../common/themes.dart';
 import '../entities/choice_question.dart';
-
-final constructorProvider = StateNotifierProvider<
-    ConstructorQuestionsStateNotifier,
-    List<QuestionItem>>((ref) => ConstructorQuestionsStateNotifier());
-
-class ConstructorQuestionsStateNotifier
-    extends StateNotifier<List<QuestionItem>> {
-  ConstructorQuestionsStateNotifier() : super([]);
-
-  void addQuestion(QuestionItem questionItem) {
-    if (!state.contains(questionItem)) {
-      state = [...state, questionItem];
-    }
-  }
-
-  void deleteQuestion(QuestionItem questionItem) {
-    state = [
-      for (final q in state)
-        if (questionItem != q) q,
-    ];
-  }
-
-  void moveQuestion(QuestionItem questionItem, int newIndex) {
-    int index = 0;
-    List<QuestionItem> newList = [];
-    for (var q in state) {
-      if (index == newIndex) {
-        newList.add(questionItem);
-        ++index;
-      } else if (q != questionItem) {
-        newList.add(q);
-        ++index;
-      }
-    }
-    state = newList;
-  }
-}
+import '../global_providers.dart';
 
 class FormConstructor extends ConsumerStatefulWidget {
-  const FormConstructor({super.key});
+  final PageController pageController;
+  final SideMenuController menuController;
+
+  const FormConstructor({
+    required this.pageController,
+    required this.menuController,
+    super.key,
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() {
@@ -59,11 +31,13 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
   final TextEditingController _descriptionController = TextEditingController();
   late List<QuestionItem> _questions;
   late List<QuestionItemWidget> _qWidgets;
+  bool _allSelected = false;
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
     _questions = ref.watch(constructorProvider);
+    _allSelected = ref.watch(constructorSelectionProvider);
     _qWidgets = _questions.map((e) => QuestionItemWidget(question: e)).toList();
     return MaterialApp(
       theme: Themes.darkBlue,
@@ -269,11 +243,38 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
                               Strings.questions,
                               style: Theme.of(context).textTheme.headlineSmall,
                             ),
-                            ElevatedButton(
-                              onPressed: () {},
-                              child: const Text(
-                                Strings.add,
-                              ),
+                            Row(
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    ref.read(constructorSelectionProvider.notifier).toggle();
+                                  },
+                                  child: Text(
+                                    _allSelected
+                                      ? Strings.unselectAll
+                                      : Strings.selectAll
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    for (var w in _qWidgets) {
+                                      ref.read(constructorProvider.notifier).deleteQuestion(w.question);
+                                    }
+                                  },
+                                  child: const Text(
+                                    Strings.deleteSelected,
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    widget.pageController.jumpToPage(1);
+                                    widget.menuController.changePage(1);
+                                  },
+                                  child: const Icon(
+                                    Icons.add,
+                                  ),
+                                ),
+                              ],
                             )
                           ],
                         ),
@@ -294,6 +295,8 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
                               ))
                             : Expanded(
                                 child: ListView(
+                                  key: UniqueKey(),
+                                  shrinkWrap: true,
                                   children: _qWidgets,
                                 ),
                               ),

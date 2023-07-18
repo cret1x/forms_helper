@@ -7,6 +7,7 @@ import 'package:forms_helper/screens/storage.dart';
 
 import '../../common/strings.dart';
 import '../../entities/question_item.dart';
+import '../../global_providers.dart';
 import '../../sqlite/local_storage.dart';
 import '../question_widget.dart';
 
@@ -59,6 +60,20 @@ class _QuestionItemWidgetState extends ConsumerState<QuestionItemWidget> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.info._fromImportScreen) {
+      ref.listen(importSelectionProvider, (previous, next) {
+        setState(() {
+          widget.info._isSelected = next;
+        });
+      });
+    } else if (!widget.info._fromStorageScreen) {
+      ref.listen(constructorSelectionProvider, (previous, next) {
+        widget.info._isSelected = next;
+        setState(() {
+          print(widget.info.selected);
+        });
+      });
+    }
     if (widget.info._fromStorageScreen) {
       _constructQuestions = ref.watch(constructorProvider);
     }

@@ -9,29 +9,8 @@ import 'package:forms_helper/screens/import/question_item_widget.dart';
 import '../common/strings.dart';
 import '../common/themes.dart';
 import '../entities/question_item.dart';
+import '../global_providers.dart';
 import '../sqlite/local_storage.dart';
-
-final storageProvider = StateNotifierProvider<
-    ConstructorQuestionsStateNotifier,
-    List<QuestionItem>>((ref) => ConstructorQuestionsStateNotifier());
-
-class StorageQuestionsStateNotifier
-    extends StateNotifier<List<QuestionItem>> {
-  StorageQuestionsStateNotifier() : super([]);
-
-  void addQuestion(QuestionItem questionItem) {
-    if (!state.contains(questionItem)) {
-      state = [...state, questionItem];
-    }
-  }
-
-  void deleteQuestion(QuestionItem questionItem) {
-    state = [
-      for (final q in state)
-        if (questionItem != q) q,
-    ];
-  }
-}
 
 class StorageWidget extends ConsumerStatefulWidget {
   final PageController pageController;
@@ -215,8 +194,8 @@ class _StorageWidgetState extends ConsumerState<StorageWidget>
                 ),
                 ElevatedButton(
                   onPressed: () {},
-                  child: const Text(
-                    Strings.add,
+                  child: const Icon(
+                    Icons.add,
                   ),
                 ),
                 const SizedBox(
@@ -254,6 +233,7 @@ class _StorageWidgetState extends ConsumerState<StorageWidget>
                   return Expanded(
                     child: ListView(
                       shrinkWrap: true,
+                      key: UniqueKey(),
                       children: _qWidgets!,
                     ),
                   );
