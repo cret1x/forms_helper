@@ -335,6 +335,13 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
                               ))
                             : Expanded(
                                 child: ReorderableColumn(
+                                  draggedItemBuilder: (context, index) {
+                                    var w = QuestionItemWidget(question: _qWidgets![index].question, noPadding: true,);
+                                    if (_qWidgets![index].info.selected) {
+                                      w.info.select();
+                                    }
+                                    return w;
+                                  },
                                   onReorder: (int oldIndex, int newIndex) {
                                     ref
                                         .read(constructorProvider.notifier)
