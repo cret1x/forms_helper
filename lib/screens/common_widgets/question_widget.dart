@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:forms_helper/entities/choice_question.dart';
 
-import '../common/strings.dart';
-import '../common/themes.dart';
-import '../entities/question_item.dart';
-import '../entities/text_question.dart';
+import '../../common/strings.dart';
+import '../../common/themes.dart';
+import '../../entities/question_item.dart';
+import '../../entities/text_question.dart';
 
 class QuestionWidget extends StatefulWidget {
   final QuestionItem question;

@@ -9,7 +9,7 @@ import '../../common/strings.dart';
 import '../../entities/question_item.dart';
 import '../../global_providers.dart';
 import '../../sqlite/local_storage.dart';
-import '../question_widget.dart';
+import 'question_widget.dart';
 
 class QuestionWidgetInfo {
   bool? contained;
