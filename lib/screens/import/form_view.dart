@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:forms_helper/entities/choice_question.dart';
 import 'package:forms_helper/global_providers.dart';
-import 'package:forms_helper/screens/import/question_item_widget.dart';
+import 'package:forms_helper/screens/common_widgets/question_item_widget.dart';
 import 'package:forms_helper/screens/import/no_discipline_selected_dialog.dart';
 import 'package:forms_helper/sqlite/local_storage.dart';
 
@@ -55,8 +55,8 @@ class _FormViewState extends ConsumerState<FormView> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-            width: 500,
+          Expanded(
+            flex: 35,
             child: ListView(
               shrinkWrap: true,
               children: [
@@ -297,6 +297,7 @@ class _FormViewState extends ConsumerState<FormView> {
             width: 36,
           ),
           Expanded(
+            flex: 65,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
