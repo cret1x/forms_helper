@@ -4,7 +4,7 @@ import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:forms_helper/screens/construct.dart';
-import 'package:forms_helper/screens/import/question_item_widget.dart';
+import 'package:forms_helper/screens/common_widgets/question_item_widget.dart';
 
 import '../common/strings.dart';
 import '../common/themes.dart';

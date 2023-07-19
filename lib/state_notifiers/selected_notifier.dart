@@ -18,4 +18,8 @@ class SelectedQuestionsStateNotifier
         if (questionItem != q) q,
     ];
   }
+
+  void clear() {
+    state = [];
+  }
 }

@@ -4,26 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:forms_helper/common/strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:forms_helper/entities/question_item.dart';
-import 'package:forms_helper/screens/import/question_item_widget.dart';
+import 'package:forms_helper/google_api/auth.dart';
+import 'package:forms_helper/google_api/forms.dart';
+import 'package:forms_helper/screens/common_widgets/question_item_widget.dart';
 import '../common/themes.dart';
+import '../entities/form.dart';
 import '../global_providers.dart';
-
-class MyReorderableDragStartListener extends ReorderableDragStartListener {
-  const MyReorderableDragStartListener({
-    required super.child,
-    required super.index,
-    super.key,
-    super.enabled,
-  });
-
-  @override
-  MultiDragGestureRecognizer createRecognizer() {
-    return DelayedMultiDragGestureRecognizer(
-      debugOwner: this,
-      delay: Duration.zero,
-    );
-  }
-}
+import 'package:reorderables/reorderables.dart';
 
 class FormConstructor extends ConsumerStatefulWidget {
   final PageController pageController;
@@ -48,6 +35,9 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
   final TextEditingController _descriptionController = TextEditingController();
   late List<QuestionItem> _questions;
   List<QuestionItemWidget>? _qWidgets;
+  final GoogleFormsApi _formsApi =
+      GoogleFormsApi(url: "https://forms.googleapis.com/v1/forms");
+  final GoogleAuthApi _authApi = GoogleAuthApi();
 
   @override
   Widget build(BuildContext context) {
@@ -91,10 +81,18 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
+                    flex: 35,
                     child: ListView(
                       padding: const EdgeInsets.symmetric(vertical: 4),
                       shrinkWrap: true,
                       children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 6, bottom: 40),
+                          child: Text(
+                            Strings.properties,
+                            style: Theme.of(context).textTheme.headlineSmall,
+                          ),
+                        ),
                         TextField(
                           controller: _filenameController,
                           cursorColor: Theme.of(context).colorScheme.onPrimary,
@@ -232,9 +230,16 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
                                   );
                                   if (result != null && result == true) {
                                     setState(() {
+                                      _filenameController.text = "";
                                       _headerController.text = "";
                                       _descriptionController.text = "";
-                                      _questions.clear();
+                                      ref
+                                          .read(constructorProvider.notifier)
+                                          .clear();
+                                      ref
+                                          .read(constructorSelectedProvider
+                                              .notifier)
+                                          .clear();
                                     });
                                   }
                                 },
@@ -248,7 +253,16 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
                             ),
                             Expanded(
                               child: ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () async {
+                                  final form = GForm(
+                                    title: _headerController.text,
+                                    description: _descriptionController.text,
+                                    documentTitle: _filenameController.text,
+                                    items: _questions,
+                                  );
+                                  final token = await _authApi.getAccessToken();
+                                  await _formsApi.create(form, token);
+                                },
                                 child: const Text(
                                   Strings.save,
                                 ),
@@ -266,6 +280,7 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
                     ),
                   ),
                   Expanded(
+                    flex: 65,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -291,6 +306,9 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
                                           ? Strings.unselectAll
                                           : Strings.selectAll),
                                 ),
+                                const SizedBox(
+                                  width: 12,
+                                ),
                                 ElevatedButton(
                                   onPressed: () {
                                     for (var q in ref
@@ -298,11 +316,18 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
                                       ref
                                           .read(constructorProvider.notifier)
                                           .deleteQuestion(q);
+                                      ref
+                                          .read(constructorSelectedProvider
+                                              .notifier)
+                                          .deleteQuestion(q);
                                     }
                                   },
                                   child: const Text(
                                     Strings.deleteSelected,
                                   ),
+                                ),
+                                const SizedBox(
+                                  width: 12,
                                 ),
                                 ElevatedButton(
                                   onPressed: () {
@@ -333,23 +358,23 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
                                 ),
                               ))
                             : Expanded(
-                                child: ReorderableListView.builder(
-                                  buildDefaultDragHandles: false,
-                                  dragStartBehavior: DragStartBehavior.start,
-                                  shrinkWrap: true,
+                                child: ReorderableColumn(
+                                  draggedItemBuilder: (context, index) {
+                                    var w = QuestionItemWidget(
+                                      question: _qWidgets![index].question,
+                                      noPadding: true,
+                                    );
+                                    if (_qWidgets![index].info.selected) {
+                                      w.info.select();
+                                    }
+                                    return w;
+                                  },
                                   onReorder: (int oldIndex, int newIndex) {
                                     ref
                                         .read(constructorProvider.notifier)
                                         .moveQuestion(oldIndex, newIndex);
                                   },
-                                  itemCount: _qWidgets!.length,
-                                  onReorderStart: (_) {},
-                                  itemBuilder: (context, index) =>
-                                      ReorderableDelayedDragStartListener(
-                                          index: index,
-                                          key: UniqueKey(),
-                                          child: _qWidgets![index],
-                                      ),
+                                  children: _qWidgets!,
                                 ),
                               ),
                       ],

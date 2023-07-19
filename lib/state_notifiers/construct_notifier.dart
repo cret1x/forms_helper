@@ -25,10 +25,11 @@ class ConstructorQuestionsStateNotifier
       newList.add(q);
     }
     var q = newList.removeAt(oldIndex);
-    if (oldIndex < newIndex) {
-      newIndex -= 1;
-    }
     newList.insert(newIndex, q);
     state = newList;
+  }
+
+  void clear() {
+    state = [];
   }
 }

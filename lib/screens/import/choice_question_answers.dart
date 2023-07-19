@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:forms_helper/screens/import/question_item_widget.dart';
+import 'package:forms_helper/screens/common_widgets/question_item_widget.dart';
 
 import '../../entities/choice_question.dart';
 
