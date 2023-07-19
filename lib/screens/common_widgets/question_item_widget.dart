@@ -87,7 +87,7 @@ class _QuestionItemWidgetState extends ConsumerState<QuestionItemWidget> {
       _constructQuestions = ref.watch(constructorProvider);
     }
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: (widget.noPadding ? 0 : 4)),
+      padding: EdgeInsets.only(bottom: (widget.noPadding ? 0 : 10)),
       child: ElevatedButton(
         onPressed: () {
           Navigator.push(

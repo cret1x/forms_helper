@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:forms_helper/screens/construct.dart';
 import 'package:forms_helper/screens/common_widgets/question_item_widget.dart';
@@ -35,11 +36,11 @@ class _StorageWidgetState extends ConsumerState<StorageWidget>
   final TextEditingController _controller = TextEditingController();
   final LocalStorage _storage = LocalStorage();
   String? _dropdownValue;
-  int page = 0;
   late Animation<double> _animation;
   late AnimationController _animationController;
   List<QuestionItemWidget>? _qWidgets;
   late List<QuestionItem> _constructQuestions;
+  int _page = 1;
 
   @override
   void initState() {
@@ -70,7 +71,7 @@ class _StorageWidgetState extends ConsumerState<StorageWidget>
   Widget build(BuildContext context) {
     super.build(context);
     Future<List<QuestionItem>> _questions = _storage.getQuestions(
-        searchText: _controller.text, page: page, tag: _dropdownValue);
+        searchText: _controller.text, page: _page - 1, tag: _dropdownValue);
     return MaterialApp(
       theme: Themes.darkBlue,
       home: Padding(
@@ -85,47 +86,44 @@ class _StorageWidgetState extends ConsumerState<StorageWidget>
             const SizedBox(
               height: 24,
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _controller,
-                    cursorColor: Theme.of(context).colorScheme.onPrimary,
-                    onChanged: (_) {
-                      setState(() {});
-                    },
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(
-                        Icons.search,
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
-                      hintText: Strings.findQuestion,
-                      hintStyle:
-                          Theme.of(context).textTheme.titleMedium!.copyWith(
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium!
-                                    .color!
-                                    .withOpacity(0.4),
-                              ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                        borderSide: const BorderSide(
-                          width: 0,
-                          style: BorderStyle.none,
-                        ),
-                      ),
-                      filled: true,
-                      contentPadding: const EdgeInsets.all(16),
-                      prefixIconConstraints: const BoxConstraints(
-                        minWidth: 50,
-                      ),
+            TextField(
+              controller: _controller,
+              cursorColor: Theme.of(context).colorScheme.onPrimary,
+              onChanged: (_) {
+                setState(() {});
+              },
+              decoration: InputDecoration(
+                prefixIcon: Icon(
+                  Icons.search,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+                hintText: Strings.findQuestion,
+                hintStyle: Theme.of(context).textTheme.titleMedium!.copyWith(
+                      color: Theme.of(context)
+                          .textTheme
+                          .titleMedium!
+                          .color!
+                          .withOpacity(0.4),
                     ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: const BorderSide(
+                    width: 0,
+                    style: BorderStyle.none,
                   ),
                 ),
-                const SizedBox(
-                  width: 14,
+                filled: true,
+                contentPadding: const EdgeInsets.all(16),
+                prefixIconConstraints: const BoxConstraints(
+                  minWidth: 50,
                 ),
+              ),
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            Row(
+              children: [
                 Flexible(
                   child: DropdownButtonFormField(
                     decoration: const InputDecoration(
@@ -167,7 +165,69 @@ class _StorageWidgetState extends ConsumerState<StorageWidget>
                   ),
                 ),
                 const SizedBox(
-                  width: 14,
+                  width: 12,
+                ),
+                ElevatedButton(
+                  onPressed: _page == 1
+                      ? null
+                      : () {
+                    setState(() {
+                      _page = 1;
+                    });
+                  },
+                  child: const Icon(Icons.keyboard_double_arrow_left_rounded),
+                ),
+                const SizedBox(
+                  width: 12,
+                ),
+                ElevatedButton(
+                  onPressed: _page == 1
+                      ? null
+                      : () {
+                          setState(() {
+                            --_page;
+                          });
+                        },
+                  child: const Icon(Icons.arrow_back_rounded),
+                ),
+                const SizedBox(
+                  width: 12,
+                ),
+                ElevatedButton(
+                  onPressed: null,
+                  child: Text(
+                    _page.toString(),
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                ),
+                const SizedBox(
+                  width: 12,
+                ),
+                ElevatedButton(
+                  onPressed: _page == _storage.pages
+                      ? null
+                      : () {
+                          setState(() {
+                            ++_page;
+                          });
+                        },
+                  child: const Icon(Icons.arrow_forward_rounded),
+                ),
+                const SizedBox(
+                  width: 12,
+                ),
+                ElevatedButton(
+                  onPressed: _page == _storage.pages
+                      ? null
+                      : () {
+                    setState(() {
+                      _page = _storage.pages;
+                    });
+                  },
+                  child: const Icon(Icons.keyboard_double_arrow_right_rounded),
+                ),
+                const SizedBox(
+                  width: 12,
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -176,9 +236,7 @@ class _StorageWidgetState extends ConsumerState<StorageWidget>
 
                     for (var q in selectedQuestions) {
                       if (!_constructQuestions.contains(q)) {
-                        ref
-                            .read(constructorProvider.notifier)
-                            .addQuestion(q);
+                        ref.read(constructorProvider.notifier).addQuestion(q);
                       }
                     }
 
@@ -190,7 +248,7 @@ class _StorageWidgetState extends ConsumerState<StorageWidget>
                   ),
                 ),
                 const SizedBox(
-                  width: 14,
+                  width: 12,
                 ),
                 ElevatedButton(
                   onPressed: () {},
@@ -199,7 +257,7 @@ class _StorageWidgetState extends ConsumerState<StorageWidget>
                   ),
                 ),
                 const SizedBox(
-                  width: 14,
+                  width: 12,
                 ),
                 ElevatedButton(
                   onPressed: () {
