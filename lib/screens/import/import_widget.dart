@@ -54,6 +54,95 @@ class _ImportWidgetState extends State<ImportWidget>
               children: [
                 Expanded(
                   child: TextField(
+                    onSubmitted: (_) async {
+                      setState(() {
+                        _importButtonPressed = true;
+                      });
+                      final token = await _authApi.getAccessToken();
+                      final result =
+                      await _formsApi.get(_linkController.text, token);
+                      setState(() {
+                        _importButtonPressed = false;
+                      });
+                      switch (result.error) {
+                        case FormsError.OK:
+                          setState(() {
+                            _content = result.form;
+                          });
+                          break;
+                        case FormsError.AUTH_REQUIRED:
+                          await showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                actionsPadding: const EdgeInsets.all(12),
+                                title: const Text(
+                                  Strings.accessError,
+                                  style: TextStyle(
+                                    fontFamily: 'Verdana',
+                                  ),
+                                ),
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(15),
+                                  ),
+                                ),
+                                content: Text(
+                                  Strings.reauth,
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text(Strings.ok),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                          break;
+                        case FormsError.INVALID_URL:
+                          await showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                actionsPadding: const EdgeInsets.all(12),
+                                title: const Text(
+                                  Strings.wrongLink,
+                                  style: TextStyle(
+                                    fontFamily: 'Verdana',
+                                  ),
+                                ),
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(15),
+                                  ),
+                                ),
+                                content: Text(
+                                  Strings.checkLink,
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text(Strings.ok),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                      }
+                    },
                     controller: _linkController,
                     cursorColor: Theme.of(context).colorScheme.onPrimary,
                     decoration: InputDecoration(
