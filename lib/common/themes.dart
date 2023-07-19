@@ -72,6 +72,12 @@ class Themes {
         ),
       ),
     ),
+    cardTheme: CardTheme(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      shadowColor: Colors.white.withOpacity(0),
+    ),
     colorScheme: ColorScheme(
       brightness: Brightness.dark,
       primary: Color.fromRGBO(73, 73, 73, 1),
