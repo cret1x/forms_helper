@@ -61,6 +61,17 @@ class FirestoreManager {
     }
   }
 
+  Future<void> deleteQuestion(QuestionItem questionItem) async {
+    if (!await exists(questionItem)) {
+      return;
+    }
+    final questionsCollection = Firestore.instance.collection('questions');
+    final document = await questionsCollection.where('title', isEqualTo: questionItem.title).get();
+    final key = document.first.id;
+    final docDef = questionsCollection.document(key);
+    await docDef.delete();
+  }
+
   Future<void> updateQuestion(QuestionItem questionItem) async {
     if (!await exists(questionItem)) {
       return;
@@ -73,7 +84,7 @@ class FirestoreManager {
 
   Future<void> saveForm(GForm form) async {
     final formsCollection = Firestore.instance.collection('forms');
-    formsCollection.add(form.toMap());
+    await formsCollection.add(form.toMap());
   }
 
   Future<bool> exists(QuestionItem question) async {
@@ -90,5 +101,47 @@ class FirestoreManager {
       forms.add(GForm.fromMap(doc.map));
     }
     return forms;
+  }
+
+  Future<List<String>> getTags() async {
+    final tagsCollection = Firestore.instance.collection('tags');
+    final documents = await tagsCollection.get();
+    List<String> tags = [];
+    for (var doc in documents) {
+      tags.add(doc.map['value'].toString());
+    }
+    return tags;
+  }
+
+  Future<void> createTag(String tag) async {
+    final tagsCollection = Firestore.instance.collection('tags');
+    await tagsCollection.add({'value': tag});
+  }
+
+  Future<void> deleteTag(String tag) async {
+    if (!await tagExists(tag)) {
+      return;
+    }
+    final tagsCollection = Firestore.instance.collection('tags');
+    final document = await tagsCollection.where('value', isEqualTo: tag).get();
+    final key = document.first.id;
+    final docDef = tagsCollection.document(key);
+    await docDef.delete();
+  }
+
+  Future<void> updateTag(String tag) async {
+    if (!await tagExists(tag)) {
+      return;
+    }
+    final tagsCollection = Firestore.instance.collection('tags');
+    final document = await tagsCollection.where('value', isEqualTo: tag).get();
+    final key = document.first.id;
+    await tagsCollection.document(key).update({'value': tag});
+  }
+
+  Future<bool> tagExists(String tag) async {
+    final tagsCollection = Firestore.instance.collection('tags');
+    final documents = await tagsCollection.where('value', isEqualTo: tag).get();
+    return documents.isNotEmpty;
   }
 }

@@ -26,6 +26,14 @@ class LocalStorage {
 
   LocalStorage._internal();
 
+  int get pages {
+    if (questionsCount == 0) {
+      return questionsCount;
+    }
+    double pgs = questionsCount / pageSize;
+    return pgs.ceil();
+  }
+
   Future<void> init() async {
     if (isInitialized) {
       return;
@@ -108,9 +116,56 @@ class LocalStorage {
     await _firestoreManager.updateQuestion(questionItem);
   }
 
+  Future<void> deleteQuestion(QuestionItem questionItem) async {
+    final store = intMapStoreFactory.store('questions');
+    final filter = Filter.equals('title', questionItem.title);
+    final finder = Finder(filter: filter);
+    await store.delete(_db, finder: finder);
+    await _firestoreManager.deleteQuestion(questionItem);
+  }
+
   Future<bool> exists(QuestionItem questionItem) async {
     final store = intMapStoreFactory.store('questions');
     final filter = Filter.equals('title', questionItem.title);
+    final finder = Finder(filter: filter);
+    final record = await store.findFirst(_db, finder: finder);
+    return record != null;
+  }
+
+  Future<List<String>> getTags() async {
+    final store = intMapStoreFactory.store('tags');
+    final finder = Finder(
+        sortOrders: [SortOrder('value')]);
+    final records = await store.find(_db, finder: finder);
+    List<String> tags = [];
+    for (var record in records) {
+      tags.add(record.value['value'].toString());
+    }
+    return tags;
+  }
+
+  Future<void> createTag(String tag) async {
+    final store = intMapStoreFactory.store('tags');
+    await store.add(_db, {'value': tag});
+  }
+
+  Future<void> deleteTag(String tag) async {
+    final store = intMapStoreFactory.store('tags');
+    final filter = Filter.equals('value', tag);
+    final finder = Finder(filter: filter);
+    await store.delete(_db, finder: finder);
+  }
+
+  Future<void> updateTag(String tag) async {
+    final store = intMapStoreFactory.store('tags');
+    final filter = Filter.equals('value', tag);
+    final finder = Finder(filter: filter);
+    await store.update(_db, {'value': tag}, finder: finder);
+  }
+
+  Future<bool> tagExists(String tag) async {
+    final store = intMapStoreFactory.store('tags');
+    final filter = Filter.equals('value', tag);
     final finder = Finder(filter: filter);
     final record = await store.findFirst(_db, finder: finder);
     return record != null;
