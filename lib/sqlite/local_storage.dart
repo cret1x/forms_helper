@@ -44,6 +44,8 @@ class LocalStorage {
     File dbFile = File(path);
     await dbFile.delete();
     _db = await _dbFactory.openDatabase(path);
+    final tags = await _firestoreManager.getTags();
+    _importTags(tags);
     await for (final questions in _firestoreManager.getQuestions()) {
       _importQuestions(questions);
       questionsCount += questions.length;
@@ -62,6 +64,8 @@ class LocalStorage {
     File dbFile = File(path);
     await dbFile.delete();
     _db = await _dbFactory.openDatabase(path);
+    final tags = await _firestoreManager.getTags();
+    _importTags(tags);
     await for (final questions in _firestoreManager.getQuestions()) {
       _importQuestions(questions);
       questionsCount += questions.length;
@@ -115,6 +119,13 @@ class LocalStorage {
     final store = intMapStoreFactory.store('questions');
     await _db.transaction((transaction) async {
       await store.addAll(transaction, questions.map((e) => e.toMap()).toList());
+    });
+  }
+
+  Future<void> _importTags(List<Tag> tags) async {
+    final store = intMapStoreFactory.store('tags');
+    await _db.transaction((transaction) async {
+      await store.addAll(transaction, tags.map((e) => e.toMap()).toList());
     });
   }
 
