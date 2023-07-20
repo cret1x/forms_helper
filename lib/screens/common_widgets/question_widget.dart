@@ -172,10 +172,9 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Text(
-                      widget.question.tag == null ||
-                              widget.question.tag!.isEmpty
+                      widget.question.tag == null
                           ? Strings.no
-                          : widget.question.tag!,
+                          : widget.question.tag!.value,
                       style: Theme.of(context).textTheme.displaySmall,
                     )
                   ],

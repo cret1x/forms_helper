@@ -1,12 +1,13 @@
 import 'package:forms_helper/entities/answer.dart';
 import 'package:forms_helper/entities/form_item.dart';
+import 'package:forms_helper/entities/question_tag.dart';
 
 class QuestionItem extends FormItem {
   final bool required;
   final int pointValue;
   final List<Answer> correctAnswers;
   final String questionType;
-  String? tag;
+  Tag? tag;
 
   QuestionItem({
     required super.title,
@@ -26,7 +27,7 @@ class QuestionItem extends FormItem {
       'pointValue': pointValue,
       'correctAnswers': correctAnswers.map((e) => e.toMap()).toList(),
       'questionType': questionType,
-      'tag': tag,
+      'tag': tag?.toMap(),
     };
     return itemJson;
   }
@@ -40,7 +41,7 @@ class QuestionItem extends FormItem {
             .map((e) => Answer(value: e['value']))
             .toList();
     String questionType = json['question']['questionType'] ?? "";
-    String tag = json['question']['tag'] ?? "";
+    Tag? tag = json['question']['tag'] != null ? Tag.fromMap(json['question']['tag']) : null;
     return QuestionItem(
       title: item.title,
       description: item.description,
@@ -98,12 +99,12 @@ class QuestionItem extends FormItem {
       pointValue: pointValue,
       correctAnswers: correctAnswers,
       questionType: questionType,
-      tag: "",
+      tag: null,
     );
   }
 
   @override
   String toString() {
-    return '[$title, $questionType, $pointValue, $tag]';
+    return '[$title, $questionType, $pointValue, ${tag?.value}]';
   }
 }

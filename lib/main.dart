@@ -118,7 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         pointValue: 0,
                         correctAnswers: [],
                         paragraph: false,
-                        tag: ''),
+                        tag: null),
                     TextQuestion(
                         title: "Группа",
                         description: "",
@@ -126,7 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         pointValue: 0,
                         correctAnswers: [],
                         paragraph: false,
-                        tag: ''),
+                        tag: null),
                     ChoiceQuestion(
                         title: "Вопрос с выбором",
                         description: '',
@@ -136,7 +136,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         options: options,
                         correctAnswers: correct,
                         type: QuestionType.RADIO,
-                        tag: 'Мозг'),
+                        tag: null),
                   ];
                   PDFExport.export(GForm(title: 'a', description: 'b', documentTitle: 'c', items: questions));
                 },

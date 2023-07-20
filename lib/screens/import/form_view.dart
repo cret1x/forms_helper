@@ -392,7 +392,7 @@ class _FormViewState extends ConsumerState<FormView> {
                                     (widget.info.contained == null ||
                                         !widget.info.contained!)) {
                                   _questionItems.add(widget.question);
-                                  _questionItems.last.tag = _dropdownValue;
+                                  _questionItems.last.tag?.value = _dropdownValue;
                                   widget.info.contained = true;
                                   widget.info.unselect();
                                 }
