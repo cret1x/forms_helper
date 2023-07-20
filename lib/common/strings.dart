@@ -62,4 +62,5 @@ class Strings {
   static const String selectToSave = "Для того, чтобы сохранить вопрос(-ы) его(их) необходимо сначала выделить";
   static const String toConstructor = "В конструктор";
   static const String properties = "Свойства";
+  static const String noQuestionsYet = "У Вас пока нет сохранённых вопросов\nСохраните вопрос из окна импорта или создайте новый";
 }

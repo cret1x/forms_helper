@@ -171,10 +171,10 @@ class _StorageWidgetState extends ConsumerState<StorageWidget>
                   onPressed: _page == 1
                       ? null
                       : () {
-                    setState(() {
-                      _page = 1;
-                    });
-                  },
+                          setState(() {
+                            _page = 1;
+                          });
+                        },
                   child: const Icon(Icons.keyboard_double_arrow_left_rounded),
                 ),
                 const SizedBox(
@@ -220,10 +220,10 @@ class _StorageWidgetState extends ConsumerState<StorageWidget>
                   onPressed: _page == _storage.pages || _storage.pages == 0
                       ? null
                       : () {
-                    setState(() {
-                      _page = _storage.pages;
-                    });
-                  },
+                          setState(() {
+                            _page = _storage.pages;
+                          });
+                        },
                   child: const Icon(Icons.keyboard_double_arrow_right_rounded),
                 ),
                 const SizedBox(
@@ -288,6 +288,18 @@ class _StorageWidgetState extends ConsumerState<StorageWidget>
                             fromStorageScreen: true,
                           ))
                       .toList();
+                  if (_qWidgets!.isEmpty) {
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 48),
+                      child: Center(
+                        child: Text(
+                          Strings.noQuestionsYet,
+                          style: Theme.of(context).textTheme.displaySmall,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    );
+                  }
                   return Expanded(
                     child: ListView(
                       shrinkWrap: true,
