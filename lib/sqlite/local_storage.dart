@@ -56,6 +56,7 @@ class LocalStorage {
       return;
     }
     _db.close();
+    questionsCount = 0;
     final docPath = (await getApplicationDocumentsDirectory()).path;
     final path = join(docPath, databasePath);
     File dbFile = File(path);
