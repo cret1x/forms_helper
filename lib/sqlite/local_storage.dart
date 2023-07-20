@@ -55,7 +55,7 @@ class LocalStorage {
     if (!isInitialized) {
       return;
     }
-    _db.close();
+    await _db.close();
     questionsCount = 0;
     final docPath = (await getApplicationDocumentsDirectory()).path;
     final path = join(docPath, databasePath);
