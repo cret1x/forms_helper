@@ -204,7 +204,7 @@ class _StorageWidgetState extends ConsumerState<StorageWidget>
                   width: 12,
                 ),
                 ElevatedButton(
-                  onPressed: _page == _storage.pages
+                  onPressed: _page == _storage.pages || _storage.pages == 0
                       ? null
                       : () {
                           setState(() {
@@ -217,7 +217,7 @@ class _StorageWidgetState extends ConsumerState<StorageWidget>
                   width: 12,
                 ),
                 ElevatedButton(
-                  onPressed: _page == _storage.pages
+                  onPressed: _page == _storage.pages || _storage.pages == 0
                       ? null
                       : () {
                     setState(() {
