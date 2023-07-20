@@ -60,6 +60,7 @@ class LocalStorage {
     final path = join(docPath, databasePath);
     File dbFile = File(path);
     await dbFile.delete();
+    _db = await _dbFactory.openDatabase(path);
     await for (final questions in _firestoreManager.getQuestions()) {
       _importQuestions(questions);
       questionsCount += questions.length;
