@@ -90,10 +90,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   }
                   final t1 = await local.getQuestions();
                   final t2 = await local.getQuestions(searchText: 'sim');
-                  final t3 = await local.getQuestions(tag: 'A');
                   print(t1.join(', '));
                   print(t2.join(', '));
-                  print(t3.join(', '));
                   print(local.questionsCount);
                 },
                 child: const Text("1"),

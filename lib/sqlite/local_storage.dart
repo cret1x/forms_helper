@@ -72,7 +72,7 @@ class LocalStorage {
       {String? searchText,
       int page = 0,
       bool ascending = true,
-      String? tag}) async {
+      Tag? tag}) async {
     var store = intMapStoreFactory.store('questions');
     List<QuestionItem> items = [];
     Filter? filter;
@@ -83,8 +83,8 @@ class LocalStorage {
         Filter.matchesRegExp('description', regExp),
       ]);
     }
-    if (tag != null && tag.isNotEmpty) {
-      var regExp = RegExp(tag, caseSensitive: false);
+    if (tag != null) {
+      var regExp = RegExp(tag.id, caseSensitive: false);
       var tagFilter = Filter.matchesRegExp('question.tag', regExp);
       if (filter == null) {
         filter = tagFilter;
