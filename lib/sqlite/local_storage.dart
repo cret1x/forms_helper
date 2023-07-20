@@ -51,6 +51,21 @@ class LocalStorage {
     isInitialized = true;
   }
 
+  Future<void> update() async {
+    if (!isInitialized) {
+      return;
+    }
+    _db.close();
+    final docPath = (await getApplicationDocumentsDirectory()).path;
+    final path = join(docPath, databasePath);
+    File dbFile = File(path);
+    await dbFile.delete();
+    await for (final questions in _firestoreManager.getQuestions()) {
+      _importQuestions(questions);
+      questionsCount += questions.length;
+    }
+  }
+
   Future<List<QuestionItem>> getQuestions(
       {String? searchText,
       int page = 0,
