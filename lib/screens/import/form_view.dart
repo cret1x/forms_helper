@@ -10,6 +10,7 @@ import 'package:forms_helper/sqlite/local_storage.dart';
 import '../../common/strings.dart';
 import '../../entities/form.dart';
 import '../../entities/question_item.dart';
+import '../../entities/question_tag.dart';
 
 class FormView extends ConsumerStatefulWidget {
   final GForm form;
@@ -31,17 +32,13 @@ class FormView extends ConsumerStatefulWidget {
 class _FormViewState extends ConsumerState<FormView> {
   List<QuestionItemWidget>? _qWidgets;
   final LocalStorage _storage = LocalStorage();
-
-  final List<String> _disciplines = [
-    Strings.notSelected,
-    'Apple',
-    'Orange',
-    'Lemon'
-  ];
-  String _dropdownValue = Strings.notSelected;
+  final Tag _nullTag = Tag(id: "", value: Strings.notSelected);
+  List<Tag>? _disciplines;
+  Tag? _dropdownValue;
 
   @override
   Widget build(BuildContext context) {
+    _dropdownValue ??= _nullTag;
     _qWidgets ??= widget.form.items!
         .whereType<QuestionItem>()
         .map(
@@ -51,6 +48,7 @@ class _FormViewState extends ConsumerState<FormView> {
           ),
         )
         .toList();
+    _disciplines = ref.watch(disciplinesProvider);
     return Expanded(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -175,7 +173,8 @@ class _FormViewState extends ConsumerState<FormView> {
                       width: 36,
                     ),
                     Flexible(
-                      child: DropdownButtonFormField<String>(
+                      child: DropdownButtonFormField<Tag>(
+                        borderRadius: BorderRadius.circular(15),
                         decoration: const InputDecoration(
                           contentPadding: EdgeInsets.all(16),
                           border: OutlineInputBorder(
@@ -186,33 +185,20 @@ class _FormViewState extends ConsumerState<FormView> {
                           ),
                           filled: true,
                         ),
-                        borderRadius: BorderRadius.circular(15),
-                        style: Theme.of(context).textTheme.titleMedium,
-                        hint: Text(
-                          Strings.discipline,
-                          style:
-                              Theme.of(context).textTheme.titleMedium!.copyWith(
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium!
-                                        .color!
-                                        .withOpacity(0.4),
-                                  ),
-                        ),
                         value: _dropdownValue,
-                        onChanged: (String? newValue) {
+                        onChanged: (Tag? newValue) {
                           setState(() {
                             _dropdownValue = newValue!;
                           });
                         },
                         icon: const Icon(Icons.keyboard_arrow_down),
-                        items: _disciplines
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
+                        items: [_nullTag, ..._disciplines!]
+                              .map<DropdownMenuItem<Tag>>((Tag value) {
+                            return DropdownMenuItem<Tag>(
+                              value: value,
+                              child: Text(value.value),
+                            );
+                          }).toList(),
                       ),
                     ),
                   ],
@@ -366,7 +352,7 @@ class _FormViewState extends ConsumerState<FormView> {
                               );
                               return;
                             }
-                            if (_dropdownValue == Strings.notSelected) {
+                            if (_dropdownValue == _nullTag) {
                               bool? res = await showDialog(
                                   context: context,
                                   builder: (_) =>
@@ -375,13 +361,12 @@ class _FormViewState extends ConsumerState<FormView> {
                                 return;
                               }
                             }
-                            List<QuestionItem> _questionItems = [];
-                            if (_dropdownValue ==
-                                Strings.noDisciplineSelected) {
+                            List<QuestionItem> questionItems = [];
+                            if (_dropdownValue == _nullTag) {
                               for (var widget in _qWidgets!) {
                                 if (widget.info.selected &&
                                     !widget.info.contained!) {
-                                  _questionItems.add(widget.question);
+                                  questionItems.add(widget.question);
                                   widget.info.contained = true;
                                   widget.info.unselect();
                                 }
@@ -391,8 +376,8 @@ class _FormViewState extends ConsumerState<FormView> {
                                 if (widget.info.selected &&
                                     (widget.info.contained == null ||
                                         !widget.info.contained!)) {
-                                  _questionItems.add(widget.question);
-                                  _questionItems.last.tag?.value = _dropdownValue;
+                                  questionItems.add(widget.question);
+                                  questionItems.last.tag = _dropdownValue;
                                   widget.info.contained = true;
                                   widget.info.unselect();
                                 }
@@ -402,7 +387,7 @@ class _FormViewState extends ConsumerState<FormView> {
                             if (!_storage.isInitialized) {
                               await _storage.init();
                             }
-                            await _storage.saveQuestions(_questionItems);
+                            await _storage.saveQuestions(questionItems);
                             setState(() {});
                           },
                           child: const Text(
