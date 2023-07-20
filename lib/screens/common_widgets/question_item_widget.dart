@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:forms_helper/entities/choice_question.dart';
 import 'package:forms_helper/screens/construct.dart';
-import 'package:forms_helper/screens/import/choice_question_answers.dart';
-import 'package:forms_helper/screens/storage.dart';
+import 'package:forms_helper/screens/common_widgets/choice_question_answers.dart';
+import 'package:forms_helper/screens/storage/storage.dart';
 
 import '../../common/strings.dart';
 import '../../entities/question_item.dart';
