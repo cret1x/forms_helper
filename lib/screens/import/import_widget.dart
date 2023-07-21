@@ -36,6 +36,7 @@ class _ImportWidgetState extends State<ImportWidget>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return MaterialApp(
       theme: Themes.darkBlue,
       home: Padding(
