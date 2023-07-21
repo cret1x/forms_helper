@@ -23,8 +23,13 @@ class _HomeState extends ConsumerState<HomeWidget> {
   final SideMenuController _menuController = SideMenuController();
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
     ref.read(disciplinesProvider.notifier).init();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return MaterialApp(
       theme: Themes.darkBlue,
       home: Scaffold(
