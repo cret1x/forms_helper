@@ -56,6 +56,15 @@ class GoogleAuthApi {
     await launchUrl(Uri.parse(url));
   }
 
+  Future<void> logout() async {
+    try {
+      final file = await _localTokenFile;
+      await file.delete();
+    } catch (e) {
+      //
+    }
+  }
+
   Future<String> getAccessToken() async {
     final credentials = await _getCredentials();
     if (credentials == null) {

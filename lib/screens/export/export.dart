@@ -57,7 +57,7 @@ class PDFExport {
           return pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [
-              pw.Header(text: form.title),
+              pw.Header(level: 3, text: form.title),
               pw.Text(form.description),
               pw.Padding(
                 padding: const pw.EdgeInsets.only(top: 32),
