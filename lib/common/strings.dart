@@ -63,4 +63,7 @@ class Strings {
   static const String toConstructor = "В конструктор";
   static const String properties = "Свойства";
   static const String noQuestionsYet = "У Вас пока нет сохранённых вопросов\nСохраните вопрос из окна импорта или создайте новый";
+  static const String disciplinesList = "Список дисциплин";
+  static const String editTag = "Редактировать дисциплину";
+  static const String addTag = "Добавить дисциплину";
 }

@@ -312,10 +312,7 @@ class _FormViewState extends ConsumerState<FormView> {
                         ),
                         ElevatedButton(
                           onPressed: () async {
-                            if (_qWidgets!.every((e) =>
-                                (e.info.contained != null &&
-                                    e.info.contained!) ||
-                                !e.info.selected)) {
+                            if (_qWidgets!.every((e) => !e.info.selected)) {
                               await showDialog(
                                 context: context,
                                 builder: (_) => AlertDialog(
@@ -363,23 +360,20 @@ class _FormViewState extends ConsumerState<FormView> {
                             }
                             List<QuestionItem> questionItems = [];
                             if (_dropdownValue == _nullTag) {
-                              for (var widget in _qWidgets!) {
-                                if (widget.info.selected &&
-                                    !widget.info.contained!) {
-                                  questionItems.add(widget.question);
-                                  widget.info.contained = true;
-                                  widget.info.unselect();
+                              for (var q in _qWidgets!) {
+                                final contained = await _storage.exists(q.question);
+                                if (q.info.selected && !contained) {
+                                  questionItems.add(q.question);
+                                  q.info.unselect();
                                 }
                               }
                             } else {
-                              for (var widget in _qWidgets!) {
-                                if (widget.info.selected &&
-                                    (widget.info.contained == null ||
-                                        !widget.info.contained!)) {
-                                  questionItems.add(widget.question);
+                              for (var q in _qWidgets!) {
+                                final contained = await _storage.exists(q.question);
+                                if (q.info.selected && !contained) {
+                                  questionItems.add(q.question);
                                   questionItems.last.tag = _dropdownValue;
-                                  widget.info.contained = true;
-                                  widget.info.unselect();
+                                  q.info.unselect();
                                 }
                               }
                             }
@@ -388,6 +382,7 @@ class _FormViewState extends ConsumerState<FormView> {
                               await _storage.init();
                             }
                             await _storage.saveQuestions(questionItems);
+                            ref.read(saveNotifierProvider).notify();
                             setState(() {});
                           },
                           child: const Text(

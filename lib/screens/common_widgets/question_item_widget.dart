@@ -12,7 +12,6 @@ import '../../sqlite/local_storage.dart';
 import 'question_widget.dart';
 
 class QuestionWidgetInfo {
-  bool? contained;
   bool _isSelected = false;
   late final bool _fromImportScreen;
   late final bool _fromStorageScreen;
@@ -62,6 +61,9 @@ class _QuestionItemWidgetState extends ConsumerState<QuestionItemWidget> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(saveNotifierProvider, (previous, next) {
+      setState(() {});
+    });
     if (widget.info._fromImportScreen) {
       ref.listen(importSelectionProvider, (previous, next) {
         setState(() {
@@ -72,12 +74,12 @@ class _QuestionItemWidgetState extends ConsumerState<QuestionItemWidget> {
       ref.listen(constructorSelectionProvider, (previous, next) {
         widget.info._isSelected = next;
         if (widget.info.selected) {
-          ref.read(
-              constructorSelectedProvider.notifier)
+          ref
+              .read(constructorSelectedProvider.notifier)
               .addQuestion(widget.question);
         } else {
-          ref.read(
-              constructorSelectedProvider.notifier)
+          ref
+              .read(constructorSelectedProvider.notifier)
               .deleteQuestion(widget.question);
         }
         setState(() {});
@@ -138,7 +140,10 @@ class _QuestionItemWidgetState extends ConsumerState<QuestionItemWidget> {
                                 );
                               }
                               return snapshot.data!
-                                  ? const Icon(Icons.download_done)
+                                  ? const Checkbox(
+                                      value: true,
+                                      onChanged: null,
+                                    )
                                   : Checkbox(
                                       value: widget.info.selected,
                                       onChanged: (_) {
@@ -178,12 +183,14 @@ class _QuestionItemWidgetState extends ConsumerState<QuestionItemWidget> {
                                   setState(() {
                                     widget.info._toggle();
                                     if (widget.info.selected) {
-                                      ref.read(
-                                          constructorSelectedProvider.notifier)
+                                      ref
+                                          .read(constructorSelectedProvider
+                                              .notifier)
                                           .addQuestion(widget.question);
                                     } else {
-                                      ref.read(
-                                          constructorSelectedProvider.notifier)
+                                      ref
+                                          .read(constructorSelectedProvider
+                                              .notifier)
                                           .deleteQuestion(widget.question);
                                     }
                                   });

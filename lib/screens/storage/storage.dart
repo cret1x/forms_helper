@@ -2,10 +2,9 @@ import 'dart:math';
 
 import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:forms_helper/screens/construct.dart';
 import 'package:forms_helper/screens/common_widgets/question_item_widget.dart';
+import 'package:forms_helper/screens/storage/tags_widget.dart';
 
 import '../../common/strings.dart';
 import '../../common/themes.dart';
@@ -233,9 +232,13 @@ class _StorageWidgetState extends ConsumerState<StorageWidget>
                   width: 12,
                 ),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (_) => const TagsListWidget(),
+                    ));
+                  },
                   child: const Icon(
-                    Icons.edit_outlined,
+                    Icons.tag,
                   ),
                 ),
                 const SizedBox(

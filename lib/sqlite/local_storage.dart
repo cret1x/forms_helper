@@ -88,7 +88,7 @@ class LocalStorage {
       ]);
     }
     if (tag != null) {
-      var regExp = RegExp(tag.id, caseSensitive: false);
+      var regExp = RegExp(tag.id!, caseSensitive: false);
       var tagFilter = Filter.matchesRegExp('question.tag', regExp);
       if (filter == null) {
         filter = tagFilter;

@@ -8,8 +8,10 @@ class DisciplinesListStateNotifier
   final LocalStorage _storage = LocalStorage();
 
   void init() async {
+    if (!_storage.isInitialized) {
+      await _storage.init();
+    }
     state = await _storage.getTags();
-    print(state);
   }
 
   void addDiscipline(Tag discipline) {

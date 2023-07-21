@@ -25,9 +25,7 @@ class QuestionWidget extends StatefulWidget {
 class _QuestionWidgetState extends State<QuestionWidget> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: Themes.darkBlue,
-      home: Scaffold(
+    return Scaffold(
         body: Padding(
           padding: const EdgeInsets.symmetric(
             vertical: 26,
@@ -279,7 +277,6 @@ class _QuestionWidgetState extends State<QuestionWidget> {
             ],
           ),
         ),
-      ),
     );
   }
 }
