@@ -12,7 +12,6 @@ class DisciplinesListStateNotifier
       await _storage.init();
     }
     state = await _storage.getTags();
-    print(state);
   }
 
   void addDiscipline(Tag discipline) {
