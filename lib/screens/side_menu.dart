@@ -1,6 +1,7 @@
 import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:forms_helper/google_api/auth.dart';
 
 import '../common/strings.dart';
 import '../common/themes.dart';
@@ -22,6 +23,7 @@ class MenuWidget extends StatefulWidget {
 }
 
 class _MenuWidgetState extends State<MenuWidget> {
+  final GoogleAuthApi _api = GoogleAuthApi();
 
   @override
   Widget build(BuildContext context) {
@@ -66,8 +68,11 @@ class _MenuWidgetState extends State<MenuWidget> {
         ),
         SideMenuItem(
           priority: 4,
-          onTap: _itemFunc,
-          icon: const Icon(Icons.settings),
+          onTap: (_, __) async {
+            //TODO: confirmation
+            await _api.logout();
+          },
+          icon: const Icon(Icons.logout),
         ),
       ],
       controller: widget.menuController,
