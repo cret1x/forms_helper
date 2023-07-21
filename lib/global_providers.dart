@@ -33,4 +33,4 @@ final disciplinesProvider =
         (ref) => DisciplinesListStateNotifier());
 
 final saveNotifierProvider =
-    ChangeNotifierProvider<SaveNotifier>((ref) => SaveNotifier());
+    ChangeNotifierProvider<ManualNotifier>((ref) => ManualNotifier());
