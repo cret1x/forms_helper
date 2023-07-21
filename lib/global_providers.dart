@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:forms_helper/state_notifiers/construct_notifier.dart';
 import 'package:forms_helper/state_notifiers/discipline_notifier.dart';
+import 'package:forms_helper/state_notifiers/manual_notifier.dart';
 import 'package:forms_helper/state_notifiers/selection_notifier.dart';
 import 'package:forms_helper/state_notifiers/selected_notifier.dart';
 
@@ -30,3 +31,6 @@ final importSelectionProvider =
 final disciplinesProvider =
     StateNotifierProvider<DisciplinesListStateNotifier, List<Tag>>(
         (ref) => DisciplinesListStateNotifier());
+
+final saveNotifierProvider =
+    ChangeNotifierProvider<SaveNotifier>((ref) => SaveNotifier());
