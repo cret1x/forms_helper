@@ -13,7 +13,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:printing/printing.dart';
 
 class PDFExport {
-  static pw.Widget q2w(FormItem item) {
+  static pw.Widget q2w(FormItem item, int index, int startFrom) {
     late List<Answer> options;
     if (item is ChoiceQuestion) {
       options = item.options;
@@ -23,7 +23,7 @@ class PDFExport {
     return pw.Column(
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: [
-        pw.Header(level: 3, text: item.title),
+        pw.Header(level: 3, text: '${index <= startFrom ? "" : "${index - startFrom}. "}${item.title}'),
         pw.Text(item.description),
         pw.Padding(
           padding: const pw.EdgeInsets.all(16),
@@ -32,13 +32,23 @@ class PDFExport {
                   crossAxisAlignment: pw.CrossAxisAlignment.start,
                   children: options.map((e) => pw.Text(e.value)).toList(),
                 )
-              : pw.Divider(),
+              : pw.DecoratedBox(
+                  decoration: const pw.BoxDecoration(
+                    color: PdfColors.black,
+                    border: pw.Border(
+                      bottom: pw.BorderSide(),
+                    ),
+                  ),
+                  child: pw.Expanded(
+                    child: pw.SizedBox(height: 1, width: double.infinity,),
+                  ),
+                ),
         ),
       ],
     );
   }
 
-  static void export(GForm form) async {
+  static void export(GForm form, {int startFrom = 0}) async {
     final dir = await getApplicationDocumentsDirectory();
     final font = await PdfGoogleFonts.robotoMedium();
     final pdf = pw.Document(
@@ -50,7 +60,6 @@ class PDFExport {
         header3: pw.TextStyle(font: font),
       ),
     );
-    final q = form.items?.map(q2w).toList() ?? [];
     pdf.addPage(pw.Page(
         pageFormat: PdfPageFormat.a4,
         build: (pw.Context context) {
@@ -61,10 +70,11 @@ class PDFExport {
               pw.Text(form.description),
               pw.Padding(
                 padding: const pw.EdgeInsets.only(top: 32),
-                child: pw.Column(
-                  crossAxisAlignment: pw.CrossAxisAlignment.start,
-                  children: q,
-                ),
+                child: pw.ListView.builder(
+                    itemCount: form.items?.length ?? 0,
+                    itemBuilder: (context, index) {
+                      return q2w(form.items![index], index + 1, startFrom);
+                    }),
               ),
             ],
           );
