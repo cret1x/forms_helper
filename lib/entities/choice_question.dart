@@ -13,6 +13,7 @@ class ChoiceQuestion extends QuestionItem {
   final QuestionType type;
 
   ChoiceQuestion({
+    required super.id,
     required super.title,
     required super.description,
     required super.required,
@@ -59,6 +60,7 @@ class ChoiceQuestion extends QuestionItem {
     final item = FormItem.fromGoogleFormJson(json);
     final questionItem = QuestionItem.fromGoogleFormJson(json);
     return ChoiceQuestion(
+      id: item.id,
       title: item.title,
       description: item.description,
       required: questionItem.required,
@@ -83,6 +85,7 @@ class ChoiceQuestion extends QuestionItem {
     final item = FormItem.fromMap(json);
     final questionItem = QuestionItem.fromMap(json);
     return ChoiceQuestion(
+      id: item.id,
       title: item.title,
       description: item.description,
       required: questionItem.required,

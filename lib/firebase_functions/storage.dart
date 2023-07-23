@@ -67,7 +67,7 @@ class FirestoreManager {
       return;
     }
     final questionsCollection = Firestore.instance.collection('questions');
-    final document = await questionsCollection.where('title', isEqualTo: questionItem.title).get();
+    final document = await questionsCollection.where('id', isEqualTo: questionItem.id).get();
     final key = document.first.id;
     final docDef = questionsCollection.document(key);
     await docDef.delete();
@@ -78,30 +78,15 @@ class FirestoreManager {
       return;
     }
     final questionsCollection = Firestore.instance.collection('questions');
-    final document = await questionsCollection.where('title', isEqualTo: questionItem.title).get();
+    final document = await questionsCollection.where('id', isEqualTo: questionItem.id).get();
     final key = document.first.id;
     await questionsCollection.document(key).update(questionItem.toMap());
   }
 
-  Future<void> saveForm(GForm form) async {
-    final formsCollection = Firestore.instance.collection('forms');
-    await formsCollection.add(form.toMap());
-  }
-
   Future<bool> exists(QuestionItem question) async {
     final questionsCollection = Firestore.instance.collection('questions');
-    final questionsDocuments = await questionsCollection.where('title', isEqualTo: question.title).get();
+    final questionsDocuments = await questionsCollection.where('id', isEqualTo: question.id).get();
     return questionsDocuments.isNotEmpty;
-  }
-
-  Future<List<GForm>> getForms() async {
-    final formsCollection = Firestore.instance.collection('forms');
-    final formDocuments = await formsCollection.get(pageSize: pageSize);
-    final forms = <GForm>[];
-    for (var doc in formDocuments) {
-      forms.add(GForm.fromMap(doc.map));
-    }
-    return forms;
   }
 
   Future<List<Tag>> getTags() async {

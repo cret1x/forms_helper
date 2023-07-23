@@ -10,6 +10,7 @@ class QuestionItem extends FormItem {
   Tag? tag;
 
   QuestionItem({
+    required super.id,
     required super.title,
     required super.description,
     required this.required,
@@ -43,6 +44,7 @@ class QuestionItem extends FormItem {
     String questionType = json['question']['questionType'] ?? "";
     Tag? tag = json['question']['tag'] != null ? Tag.fromMap(json['question']['tag']) : null;
     return QuestionItem(
+      id: item.id,
       title: item.title,
       description: item.description,
       required: required,
@@ -93,6 +95,7 @@ class QuestionItem extends FormItem {
 
     final item = FormItem.fromGoogleFormJson(json);
     return QuestionItem(
+      id: item.id,
       title: item.title,
       description: item.description,
       required: required,
@@ -105,6 +108,6 @@ class QuestionItem extends FormItem {
 
   @override
   String toString() {
-    return '[$title, $questionType, $pointValue, ${tag?.value}]';
+    return '[$id, $title, $questionType, $pointValue, ${tag?.value}]';
   }
 }

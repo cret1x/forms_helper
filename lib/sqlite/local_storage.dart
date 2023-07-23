@@ -9,6 +9,7 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
+import 'package:uuid/uuid.dart';
 
 class LocalStorage {
   static const databasePath = 'FormsHelper/forms_helper.db';
@@ -130,6 +131,12 @@ class LocalStorage {
   }
 
   Future<void> saveQuestions(List<QuestionItem> questions) async {
+    Uuid uuid  = const Uuid();
+    for (var question in questions) {
+      if (question.id.isEmpty) {
+        question.id = uuid.v4();
+      }
+    }
     final store = intMapStoreFactory.store('questions');
     _firestoreManager.saveQuestions(questions);
     await _db.transaction((transaction) async {
@@ -139,7 +146,7 @@ class LocalStorage {
 
   Future<void> updateQuestion(QuestionItem questionItem) async {
     final store = intMapStoreFactory.store('questions');
-    final filter = Filter.equals('title', questionItem.title);
+    final filter = Filter.equals('id', questionItem.id);
     final finder = Finder(filter: filter);
     await store.update(_db, questionItem.toMap(), finder: finder);
     await _firestoreManager.updateQuestion(questionItem);
@@ -147,7 +154,7 @@ class LocalStorage {
 
   Future<void> deleteQuestion(QuestionItem questionItem) async {
     final store = intMapStoreFactory.store('questions');
-    final filter = Filter.equals('title', questionItem.title);
+    final filter = Filter.equals('id', questionItem.id);
     final finder = Finder(filter: filter);
     await store.delete(_db, finder: finder);
     await _firestoreManager.deleteQuestion(questionItem);

@@ -110,6 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ];
                   List<QuestionItem> questions = [
                     TextQuestion(
+                        id: 'a',
                         title: "Почта",
                         description: "",
                         required: true,
@@ -118,6 +119,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         paragraph: false,
                         tag: null),
                     TextQuestion(
+                        id: 'b',
                         title: "Группа",
                         description: "",
                         required: true,
@@ -126,6 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         paragraph: false,
                         tag: null),
                     ChoiceQuestion(
+                        id: 'c',
                         title: "Вопрос с выбором",
                         description: '',
                         required: true,
@@ -136,7 +139,11 @@ class _MyHomePageState extends State<MyHomePage> {
                         type: QuestionType.RADIO,
                         tag: null),
                   ];
-                  PDFExport.export(GForm(title: 'a', description: 'b', documentTitle: 'c', items: questions));
+                  PDFExport.export(GForm(
+                      title: 'a',
+                      description: 'b',
+                      documentTitle: 'c',
+                      items: questions));
                 },
                 child: const Text("2"),
               ),

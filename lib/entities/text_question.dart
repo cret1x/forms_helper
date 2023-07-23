@@ -5,6 +5,7 @@ class TextQuestion extends QuestionItem {
   final bool paragraph;
 
   TextQuestion({
+    required super.id,
     required super.title,
     required super.description,
     required super.required,
@@ -40,6 +41,7 @@ class TextQuestion extends QuestionItem {
     final item = FormItem.fromGoogleFormJson(json);
     final questionItem = QuestionItem.fromGoogleFormJson(json);
     return TextQuestion(
+      id: item.id,
         title: item.title,
         description: item.description,
         required: questionItem.required,
@@ -55,6 +57,7 @@ class TextQuestion extends QuestionItem {
     final item = FormItem.fromMap(json);
     final questionItem = QuestionItem.fromMap(json);
     return TextQuestion(
+      id: item.id,
       title: item.title,
       description: item.description,
       required: questionItem.required,

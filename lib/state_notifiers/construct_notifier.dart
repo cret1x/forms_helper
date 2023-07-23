@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:uuid/uuid.dart';
 
 import '../entities/question_item.dart';
 
@@ -30,6 +31,12 @@ class ConstructorQuestionsStateNotifier
   }
 
   void setQuestions(List<QuestionItem> questions) {
+    Uuid uuid  = const Uuid();
+    for (var question in questions) {
+      if (question.id.isEmpty) {
+        question.id = uuid.v1();
+      }
+    }
     state = [...questions];
   }
 
