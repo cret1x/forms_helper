@@ -86,7 +86,7 @@ class _QuestionItemWidgetState extends ConsumerState<QuestionItemWidget> {
       });
     }
     if (widget.info._fromStorageScreen) {
-      _constructQuestions = ref.watch(constructorProvider);
+      _constructQuestions = ref.watch(constructorQuestionsProvider);
     }
     return Padding(
       padding: EdgeInsets.only(bottom: (widget.noPadding ? 0 : 10)),

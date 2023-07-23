@@ -253,12 +253,12 @@ class _StorageWidgetState extends ConsumerState<StorageWidget>
                     ),
                   ),
                   onPressed: () {
-                    _constructQuestions = ref.read(constructorProvider);
+                    _constructQuestions = ref.read(constructorQuestionsProvider);
                     final selectedQuestions = ref.read(storageProvider);
 
                     for (var q in selectedQuestions) {
                       if (!_constructQuestions.contains(q)) {
-                        ref.read(constructorProvider.notifier).addQuestion(q);
+                        ref.read(constructorQuestionsProvider.notifier).addQuestion(q);
                       }
                     }
 

@@ -193,12 +193,12 @@ class _FormViewState extends ConsumerState<FormView> {
                         },
                         icon: const Icon(Icons.keyboard_arrow_down),
                         items: [_nullTag, ..._disciplines!]
-                              .map<DropdownMenuItem<Tag>>((Tag value) {
-                            return DropdownMenuItem<Tag>(
-                              value: value,
-                              child: Text(value.value),
-                            );
-                          }).toList(),
+                            .map<DropdownMenuItem<Tag>>((Tag value) {
+                          return DropdownMenuItem<Tag>(
+                            value: value,
+                            child: Text(value.value),
+                          );
+                        }).toList(),
                       ),
                     ),
                   ],
@@ -270,8 +270,13 @@ class _FormViewState extends ConsumerState<FormView> {
                           }
                           widget.pageController.jumpToPage(2);
                           widget.menuController.changePage(2);
-                          ref.read(formMoveProvider.notifier).form = widget.form;
-                          ref.read(formMoveProvider.notifier).notify();
+                          //TODO: confirmation in non-empty case
+                          ref.read(formInfoProvider).import(widget.form);
+                          ref
+                              .read(constructorQuestionsProvider.notifier)
+                              .setQuestions(widget.form.items!
+                                  .whereType<QuestionItem>()
+                                  .toList());
                         },
                         child: const Text(Strings.toConstructor),
                       ),
@@ -363,7 +368,8 @@ class _FormViewState extends ConsumerState<FormView> {
                             List<QuestionItem> questionItems = [];
                             if (_dropdownValue == _nullTag) {
                               for (var q in _qWidgets!) {
-                                final contained = await _storage.exists(q.question);
+                                final contained =
+                                    await _storage.exists(q.question);
                                 if (q.info.selected && !contained) {
                                   questionItems.add(q.question);
                                   q.info.unselect();
@@ -371,7 +377,8 @@ class _FormViewState extends ConsumerState<FormView> {
                               }
                             } else {
                               for (var q in _qWidgets!) {
-                                final contained = await _storage.exists(q.question);
+                                final contained =
+                                    await _storage.exists(q.question);
                                 if (q.info.selected && !contained) {
                                   questionItems.add(q.question);
                                   questionItems.last.tag = _dropdownValue;

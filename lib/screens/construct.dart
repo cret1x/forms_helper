@@ -30,52 +30,23 @@ class FormConstructor extends ConsumerStatefulWidget {
 
 class _FormConstructorState extends ConsumerState<FormConstructor>
     with AutomaticKeepAliveClientMixin<FormConstructor> {
-  final TextEditingController _filenameController = TextEditingController();
-  final TextEditingController _headerController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
   late List<QuestionItem> _questions;
   List<QuestionItemWidget>? _qWidgets;
   final GoogleFormsApi _formsApi =
       GoogleFormsApi(url: "https://forms.googleapis.com/v1/forms");
   final GoogleAuthApi _authApi = GoogleAuthApi();
 
-  bool _isClear() {
-    return _filenameController.text.isEmpty &&
-        _headerController.text.isEmpty &&
-        _descriptionController.text.isEmpty &&
-        _questions.isEmpty;
-  }
-
-  @override
-  void initState() {
-    final form = ref.read(formMoveProvider.notifier).form;
-    List<QuestionItem> questions = [];
-    if (form.items != null) {
-      for (var item in form.items!) {
-        if (item is QuestionItem) {
-          questions.add(item);
-        }
-      }
-    }
-    _filenameController.text = form.documentTitle;
-    _headerController.text = form.title;
-    _descriptionController.text = form.description;
-    ref.read(constructorProvider.notifier).setQuestions(questions);
-
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    _questions = ref.read(constructorProvider);
+    _questions = ref.read(constructorQuestionsProvider);
     _qWidgets ??= _questions
         .map((e) => QuestionItemWidget(
               question: e,
               key: UniqueKey(),
             ))
         .toList();
-    ref.listen(constructorProvider, (previous, next) {
+    ref.listen(constructorQuestionsProvider, (previous, next) {
       _qWidgets = [];
       for (var q in next) {
         _qWidgets!.add(QuestionItemWidget(
@@ -87,30 +58,6 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
         }
       }
       setState(() {});
-    });
-    ref.listen(formMoveProvider, (previous, next) {
-      bool res = _isClear();
-      //TODO: check
-      if (res) {
-        final form = ref.read(formMoveProvider.notifier).form;
-        List<QuestionItem> questions = [];
-        if (form.items != null) {
-          for (var item in form.items!) {
-            if (item is QuestionItem) {
-              questions.add(item);
-            }
-          }
-        }
-        _filenameController.text = form.documentTitle;
-        _headerController.text = form.title;
-        _descriptionController.text = form.description;
-        ref.read(constructorProvider.notifier).setQuestions(questions);
-        if (ref.read(constructorSelectionProvider)) {
-          ref.read(constructorSelectionProvider.notifier).toggle();
-        } else {
-          ref.read(constructorSelectedProvider.notifier).clear();
-        }
-      }
     });
     return MaterialApp(
       theme: Themes.darkBlue,
@@ -144,7 +91,7 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
                           ),
                         ),
                         TextField(
-                          controller: _filenameController,
+                          controller: ref.read(formInfoProvider).filenameController,
                           cursorColor: Theme.of(context).colorScheme.onPrimary,
                           decoration: InputDecoration(
                             hintText: Strings.name,
@@ -173,7 +120,7 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
                           height: 18,
                         ),
                         TextField(
-                          controller: _headerController,
+                          controller: ref.read(formInfoProvider).titleController,
                           cursorColor: Theme.of(context).colorScheme.onPrimary,
                           decoration: InputDecoration(
                             hintText: Strings.header,
@@ -202,7 +149,7 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
                           height: 18,
                         ),
                         TextFormField(
-                          controller: _descriptionController,
+                          controller: ref.read(formInfoProvider).descriptionController,
                           cursorColor: Theme.of(context).colorScheme.onPrimary,
                           maxLines: 12,
                           decoration: InputDecoration(
@@ -280,11 +227,9 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
                                   );
                                   if (result != null && result == true) {
                                     setState(() {
-                                      _filenameController.text = "";
-                                      _headerController.text = "";
-                                      _descriptionController.text = "";
+                                      ref.read(formInfoProvider).clear();
                                       ref
-                                          .read(constructorProvider.notifier)
+                                          .read(constructorQuestionsProvider.notifier)
                                           .clear();
                                       ref
                                           .read(constructorSelectedProvider
@@ -305,9 +250,9 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
                               child: ElevatedButton(
                                 onPressed: () async {
                                   final form = GForm(
-                                    title: _headerController.text,
-                                    description: _descriptionController.text,
-                                    documentTitle: _filenameController.text,
+                                    title: ref.read(formInfoProvider).filenameController.text,
+                                    description: ref.read(formInfoProvider).titleController.text,
+                                    documentTitle: ref.read(formInfoProvider).descriptionController.text,
                                     items: _questions,
                                   );
                                   final token = await _authApi.getAccessToken();
@@ -364,7 +309,7 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
                                     for (var q in ref
                                         .read(constructorSelectedProvider)) {
                                       ref
-                                          .read(constructorProvider.notifier)
+                                          .read(constructorQuestionsProvider.notifier)
                                           .deleteQuestion(q);
                                       ref
                                           .read(constructorSelectedProvider
@@ -421,7 +366,7 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
                                   },
                                   onReorder: (int oldIndex, int newIndex) {
                                     ref
-                                        .read(constructorProvider.notifier)
+                                        .read(constructorQuestionsProvider.notifier)
                                         .moveQuestion(oldIndex, newIndex);
                                   },
                                   children: _qWidgets!,

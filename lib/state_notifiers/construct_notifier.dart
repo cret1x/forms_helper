@@ -30,7 +30,7 @@ class ConstructorQuestionsStateNotifier
   }
 
   void setQuestions(List<QuestionItem> questions) {
-    state = questions;
+    state = [...questions];
   }
 
   void clear() {

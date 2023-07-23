@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:forms_helper/state_notifiers/construct_notifier.dart';
 import 'package:forms_helper/state_notifiers/discipline_notifier.dart';
-import 'package:forms_helper/state_notifiers/form_move_notifier.dart';
+import 'package:forms_helper/state_notifiers/form_info_notifier.dart';
 import 'package:forms_helper/state_notifiers/manual_notifier.dart';
 import 'package:forms_helper/state_notifiers/selection_notifier.dart';
 import 'package:forms_helper/state_notifiers/selected_notifier.dart';
@@ -9,7 +9,7 @@ import 'package:forms_helper/state_notifiers/selected_notifier.dart';
 import 'entities/question_item.dart';
 import 'entities/question_tag.dart';
 
-final constructorProvider = StateNotifierProvider<
+final constructorQuestionsProvider = StateNotifierProvider<
     ConstructorQuestionsStateNotifier,
     List<QuestionItem>>((ref) => ConstructorQuestionsStateNotifier());
 
@@ -36,4 +36,4 @@ final disciplinesProvider =
 final saveNotifierProvider =
     ChangeNotifierProvider<ManualNotifier>((ref) => ManualNotifier());
 
-final formMoveProvider = ChangeNotifierProvider<FormMoveNotifier>((ref) => FormMoveNotifier());
+final formInfoProvider = ChangeNotifierProvider<FormInfoNotifier>((ref) => FormInfoNotifier());
