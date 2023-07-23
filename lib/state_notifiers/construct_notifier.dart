@@ -29,6 +29,10 @@ class ConstructorQuestionsStateNotifier
     state = newList;
   }
 
+  void setQuestions(List<QuestionItem> questions) {
+    state = questions;
+  }
+
   void clear() {
     state = [];
   }

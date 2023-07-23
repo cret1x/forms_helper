@@ -270,6 +270,8 @@ class _FormViewState extends ConsumerState<FormView> {
                           }
                           widget.pageController.jumpToPage(2);
                           widget.menuController.changePage(2);
+                          ref.read(formMoveProvider.notifier).form = widget.form;
+                          ref.read(formMoveProvider.notifier).notify();
                         },
                         child: const Text(Strings.toConstructor),
                       ),

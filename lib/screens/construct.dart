@@ -39,6 +39,32 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
       GoogleFormsApi(url: "https://forms.googleapis.com/v1/forms");
   final GoogleAuthApi _authApi = GoogleAuthApi();
 
+  bool _isClear() {
+    return _filenameController.text.isEmpty &&
+        _headerController.text.isEmpty &&
+        _descriptionController.text.isEmpty &&
+        _questions.isEmpty;
+  }
+
+  @override
+  void initState() {
+    final form = ref.read(formMoveProvider.notifier).form;
+    List<QuestionItem> questions = [];
+    if (form.items != null) {
+      for (var item in form.items!) {
+        if (item is QuestionItem) {
+          questions.add(item);
+        }
+      }
+    }
+    _filenameController.text = form.documentTitle;
+    _headerController.text = form.title;
+    _descriptionController.text = form.description;
+    ref.read(constructorProvider.notifier).setQuestions(questions);
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -61,6 +87,30 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
         }
       }
       setState(() {});
+    });
+    ref.listen(formMoveProvider, (previous, next) {
+      bool res = _isClear();
+      //TODO: check
+      if (res) {
+        final form = ref.read(formMoveProvider.notifier).form;
+        List<QuestionItem> questions = [];
+        if (form.items != null) {
+          for (var item in form.items!) {
+            if (item is QuestionItem) {
+              questions.add(item);
+            }
+          }
+        }
+        _filenameController.text = form.documentTitle;
+        _headerController.text = form.title;
+        _descriptionController.text = form.description;
+        ref.read(constructorProvider.notifier).setQuestions(questions);
+        if (ref.read(constructorSelectionProvider)) {
+          ref.read(constructorSelectionProvider.notifier).toggle();
+        } else {
+          ref.read(constructorSelectedProvider.notifier).clear();
+        }
+      }
     });
     return MaterialApp(
       theme: Themes.darkBlue,
