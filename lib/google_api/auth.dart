@@ -65,6 +65,16 @@ class GoogleAuthApi {
     }
   }
 
+  Future<bool> get hasLoggedIn async {
+    await Future.delayed(const Duration(seconds: 1));
+    try {
+      final file = await _localTokenFile;
+      return await file.exists();
+    } catch (e) {
+      return false;
+    }
+}
+
   Future<String> getAccessToken() async {
     final credentials = await _getCredentials();
     if (credentials == null) {

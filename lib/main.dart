@@ -2,6 +2,8 @@ import 'package:firedart/firestore/firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
+import 'package:forms_helper/common/strings.dart';
 import 'package:forms_helper/entities/answer.dart';
 import 'package:forms_helper/entities/form.dart';
 import 'package:forms_helper/entities/choice_question.dart';
@@ -73,79 +75,71 @@ class _MyHomePageState extends State<MyHomePage> {
       home: Scaffold(
         body: Center(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ElevatedButton(
-                onPressed: () async {
-                  final token = await auth.getAccessToken();
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (_) => HomeWidget()));
-                },
-                child: const Text("AUTH GOOGLE"),
+              const Text(
+                Strings.appTitle,
+                style: TextStyle(fontSize: 32),
               ),
-              ElevatedButton(
-                onPressed: () async {
-                  if (!local.isInitialized) {
-                    print('Not ready!');
-                    return;
-                  }
-                  final t1 = await local.getQuestions();
-                  final t2 = await local.getQuestions(searchText: 'sim');
-                  print(t1.join(', '));
-                  print(t2.join(', '));
-                  print(local.questionsCount);
-                },
-                child: const Text("1"),
+              const Padding(
+                padding: EdgeInsets.only(top: 8.0, bottom: 40),
+                child: Text(
+                  Strings.appDescription,
+                  style: TextStyle(fontSize: 24),
+                ),
               ),
-              ElevatedButton(
-                onPressed: () async {
-                  List<Answer> options = [
-                    Answer(value: 'Вариант 1'),
-                    Answer(value: 'Вариант 2'),
-                    Answer(value: 'Вариант 3'),
-                    Answer(value: 'Вариант 4'),
-                  ];
-                  List<Answer> correct = [
-                    Answer(value: 'Вариант 1'),
-                    Answer(value: 'Вариант 3'),
-                  ];
-                  List<QuestionItem> questions = [
-                    TextQuestion(
-                        id: 'a',
-                        title: "Почта",
-                        description: "",
-                        required: true,
-                        pointValue: 0,
-                        correctAnswers: [],
-                        paragraph: false,
-                        tag: null),
-                    TextQuestion(
-                        id: 'b',
-                        title: "Группа",
-                        description: "",
-                        required: true,
-                        pointValue: 0,
-                        correctAnswers: [],
-                        paragraph: false,
-                        tag: null),
-                    ChoiceQuestion(
-                        id: 'c',
-                        title: "Вопрос с выбором",
-                        description: '',
-                        required: true,
-                        shuffle: false,
-                        pointValue: 1,
-                        options: options,
-                        correctAnswers: correct,
-                        type: QuestionType.RADIO,
-                        tag: null),
-                  ];
-                  PDFExport.export(GForm(
-                      title: 'a',
-                      description: 'b',
-                      documentTitle: 'c',
-                      items: questions));
-                },
-                child: const Text("2"),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: FutureBuilder(
+                  future: auth.hasLoggedIn,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    }
+                    if (snapshot.hasData) {
+                      if (snapshot.data!) {
+                        Future.delayed(const Duration(seconds: 1), () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => const HomeWidget()));
+                        });
+                        return const CircularProgressIndicator();
+                      }
+                    }
+                    return InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => const HomeWidget()));
+                      },
+                      borderRadius: BorderRadius.circular(15),
+                      child: Ink(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: const Color(0xFFFFFFFF),
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.only(left: 24, right: 30, top: 8, bottom: 8),
+                          child: Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: [
+                              Image(
+                                image: AssetImage(
+                                  'assets/google_logo.png',
+                                ),
+                                height: 28,
+                              ),
+                              SizedBox(width: 12),
+                              Text(Strings.signInWithGoogle, style: TextStyle(fontFamily: 'Roboto', fontSize: 24,fontWeight: FontWeight.w500 ,color: Colors.blueGrey),),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ),
             ],
           ),

@@ -66,4 +66,7 @@ class Strings {
   static const String disciplinesList = "Список дисциплин";
   static const String editTag = "Редактировать дисциплину";
   static const String addTag = "Добавить дисциплину";
+  static const String signInWithGoogle = "Войти через Google";
+  static const String appTitle = 'Forms Helper';
+  static const String appDescription = 'Приложение для работы с Google Forms';
 }
