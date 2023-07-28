@@ -4,9 +4,9 @@ import 'package:uuid/uuid.dart';
 
 import '../entities/question_item.dart';
 
-class ConstructorQuestionsStateNotifier
+class QuestionsStateNotifier
     extends StateNotifier<List<QuestionItem>> {
-  ConstructorQuestionsStateNotifier() : super([]);
+  QuestionsStateNotifier() : super([]);
   final LocalStorage _storage = LocalStorage();
 
   void addQuestion(QuestionItem questionItem) {

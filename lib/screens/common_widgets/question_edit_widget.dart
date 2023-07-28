@@ -122,6 +122,9 @@ class _QuestionEditWidgetState extends ConsumerState<QuestionEditWidget> {
                       child: ListView(
                         children: [
                           TextField(
+                            onChanged: (_) {
+                              setState(() {});
+                            },
                             controller: _titleController,
                             cursorColor:
                                 Theme.of(context).colorScheme.onPrimary,
@@ -374,7 +377,7 @@ class _QuestionEditWidgetState extends ConsumerState<QuestionEditWidget> {
                               ),
                               Expanded(
                                 child: ElevatedButton(
-                                  onPressed: () {
+                                  onPressed: _titleController.text.isEmpty ? null : () {
                                     QuestionItem question;
                                     String id = widget.question == null
                                         ? _uuid.v1()

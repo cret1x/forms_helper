@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:forms_helper/state_notifiers/construct_notifier.dart';
+import 'package:forms_helper/state_notifiers/question_list_notifier.dart';
 import 'package:forms_helper/state_notifiers/discipline_notifier.dart';
 import 'package:forms_helper/state_notifiers/form_info_notifier.dart';
 import 'package:forms_helper/state_notifiers/manual_notifier.dart';
@@ -10,8 +10,8 @@ import 'entities/question_item.dart';
 import 'entities/question_tag.dart';
 
 final constructorQuestionsProvider = StateNotifierProvider<
-    ConstructorQuestionsStateNotifier,
-    List<QuestionItem>>((ref) => ConstructorQuestionsStateNotifier());
+    QuestionsStateNotifier,
+    List<QuestionItem>>((ref) => QuestionsStateNotifier());
 
 final constructorSelectedProvider =
     StateNotifierProvider<SelectedQuestionsStateNotifier, List<QuestionItem>>(
