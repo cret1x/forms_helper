@@ -94,7 +94,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   future: auth.hasLoggedIn,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
+                      return CircularProgressIndicator(
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      );
                     }
                     if (snapshot.hasData) {
                       if (snapshot.data!) {
@@ -104,7 +106,9 @@ class _MyHomePageState extends State<MyHomePage> {
                               MaterialPageRoute(
                                   builder: (_) => const HomeWidget()));
                         });
-                        return const CircularProgressIndicator();
+                        return CircularProgressIndicator(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        );
                       }
                     }
                     return InkWell(
@@ -121,7 +125,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           color: const Color(0xFFFFFFFF),
                         ),
                         child: const Padding(
-                          padding: EdgeInsets.only(left: 24, right: 30, top: 8, bottom: 8),
+                          padding: EdgeInsets.only(
+                              left: 24, right: 30, top: 8, bottom: 8),
                           child: Wrap(
                             crossAxisAlignment: WrapCrossAlignment.center,
                             children: [
@@ -132,7 +137,14 @@ class _MyHomePageState extends State<MyHomePage> {
                                 height: 28,
                               ),
                               SizedBox(width: 12),
-                              Text(Strings.signInWithGoogle, style: TextStyle(fontFamily: 'Roboto', fontSize: 24,fontWeight: FontWeight.w500 ,color: Colors.blueGrey),),
+                              Text(
+                                Strings.signInWithGoogle,
+                                style: TextStyle(
+                                    fontFamily: 'Roboto',
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.blueGrey),
+                              ),
                             ],
                           ),
                         ),
