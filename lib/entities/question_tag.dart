@@ -16,4 +16,10 @@ class Tag {
   factory Tag.fromMap(Map<String, dynamic> map) {
     return Tag(id: map['id'], value: map['value']);
   }
+
+  @override
+  bool operator ==(Object other) => other is Tag && other.id == id;
+
+  @override
+  int get hashCode => id.hashCode;
 }

@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:forms_helper/sqlite/local_storage.dart';
 import 'package:uuid/uuid.dart';
 
 import '../entities/question_item.dart';
@@ -6,6 +7,7 @@ import '../entities/question_item.dart';
 class ConstructorQuestionsStateNotifier
     extends StateNotifier<List<QuestionItem>> {
   ConstructorQuestionsStateNotifier() : super([]);
+  final LocalStorage _storage = LocalStorage();
 
   void addQuestion(QuestionItem questionItem) {
     if (!state.contains(questionItem)) {
@@ -30,6 +32,21 @@ class ConstructorQuestionsStateNotifier
     state = newList;
   }
 
+  void updateQuestion(QuestionItem questionItem) async {
+    await _storage.updateQuestion(questionItem);
+    if (state.where((element) => element.id == questionItem.id).isNotEmpty) {
+      List<QuestionItem> newList = [];
+      for (var q in state) {
+        if (q.id == questionItem.id) {
+          newList.add(questionItem);
+        } else {
+          newList.add(q);
+        }
+      }
+      state = newList;
+    }
+  }
+  
   void setQuestions(List<QuestionItem> questions) {
     Uuid uuid  = const Uuid();
     for (var question in questions) {

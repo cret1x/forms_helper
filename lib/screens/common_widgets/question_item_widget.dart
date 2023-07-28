@@ -34,7 +34,7 @@ class QuestionWidgetInfo {
 }
 
 class QuestionItemWidget extends ConsumerStatefulWidget {
-  final QuestionItem question;
+  QuestionItem question;
   final QuestionWidgetInfo info = QuestionWidgetInfo();
   final LocalStorage _storage = LocalStorage();
   final bool noPadding;
@@ -58,6 +58,12 @@ class QuestionItemWidget extends ConsumerStatefulWidget {
 
 class _QuestionItemWidgetState extends ConsumerState<QuestionItemWidget> {
   late List<QuestionItem> _constructQuestions;
+
+  @override
+  void initState() {
+    super.initState();
+    _constructQuestions = ref.read(constructorQuestionsProvider);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,13 +92,20 @@ class _QuestionItemWidgetState extends ConsumerState<QuestionItemWidget> {
       });
     }
     if (widget.info._fromStorageScreen) {
-      _constructQuestions = ref.watch(constructorQuestionsProvider);
+      ref.listen(constructorQuestionsProvider, (previous, next) {
+        _constructQuestions = next;
+        final list = next.where((element) => element.id == widget.question.id);
+        if (list.isNotEmpty) {
+          widget.question = list.first;
+        }
+        setState(() {});
+      });
     }
     return Padding(
       padding: EdgeInsets.only(bottom: (widget.noPadding ? 0 : 10)),
       child: ElevatedButton(
-        onPressed: () {
-          Navigator.push(
+        onPressed: () async {
+          QuestionItem? res = await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => QuestionWidget(
@@ -101,6 +114,11 @@ class _QuestionItemWidgetState extends ConsumerState<QuestionItemWidget> {
               ),
             ),
           );
+          if (res != null && widget.info._fromStorageScreen) {
+            setState(() {
+              widget.question = res;
+            });
+          }
         },
         style: ButtonStyle(
           fixedSize: const MaterialStatePropertyAll(Size.infinite),

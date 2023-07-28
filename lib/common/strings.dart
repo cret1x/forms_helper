@@ -69,4 +69,10 @@ class Strings {
   static const String signInWithGoogle = "Войти через Google";
   static const String appTitle = 'Forms Helper';
   static const String appDescription = 'Приложение для работы с Google Forms';
+  static const String editQuestion = "Редактировать вопрос";
+  static const String createQuestion = "Создать вопрос";
+  static const String ansOptions = "Варианты ответов";
+  static const String answer = "Ответ";
+  static const String discard = "Вы уверены, что хотите отменить внесённые изменения?";
+  static const String cantRedo = "Это действие нельзя будет отменить";
 }

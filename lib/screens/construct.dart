@@ -59,9 +59,7 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
       }
       setState(() {});
     });
-    return MaterialApp(
-      theme: Themes.darkBlue,
-      home: Padding(
+    return Padding(
         padding: const EdgeInsets.symmetric(vertical: 26.0, horizontal: 28),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -380,7 +378,6 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
             ),
           ],
         ),
-      ),
     );
   }
 

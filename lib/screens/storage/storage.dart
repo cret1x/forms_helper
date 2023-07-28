@@ -74,13 +74,11 @@ class _StorageWidgetState extends ConsumerState<StorageWidget>
     super.build(context);
     _disciplines = ref.watch(disciplinesProvider);
     _dropdownValue ??= _nullTag;
-    Future<List<QuestionItem>> _questions = _storage.getQuestions(
+    Future<List<QuestionItem>> questions = _storage.getQuestions(
         searchText: _controller.text,
         page: _page - 1,
         tag: _dropdownValue == _nullTag ? null : _dropdownValue);
-    return MaterialApp(
-      theme: Themes.darkBlue,
-      home: Padding(
+    return Padding(
         padding: const EdgeInsets.symmetric(vertical: 26.0, horizontal: 28),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -301,7 +299,7 @@ class _StorageWidgetState extends ConsumerState<StorageWidget>
               height: 24,
             ),
             FutureBuilder(
-              future: _questions,
+              future: questions,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   _qWidgets = snapshot.data!
@@ -337,7 +335,6 @@ class _StorageWidgetState extends ConsumerState<StorageWidget>
             ),
           ],
         ),
-      ),
     );
   }
 
