@@ -4,6 +4,7 @@ import 'package:forms_helper/entities/answer.dart';
 import 'package:forms_helper/entities/choice_question.dart';
 import 'package:forms_helper/entities/text_question.dart';
 import 'package:forms_helper/global_providers.dart';
+import 'package:forms_helper/sqlite/local_storage.dart';
 import 'package:reorderables/reorderables.dart';
 import 'package:uuid/uuid.dart';
 
@@ -429,12 +430,11 @@ class _QuestionEditWidgetState extends ConsumerState<QuestionEditWidget> {
                                       );
                                     }
                                     if (widget.question == null) {
-                                      ref.read(constructorQuestionsProvider.notifier).addQuestion(question);
+                                      LocalStorage().saveQuestions([question]);
                                     } else {
                                       ref.read(constructorSelectedProvider.notifier).deleteQuestion(widget.question!);
                                       ref.read(constructorQuestionsProvider.notifier).updateQuestion(question);
                                       ref.read(constructorSelectedProvider.notifier).addQuestion(question);
-
                                     }
                                     Navigator.pop(context, question);
                                   },
