@@ -30,9 +30,9 @@ class _HomeState extends ConsumerState<HomeWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: Themes.darkBlue,
-      home: Scaffold(
+    return Theme(
+      data: Themes.darkBlue,
+      child: Scaffold(
         body: Row(
           children: [
             MenuWidget(

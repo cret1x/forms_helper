@@ -71,7 +71,7 @@ class _MenuWidgetState extends State<MenuWidget> {
           onTap: (_, __) async {
             //TODO: confirmation
             await _api.logout();
-            Navigator.of(context, rootNavigator: true).pop(context);
+            Navigator.pop(context);
           },
           icon: const Icon(Icons.logout),
         ),
