@@ -377,7 +377,7 @@ class _QuestionEditWidgetState extends ConsumerState<QuestionEditWidget> {
                               ),
                               Expanded(
                                 child: ElevatedButton(
-                                  onPressed: _titleController.text.isEmpty ? null : () {
+                                  onPressed: _titleController.text.isEmpty ? null : () async {
                                     QuestionItem question;
                                     String id = widget.question == null
                                         ? _uuid.v1()
@@ -433,7 +433,7 @@ class _QuestionEditWidgetState extends ConsumerState<QuestionEditWidget> {
                                       );
                                     }
                                     if (widget.question == null) {
-                                      LocalStorage().saveQuestions([question]);
+                                      await LocalStorage().saveQuestions([question]);
                                     } else {
                                       ref.read(constructorSelectedProvider.notifier).deleteQuestion(widget.question!);
                                       ref.read(constructorQuestionsProvider.notifier).updateQuestion(question);
