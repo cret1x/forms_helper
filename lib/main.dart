@@ -112,7 +112,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       }
                     }
                     return InkWell(
-                      onTap: () {
+                      onTap: () async {
+                        await auth.getAccessToken();
                         Navigator.push(
                             context,
                             MaterialPageRoute(
