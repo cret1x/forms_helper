@@ -160,9 +160,12 @@ class _StorageWidgetState extends ConsumerState<StorageWidget>
               ),
               ElevatedButton(
                 onPressed: null,
-                child: Text(
-                  _page.toString(),
-                  style: Theme.of(context).textTheme.titleLarge,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: Text(
+                    _page.toString(),
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
                 ),
               ),
               const SizedBox(
@@ -246,13 +249,6 @@ class _StorageWidgetState extends ConsumerState<StorageWidget>
                 width: 12,
               ),
               ElevatedButton(
-                style: const ButtonStyle(
-                  padding: MaterialStatePropertyAll(
-                    EdgeInsets.symmetric(
-                      horizontal: 24,
-                    ),
-                  ),
-                ),
                 onPressed: () {
                   _constructQuestions = ref.read(constructorQuestionsProvider);
                   final selectedQuestions = ref.read(storageProvider);
@@ -268,8 +264,19 @@ class _StorageWidgetState extends ConsumerState<StorageWidget>
                   widget.pageController.jumpToPage(2);
                   widget.menuController.changePage(2);
                 },
-                child: const Text(
-                  Strings.toConstructor,
+                child: const Icon(
+                  Icons.construction,
+                ),
+              ),
+              const SizedBox(
+                width: 12,
+              ),
+              ElevatedButton(
+                onPressed: () {
+
+                },
+                child: const Icon(
+                  Icons.delete_outline,
                 ),
               ),
               const SizedBox(
