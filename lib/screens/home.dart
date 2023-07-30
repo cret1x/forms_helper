@@ -159,7 +159,7 @@ class _HomeState extends ConsumerState<HomeWidget> {
                               documentTitle:
                                   'Нейроматематика Экзамен (14.06.23)',
                               items: questions);
-                          PDFExport.export(form, startFrom: 2);
+                          await PDFExport.export(form, startFrom: 2);
                         },
                         child: const Text("EXPORT"),
                       ),

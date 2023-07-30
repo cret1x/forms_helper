@@ -97,13 +97,14 @@ class PDFExport {
     return pdf;
   }
 
-  static void export(GForm form, {int startFrom = 0}) async {
+  static Future<void> export(GForm form, {int startFrom = 0}) async {
     String? dir = await FilePicker.platform.getDirectoryPath();
     if (dir != null) {
       print(dir);
       final pdf = await buildPDF(form, startFrom: startFrom);
-      final file = File(join(dir, "example.pdf"));
-      await file.writeAsBytes(await pdf.save());
+      final file = File(join(dir, "${form.documentTitle}.pdf"));
+      final res = await file.writeAsBytes(await pdf.save());
+      print(res.existsSync());
     }
   }
 }
