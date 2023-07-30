@@ -75,4 +75,7 @@ class Strings {
   static const String answer = "Ответ";
   static const String discard = "Вы уверены, что хотите отменить внесённые изменения?";
   static const String cantRedo = "Это действие нельзя будет отменить";
+  static const String notEmpty = "Форма не пустая";
+  static const String sureClear = "Вы уверены, что хотите заменить введённые данные?";
+  static const String replace = "Заменить";
 }

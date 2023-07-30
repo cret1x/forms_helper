@@ -265,18 +265,71 @@ class _FormViewState extends ConsumerState<FormView> {
                               );
                             },
                           );
+                          List<QuestionItem> questions;
                           if (res == null) {
                             return;
+                          } else if (res) {
+                            questions = widget.form.items!
+                                .whereType<QuestionItem>()
+                                .toList();
+                          } else {
+                            questions = _qWidgets!
+                                .where((element) => element.info.selected)
+                                .map((e) => e.question)
+                                .toList();
                           }
                           widget.pageController.jumpToPage(2);
                           widget.menuController.changePage(2);
-                          //TODO: confirmation in non-empty case
+
+                          if (!ref.read(formInfoProvider.notifier).empty ||
+                              ref.read(constructorQuestionsProvider).isNotEmpty) {
+                            res = await showDialog(
+                              builder: (context) {
+                                return AlertDialog(
+                                  actionsPadding: const EdgeInsets.all(12),
+                                  title: const Text(
+                                    Strings.notEmpty,
+                                  ),
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(15),
+                                    ),
+                                  ),
+                                  content: Text(
+                                    Strings.sureClear,
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text(Strings.cancel),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context, true);
+                                      },
+                                      child: const Text(Strings.replace),
+                                    ),
+                                  ],
+                                );
+                              },
+                              context: context,
+                            );
+                          }
+
+                          if (res == null) {
+                            return;
+                          }
+
                           ref.read(formInfoProvider).import(widget.form);
                           ref
                               .read(constructorQuestionsProvider.notifier)
-                              .setQuestions(widget.form.items!
-                                  .whereType<QuestionItem>()
-                                  .toList());
+                              .setQuestions(questions);
                         },
                         child: const Text(Strings.toConstructor),
                       ),
