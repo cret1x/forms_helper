@@ -272,8 +272,52 @@ class _StorageWidgetState extends ConsumerState<StorageWidget>
                 width: 12,
               ),
               ElevatedButton(
-                onPressed: () {
-
+                onPressed: () async {
+                  bool? res = await showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        actionsPadding: const EdgeInsets.all(12),
+                        title: const Text(
+                          Strings.deleteQuestions,
+                        ),
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(15),
+                          ),
+                        ),
+                        content: Text(
+                          Strings.cantRedo,
+                          style: TextStyle(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurface),
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context, true);
+                            },
+                            child: const Text(Strings.yes),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text(Strings.no),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                  if (res != null) {
+                    for (var q in ref.read(storageProvider)) {
+                      if (!ref.read(constructorQuestionsProvider).contains(q)) {
+                        await _storage.deleteQuestion(q);
+                      }
+                    }
+                    setState(() {});
+                  }
                 },
                 child: const Icon(
                   Icons.delete_outline,

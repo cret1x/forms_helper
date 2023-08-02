@@ -78,4 +78,5 @@ class Strings {
   static const String notEmpty = "Форма не пустая";
   static const String sureClear = "Вы уверены, что хотите заменить введённые данные?";
   static const String replace = "Заменить";
+  static const String deleteQuestions = "Вы уверены, что хотите удалить выбранные вопросы?";
 }
