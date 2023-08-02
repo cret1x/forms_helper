@@ -187,6 +187,7 @@ class LocalStorage {
   Future<void> createTag(Tag tag) async {
     final store = intMapStoreFactory.store('tags');
     await store.add(_db, tag.toMap());
+    await _firestoreManager.createTag(tag);
   }
 
   Future<void> deleteTag(Tag tag) async {
@@ -198,6 +199,7 @@ class LocalStorage {
     final qFilter = Filter.equals('tag.id', tag.id);
     final qFinder = Finder(filter: qFilter);
     await qStore.delete(_db, finder: qFinder);
+    await _firestoreManager.deleteTag(tag);
   }
 
   Future<void> updateTag(Tag tag) async {
@@ -205,6 +207,7 @@ class LocalStorage {
     final filter = Filter.equals('id', tag.id);
     final finder = Finder(filter: filter);
     await store.update(_db, tag.toMap(), finder: finder);
+    await _firestoreManager.updateTag(tag);
   }
 
   Future<bool> tagExists(Tag tag) async {
