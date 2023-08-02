@@ -14,18 +14,18 @@ class DisciplinesListStateNotifier
     state = await _storage.getTags();
   }
 
-  void addDiscipline(Tag discipline) {
+  void addDiscipline(Tag discipline) async {
     if (!state.contains(discipline)) {
       state = [...state, discipline];
-      _storage.createTag(discipline);
+      await _storage.createTag(discipline);
     }
   }
 
-  void deleteDiscipline(Tag discipline) {
+  void deleteDiscipline(Tag discipline) async {
     state = [
       for (final q in state)
         if (discipline != q) q,
     ];
-    _storage.deleteTag(discipline);
+    await _storage.deleteTag(discipline);
   }
 }
