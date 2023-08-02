@@ -43,7 +43,11 @@ class LocalStorage {
     final docPath = (await getApplicationDocumentsDirectory()).path;
     final path = join(docPath, databasePath);
     File dbFile = File(path);
-    await dbFile.delete();
+    try {
+      await dbFile.delete();
+    } catch (e) {
+      // TODO
+    }
     _db = await _dbFactory.openDatabase(path);
     final tags = await _firestoreManager.getTags();
     _importTags(tags);
