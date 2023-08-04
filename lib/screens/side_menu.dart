@@ -69,7 +69,39 @@ class _MenuWidgetState extends State<MenuWidget> {
         SideMenuItem(
           priority: 4,
           onTap: (_, __) async {
-            //TODO: confirmation
+            bool? res = await showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  actionsPadding: const EdgeInsets.all(12),
+                  title: const Text(
+                    Strings.confirmLogout,
+                  ),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(15),
+                    ),
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context, true);
+                      },
+                      child: const Text(Strings.yes),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text(Strings.no),
+                    ),
+                  ],
+                );
+              },
+            );
+            if (res == null) {
+              return;
+            }
             await _api.logout();
             Navigator.pop(context);
           },

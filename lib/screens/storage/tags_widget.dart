@@ -97,7 +97,7 @@ class _TagsListWidgetState extends ConsumerState<TagsListWidget> {
                                 return AlertDialog(
                                   actionsPadding: const EdgeInsets.all(12),
                                   title: const Text(
-                                    Strings.deleteQuestions,
+                                    Strings.deleteDiscipline,
                                   ),
                                   shape: const RoundedRectangleBorder(
                                     borderRadius: BorderRadius.all(

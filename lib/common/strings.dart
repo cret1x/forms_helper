@@ -75,8 +75,11 @@ class Strings {
   static const String answer = "Ответ";
   static const String discard = "Вы уверены, что хотите отменить внесённые изменения?";
   static const String cantRedo = "Это действие нельзя будет отменить";
+  static const String cantBackup = "Утерянные данные нельзя будет восстановить";
   static const String notEmpty = "Форма не пустая";
   static const String sureClear = "Вы уверены, что хотите заменить введённые данные?";
   static const String replace = "Заменить";
   static const String deleteQuestions = "Вы уверены, что хотите удалить выбранные вопросы?";
+  static const String deleteDiscipline = "Вы уверены, что хотите удалить дисциплину?";
+  static const String confirmLogout = "Вы уверены, что хотите выйти из учётной записи?";
 }
