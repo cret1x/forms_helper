@@ -48,7 +48,7 @@ class PDFExport {
                           .map((e) => pw.Padding(
                               padding:
                                   const pw.EdgeInsets.symmetric(vertical: 4),
-                              child: pw.Text('• ${e.value}')))
+                              child: pw.Text('□ ${e.value}')))
                           .toList(),
                     )
                   : pw.Expanded(
@@ -98,13 +98,17 @@ class PDFExport {
   }
 
   static Future<void> export(GForm form, {int startFrom = 0}) async {
-    String? dir = await FilePicker.platform.getDirectoryPath();
+    String? dir = await FilePicker.platform.saveFile(allowedExtensions: ['pdf']);
     if (dir != null) {
-      print(dir);
-      final pdf = await buildPDF(form, startFrom: startFrom);
-      final file = File(join(dir, "${form.documentTitle}.pdf"));
-      final res = await file.writeAsBytes(await pdf.save());
-      print(res.existsSync());
+      try {
+        print(dir);
+        final pdf = await buildPDF(form, startFrom: startFrom);
+        final file = File(dir);
+        final res = await file.writeAsBytes(await pdf.save());
+        print(res.existsSync());
+      } catch (e) {
+        print(e);
+      }
     }
   }
 }

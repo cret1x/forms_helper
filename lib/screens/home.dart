@@ -8,7 +8,8 @@ import 'package:forms_helper/entities/question_item.dart';
 import 'package:forms_helper/entities/text_question.dart';
 import 'package:forms_helper/global_providers.dart';
 import 'package:forms_helper/screens/construct.dart';
-import 'package:forms_helper/screens/export/export.dart';
+import 'package:forms_helper/screens/export/docx_export.dart';
+import 'package:forms_helper/screens/export/pdf_export.dart';
 import 'package:forms_helper/screens/import/import_widget.dart';
 import 'package:forms_helper/screens/side_menu.dart';
 import 'package:forms_helper/screens/storage/storage.dart';
@@ -159,7 +160,7 @@ class _HomeState extends ConsumerState<HomeWidget> {
                               documentTitle:
                                   'Нейроматематика Экзамен (14.06.23)',
                               items: questions);
-                          await PDFExport.export(form, startFrom: 2);
+                          await DocxExport.export(form, startFrom: 2);
                         },
                         child: const Text("EXPORT"),
                       ),

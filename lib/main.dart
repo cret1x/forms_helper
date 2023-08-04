@@ -13,7 +13,7 @@ import 'package:forms_helper/entities/text_question.dart';
 import 'package:forms_helper/firebase_functions/storage.dart';
 import 'package:forms_helper/google_api/auth.dart';
 import 'package:forms_helper/google_api/forms.dart';
-import 'package:forms_helper/screens/export/export.dart';
+import 'package:forms_helper/screens/export/pdf_export.dart';
 import 'package:forms_helper/screens/home.dart';
 import 'package:forms_helper/sqlite/local_storage.dart';
 
