@@ -62,7 +62,7 @@ class DocxExport {
 
   static Future<void> export(GForm form, {int startFrom = 0}) async {
     String? dir =
-        await FilePicker.platform.saveFile(allowedExtensions: ['docx']);
+        await FilePicker.platform.saveFile(allowedExtensions: ['docx'], type: FileType.custom, fileName: form.documentTitle);
     if (dir != null) {
       try {
         print(dir);
