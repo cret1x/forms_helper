@@ -86,4 +86,6 @@ class Strings {
   static const String exportToPdf = "Экспортировать в PDF";
   static const String exportToDocx = "Экспортировать в DOCX";
   static const String resultSaved = "Сохранено";
+  static const String autonumerate = "Автоматически нумеровать";
+  static const String startingFrom = "Начиная с";
 }

@@ -8,6 +8,7 @@ import 'package:forms_helper/state_notifiers/selected_notifier.dart';
 
 import 'entities/question_item.dart';
 import 'entities/question_tag.dart';
+import 'state_notifiers/numeration_notifier.dart';
 
 final constructorQuestionsProvider = StateNotifierProvider<
     QuestionsStateNotifier,
@@ -37,3 +38,5 @@ final saveNotifierProvider =
     ChangeNotifierProvider<ManualNotifier>((ref) => ManualNotifier());
 
 final formInfoProvider = ChangeNotifierProvider<FormInfoNotifier>((ref) => FormInfoNotifier());
+
+final numerationProvider = ChangeNotifierProvider<NumerationNotifier>((ref) => NumerationNotifier());

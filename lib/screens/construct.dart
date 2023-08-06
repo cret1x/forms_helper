@@ -77,9 +77,9 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  flex: 35,
+                  flex: 45,
                   child: ListView(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    padding: const EdgeInsets.fromLTRB(0, 4, 24, 4),
                     shrinkWrap: true,
                     children: [
                       Padding(
@@ -115,7 +115,7 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
                         ),
                       ),
                       const SizedBox(
-                        height: 18,
+                        height: 12,
                       ),
                       TextField(
                         controller: ref.read(formInfoProvider).titleController,
@@ -142,7 +142,7 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
                         ),
                       ),
                       const SizedBox(
-                        height: 18,
+                        height: 12,
                       ),
                       TextFormField(
                         controller:
@@ -169,6 +169,92 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
                           filled: true,
                           contentPadding: const EdgeInsets.all(16),
                         ),
+                      ),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            Strings.autonumerate,
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          Checkbox(
+                              value: ref.read(numerationProvider).numerate,
+                              onChanged: (value) {
+                                setState(() {
+                                  ref.read(numerationProvider).numerate =
+                                      value!;
+                                });
+                              })
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            Strings.startingFrom,
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          Row(
+                            children: [
+                              ElevatedButton(
+                                onPressed: ref
+                                                .read(numerationProvider)
+                                                .startsFrom ==
+                                            0 ||
+                                        !ref.read(numerationProvider).numerate
+                                    ? null
+                                    : () {
+                                        setState(() {
+                                          --ref
+                                              .read(numerationProvider)
+                                              .startsFrom;
+                                        });
+                                      },
+                                child: const Icon(Icons.remove),
+                              ),
+                              const SizedBox(
+                                width: 12,
+                              ),
+                              ElevatedButton(
+                                onPressed: null,
+                                child: Text(
+                                  (ref.read(numerationProvider).startsFrom + 1)
+                                      .toString(),
+                                  style: Theme.of(context).textTheme.titleLarge,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 12,
+                              ),
+                              ElevatedButton(
+                                onPressed: ref
+                                                .read(numerationProvider)
+                                                .startsFrom >=
+                                            ref
+                                                    .read(
+                                                        constructorQuestionsProvider)
+                                                    .length -
+                                                1 ||
+                                        !ref.read(numerationProvider).numerate
+                                    ? null
+                                    : () {
+                                        setState(() {
+                                          ++ref
+                                              .read(numerationProvider)
+                                              .startsFrom;
+                                        });
+                                      },
+                                child: const Icon(Icons.add),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                       const SizedBox(
                         height: 24,
@@ -243,7 +329,9 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
                             width: 24,
                           ),
                           Expanded(
-                            child: ExportButton(items: _questions,),
+                            child: ExportButton(
+                              items: _questions,
+                            ),
                           )
                         ],
                       )
@@ -251,7 +339,7 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
                   ),
                 ),
                 const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                  padding: EdgeInsets.fromLTRB(0, 8, 24, 8),
                   child: VerticalDivider(
                     thickness: 1,
                   ),
