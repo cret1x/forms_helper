@@ -30,7 +30,7 @@ class DocxExport {
                       (val is QuestionItem &&
                               val.required &&
                               val.pointValue > 0)
-                          ? '(${val.pointValue} балл)'
+                          ? '  (${val.pointValue} балл)'
                           : ''))
                   ..add(TextContent('qdescription', val.description))
                   ..add(ListContent(

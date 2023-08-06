@@ -212,7 +212,7 @@ class _FormViewState extends ConsumerState<FormView> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
-                      child: ExportButton(action: () {
+                      child: ExportButton(showImportForms: false, action: () {
                         ref.read(formExportProvider.notifier).setForm(widget.form);
                       },),
                     ),

@@ -329,7 +329,7 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
                             width: 24,
                           ),
                           Expanded(
-                            child: ExportButton(action: () {
+                            child: ExportButton(showImportForms: true, action: () {
                               var form = GForm(
                                   title: ref.read(formInfoProvider).titleController.text,
                                   description: ref.read(formInfoProvider).descriptionController.text,

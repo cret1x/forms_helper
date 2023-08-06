@@ -13,7 +13,8 @@ class ExportButton extends ConsumerStatefulWidget {
   final _authApi = GoogleAuthApi();
   final _formsApi = GoogleFormsApi();
   final void Function() action;
-  ExportButton({super.key, required this.action});
+  final bool showImportForms;
+  ExportButton({super.key, required this.showImportForms, required this.action});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ExportButtonState();
@@ -44,7 +45,7 @@ class _ExportButtonState extends ConsumerState<ExportButton> {
           style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
         ),
         actions: [
-          TextButton(
+          if (widget.showImportForms) TextButton(
             onPressed: () async {
               final token = await widget._authApi.getAccessToken();
               await widget._formsApi.create(form!, token, startFrom: startFrom);
