@@ -88,4 +88,6 @@ class Strings {
   static const String resultSaved = "Сохранено";
   static const String autonumerate = "Автоматически нумеровать";
   static const String startingFrom = "Начиная с";
+  static const String exportTitle = "Экспорт формы";
+  static const String exportDescription = "Выберите куда экспортировать форму";
 }

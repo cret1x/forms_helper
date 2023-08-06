@@ -329,9 +329,14 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
                             width: 24,
                           ),
                           Expanded(
-                            child: ExportButton(
-                              items: _questions,
-                            ),
+                            child: ExportButton(action: () {
+                              var form = GForm(
+                                  title: ref.read(formInfoProvider).titleController.text,
+                                  description: ref.read(formInfoProvider).descriptionController.text,
+                                  documentTitle: ref.read(formInfoProvider).filenameController.text,
+                                  items: _questions);
+                              ref.read(formExportProvider.notifier).setForm(form);
+                            },),
                           )
                         ],
                       )

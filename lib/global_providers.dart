@@ -1,4 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:forms_helper/entities/form.dart';
+import 'package:forms_helper/state_notifiers/export_notifier.dart';
 import 'package:forms_helper/state_notifiers/question_list_notifier.dart';
 import 'package:forms_helper/state_notifiers/discipline_notifier.dart';
 import 'package:forms_helper/state_notifiers/form_info_notifier.dart';
@@ -40,3 +42,5 @@ final saveNotifierProvider =
 final formInfoProvider = ChangeNotifierProvider<FormInfoNotifier>((ref) => FormInfoNotifier());
 
 final numerationProvider = ChangeNotifierProvider<NumerationNotifier>((ref) => NumerationNotifier());
+
+final formExportProvider = StateNotifierProvider<ExportStateNotifier, GForm?>((ref) => ExportStateNotifier());

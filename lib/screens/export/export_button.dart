@@ -10,11 +10,10 @@ import 'package:forms_helper/screens/export/docx_export.dart';
 import 'package:forms_helper/screens/export/pdf_export.dart';
 
 class ExportButton extends ConsumerStatefulWidget {
-  final List<FormItem> items;
   final _authApi = GoogleAuthApi();
   final _formsApi = GoogleFormsApi();
-
-  ExportButton({super.key, required this.items});
+  final void Function() action;
+  ExportButton({super.key, required this.action});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ExportButtonState();
@@ -23,13 +22,6 @@ class ExportButton extends ConsumerStatefulWidget {
 class _ExportButtonState extends ConsumerState<ExportButton> {
   GForm? form;
   int startFrom = 0;
-  String _exportGoogleText = Strings.exportToGoogle;
-  String _exportPdfText = Strings.exportToPdf;
-  String _exportDocxText = Strings.exportToDocx;
-
-  bool _googlePending = false;
-  bool _pdfPending = false;
-  bool _docxPending = false;
 
   void saveExportDialog(BuildContext context) async {
     await showDialog(
@@ -42,44 +34,28 @@ class _ExportButtonState extends ConsumerState<ExportButton> {
           ),
         ),
         title: const Text(
-          "SAVE OR EXPORT",
+          Strings.exportTitle,
           style: TextStyle(
             fontFamily: 'Verdana',
           ),
         ),
         content: Text(
-          "SAVE OR EXPORT !",
+          Strings.exportDescription,
           style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
         ),
         actions: [
           TextButton(
             onPressed: () async {
-              setState(() {
-                _googlePending = true;
-              });
               final token = await widget._authApi.getAccessToken();
               await widget._formsApi.create(form!, token, startFrom: startFrom);
-              setState(() {
-                _googlePending = false;
-              });
             },
-            child: _googlePending
-                ? const CircularProgressIndicator()
-                : Text(_exportGoogleText),
+            child: const Text(Strings.exportToGoogle),
           ),
           TextButton(
             onPressed: () async {
-              setState(() {
-                _pdfPending = true;
-              });
               await PDFExport.export(form!, startFrom: startFrom);
-              setState(() {
-                _pdfPending = false;
-              });
             },
-            child: _pdfPending
-                ? const CircularProgressIndicator()
-                : Text(_exportPdfText),
+            child: const Text(Strings.exportToPdf),
           ),
           TextButton(
             onPressed: () async {
@@ -102,14 +78,18 @@ class _ExportButtonState extends ConsumerState<ExportButton> {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        form = GForm(
-            title: ref.read(formInfoProvider).titleController.text,
-            description: ref.read(formInfoProvider).descriptionController.text,
-            documentTitle: ref.read(formInfoProvider).filenameController.text,
-            items: widget.items);
+        widget.action();
+        form = ref.read(formExportProvider);
+        if (form == null) {
+          print('form is null');
+          return;
+        }
+        startFrom = ref.read(numerationProvider).numerate
+            ? ref.read(numerationProvider).startsFrom
+            : form?.items?.length ?? 0 + 1;
         saveExportDialog(context);
       },
-      child: const Text("EXPORT"),
+      child: const Text(Strings.export),
     );
   }
 }

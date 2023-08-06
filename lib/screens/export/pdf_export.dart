@@ -76,13 +76,13 @@ class PDFExport {
         defaultTextStyle: pw.TextStyle(font: font, fontSize: 10, fontFallback: [fallbackFont]),
         header0: pw.TextStyle(font: headerFont, fontFallback: [fallbackFont]),
         header1: pw.TextStyle(font: headerFont, fontSize: 10, fontFallback: [fallbackFont]),
-        header2: pw.TextStyle(font: headerFont, fontSize: 10, fontFallback: [fallbackFont]),
+        header2: pw.TextStyle(font: headerFont, fontSize: 18, fontFallback: [fallbackFont]),
         header3: pw.TextStyle(font: headerFont, fontSize: 10, fontFallback: [fallbackFont]),
       ),
     );
     pdf.addPage(pw.MultiPage(build: (context) {
       return [
-        pw.Header(level: 3, text: form.title),
+        pw.Header(level: 2, text: form.title),
         pw.Text(form.description),
         pw.Padding(
           padding: const pw.EdgeInsets.only(top: 0),

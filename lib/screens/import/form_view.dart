@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:forms_helper/entities/choice_question.dart';
 import 'package:forms_helper/global_providers.dart';
 import 'package:forms_helper/screens/common_widgets/question_item_widget.dart';
+import 'package:forms_helper/screens/export/export_button.dart';
 import 'package:forms_helper/screens/import/no_discipline_selected_dialog.dart';
 import 'package:forms_helper/sqlite/local_storage.dart';
 
@@ -211,10 +212,9 @@ class _FormViewState extends ConsumerState<FormView> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        child: const Text(Strings.export),
-                      ),
+                      child: ExportButton(action: () {
+                        ref.read(formExportProvider.notifier).setForm(widget.form);
+                      },),
                     ),
                     const SizedBox(
                       width: 12,
