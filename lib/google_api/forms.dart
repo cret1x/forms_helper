@@ -14,7 +14,7 @@ class FormResult {
 class GoogleFormsApi {
   final String url;
 
-  GoogleFormsApi({this.url = 'https://forms.googleapis.com/v1/forms"'});
+  GoogleFormsApi({this.url = 'https://forms.googleapis.com/v1/forms'});
 
   Future<http.Response> _post(
       String endpoint, Map<String, dynamic> json, String token) async {
