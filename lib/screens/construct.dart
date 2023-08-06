@@ -7,6 +7,7 @@ import 'package:forms_helper/entities/question_item.dart';
 import 'package:forms_helper/google_api/auth.dart';
 import 'package:forms_helper/google_api/forms.dart';
 import 'package:forms_helper/screens/common_widgets/question_item_widget.dart';
+import 'package:forms_helper/screens/export/export_button.dart';
 import '../common/themes.dart';
 import '../entities/form.dart';
 import '../global_providers.dart';
@@ -242,30 +243,7 @@ class _FormConstructorState extends ConsumerState<FormConstructor>
                             width: 24,
                           ),
                           Expanded(
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                final form = GForm(
-                                  title: ref
-                                      .read(formInfoProvider)
-                                      .filenameController
-                                      .text,
-                                  description: ref
-                                      .read(formInfoProvider)
-                                      .titleController
-                                      .text,
-                                  documentTitle: ref
-                                      .read(formInfoProvider)
-                                      .descriptionController
-                                      .text,
-                                  items: _questions,
-                                );
-                                final token = await _authApi.getAccessToken();
-                                await _formsApi.create(form, token);
-                              },
-                              child: const Text(
-                                Strings.save,
-                              ),
-                            ),
+                            child: ExportButton(items: _questions,),
                           )
                         ],
                       )

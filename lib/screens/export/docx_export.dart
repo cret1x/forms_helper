@@ -60,9 +60,9 @@ class DocxExport {
     return c;
   }
 
-  static Future<void> export(GForm form, {int startFrom = 0}) async {
+  static Future<bool> export(GForm form, {int startFrom = 0}) async {
     String? dir =
-        await FilePicker.platform.saveFile(allowedExtensions: ['docx'], type: FileType.custom, fileName: form.documentTitle);
+        await FilePicker.platform.saveFile(type: FileType.custom, allowedExtensions: ['docx'], fileName: form.documentTitle);
     if (dir != null) {
       try {
         print(dir);
@@ -73,10 +73,12 @@ class DocxExport {
         final c = buildDocx(form, startFrom: startFrom);
         final d = await docx.generate(c);
         final res = await file.writeAsBytes(d!);
-        print(res.existsSync());
+        return res.existsSync();
       } catch (e) {
         print(e);
+        return false;
       }
     }
+    return false;
   }
 }

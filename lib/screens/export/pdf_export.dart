@@ -48,7 +48,7 @@ class PDFExport {
                           .map((e) => pw.Padding(
                               padding:
                                   const pw.EdgeInsets.symmetric(vertical: 4),
-                              child: pw.Text('□ ${e.value}')))
+                              child: pw.Text('- ${e.value}')))
                           .toList(),
                     )
                   : pw.Expanded(
@@ -70,13 +70,14 @@ class PDFExport {
   static Future<pw.Document> buildPDF(GForm form, {int startFrom = 0}) async {
     final headerFont = await PdfGoogleFonts.robotoMedium();
     final font = await PdfGoogleFonts.robotoLight();
+    final fallbackFont = await PdfGoogleFonts.openSansRegular();
     final pdf = pw.Document(
       theme: pw.ThemeData(
-        defaultTextStyle: pw.TextStyle(font: font, fontSize: 10),
-        header0: pw.TextStyle(font: headerFont),
-        header1: pw.TextStyle(font: headerFont, fontSize: 10),
-        header2: pw.TextStyle(font: headerFont, fontSize: 10),
-        header3: pw.TextStyle(font: headerFont, fontSize: 10),
+        defaultTextStyle: pw.TextStyle(font: font, fontSize: 10, fontFallback: [fallbackFont]),
+        header0: pw.TextStyle(font: headerFont, fontFallback: [fallbackFont]),
+        header1: pw.TextStyle(font: headerFont, fontSize: 10, fontFallback: [fallbackFont]),
+        header2: pw.TextStyle(font: headerFont, fontSize: 10, fontFallback: [fallbackFont]),
+        header3: pw.TextStyle(font: headerFont, fontSize: 10, fontFallback: [fallbackFont]),
       ),
     );
     pdf.addPage(pw.MultiPage(build: (context) {
@@ -97,18 +98,20 @@ class PDFExport {
     return pdf;
   }
 
-  static Future<void> export(GForm form, {int startFrom = 0}) async {
-    String? dir = await FilePicker.platform.saveFile(allowedExtensions: ['pdf']);
+  static Future<bool> export(GForm form, {int startFrom = 0}) async {
+    String? dir = await FilePicker.platform.saveFile(allowedExtensions: ['pdf'], type: FileType.custom, fileName: form.documentTitle);
     if (dir != null) {
       try {
         print(dir);
         final pdf = await buildPDF(form, startFrom: startFrom);
         final file = File(dir);
         final res = await file.writeAsBytes(await pdf.save());
-        print(res.existsSync());
+        return res.existsSync();
       } catch (e) {
         print(e);
+        return false;
       }
     }
+    return false;
   }
 }

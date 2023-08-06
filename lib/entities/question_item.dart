@@ -56,8 +56,8 @@ class QuestionItem extends FormItem {
   }
 
   @override
-  Map<String, dynamic> toGoogleFormJson() {
-    final itemJson = super.toGoogleFormJson();
+  Map<String, dynamic> toGoogleFormJson({String index = ''}) {
+    final itemJson = super.toGoogleFormJson(index: index);
     itemJson['questionItem'] = {
       'question': {
         'required': required,

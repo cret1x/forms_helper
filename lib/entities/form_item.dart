@@ -24,10 +24,9 @@ class FormItem {
     return FormItem(id: id, title: title, description: description);
   }
 
-  Map<String, dynamic> toGoogleFormJson() {
+  Map<String, dynamic> toGoogleFormJson({String index = ''}) {
     return {
-      'id': id,
-      'title': title,
+      'title': '$index$title',
       'description': description,
     };
   }

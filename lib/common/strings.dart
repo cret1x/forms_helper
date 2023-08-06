@@ -82,4 +82,8 @@ class Strings {
   static const String deleteQuestions = "Вы уверены, что хотите удалить выбранные вопросы?";
   static const String deleteDiscipline = "Вы уверены, что хотите удалить дисциплину?";
   static const String confirmLogout = "Вы уверены, что хотите выйти из учётной записи?";
+  static const String exportToGoogle = "Сохранить в Google Forms";
+  static const String exportToPdf = "Экспортировать в PDF";
+  static const String exportToDocx = "Экспортировать в DOCX";
+  static const String resultSaved = "Сохранено";
 }

@@ -57,7 +57,7 @@ class GForm {
       } else if (e['questionItem']['question']['textQuestion'] != null) {
         return TextQuestion.fromGoogleFormJson(e);
       }
-      return TextQuestion.fromGoogleFormJson(e);
+      return FormItem.fromGoogleFormJson(e);
     }).toList();
     return GForm(
         title: title,

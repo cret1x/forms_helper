@@ -45,7 +45,7 @@ class GoogleFormsApi {
     return jsonResponse['formId'];
   }
 
-  Future<void> create(GForm form, String token) async {
+  Future<void> create(GForm form, String token, {int startFrom = 0}) async {
     final formId = await _create(form, token);
     final formUrl = '$url/$formId:batchUpdate';
 
@@ -66,7 +66,7 @@ class GoogleFormsApi {
     for (int i = 0; i < (form.items?.length ?? 0); i++) {
       items.add({
         'createItem': {
-          'item': form.items![i].toGoogleFormJson(),
+          'item': form.items![i].toGoogleFormJson(index: i <= startFrom ? '' : '${i - startFrom}.'),
           'location': {
             'index': i,
           },
@@ -78,7 +78,7 @@ class GoogleFormsApi {
       'requests': [updateInfoJson, updateSettingJson, ...items],
     };
     final res = await _post(formUrl, batchJson, token);
-    print(res.statusCode);
+    print(res.body);
   }
 
   Future<FormResult> get(String formUrl, String token) async {

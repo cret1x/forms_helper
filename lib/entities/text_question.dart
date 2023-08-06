@@ -17,8 +17,8 @@ class TextQuestion extends QuestionItem {
 
 
   @override
-  Map<String, dynamic> toGoogleFormJson() {
-    final questionJson = super.toGoogleFormJson();
+  Map<String, dynamic> toGoogleFormJson({String index = ''}) {
+    final questionJson = super.toGoogleFormJson(index: index);
     questionJson['questionItem']['question']['textQuestion'] = {
       'paragraph': paragraph,
     };

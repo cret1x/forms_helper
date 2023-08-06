@@ -37,8 +37,8 @@ class ChoiceQuestion extends QuestionItem {
   }
 
   @override
-  Map<String, dynamic> toGoogleFormJson() {
-    final questionJson = super.toGoogleFormJson();
+  Map<String, dynamic> toGoogleFormJson({String index = ''}) {
+    final questionJson = super.toGoogleFormJson(index: index);
     questionJson['questionItem']['question']['choiceQuestion'] = {
       'type': type.name,
       'options': options.map((e) => e.toMap()).toList(),
