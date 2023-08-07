@@ -90,4 +90,6 @@ class Strings {
   static const String startingFrom = "Начиная с";
   static const String exportTitle = "Экспорт формы";
   static const String exportDescription = "Выберите куда экспортировать форму";
+  static const String exportSuccess = "Форма успешно экспортирована";
+  static const String exportFailure = "Произошла ошибка во время экспорта, возможно вы пытаетесь перезаписать открытый файл или нет соединения с сетью";
 }

@@ -8,6 +8,7 @@ import 'package:forms_helper/google_api/auth.dart';
 import 'package:forms_helper/google_api/forms.dart';
 import 'package:forms_helper/screens/export/docx_export.dart';
 import 'package:forms_helper/screens/export/pdf_export.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ExportButton extends ConsumerStatefulWidget {
   final _authApi = GoogleAuthApi();
@@ -23,6 +24,39 @@ class ExportButton extends ConsumerStatefulWidget {
 class _ExportButtonState extends ConsumerState<ExportButton> {
   GForm? form;
   int startFrom = 0;
+
+
+  void showResultDialog(BuildContext context, bool success) async {
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        actionsPadding: EdgeInsets.all(12),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(15),
+          ),
+        ),
+        title: const Text(
+          Strings.exportTitle,
+          style: TextStyle(
+            fontFamily: 'Verdana',
+          ),
+        ),
+        content: Text(
+          success ? Strings.exportSuccess : Strings.exportFailure,
+          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text(Strings.ok),
+          ),
+        ],
+      ),
+    );
+  }
 
   void saveExportDialog(BuildContext context) async {
     await showDialog(
@@ -47,20 +81,28 @@ class _ExportButtonState extends ConsumerState<ExportButton> {
         actions: [
           if (widget.showImportForms) TextButton(
             onPressed: () async {
-              final token = await widget._authApi.getAccessToken();
-              await widget._formsApi.create(form!, token, startFrom: startFrom);
+              try {
+                final token = await widget._authApi.getAccessToken();
+                final formId = await widget._formsApi.create(form!, token, startFrom: startFrom);
+                final url = 'https://docs.google.com/forms/d/$formId/edit';
+                launchUrl(Uri.parse(url));
+              } catch (e) {
+                showResultDialog(context, false);
+              }
             },
             child: const Text(Strings.exportToGoogle),
           ),
           TextButton(
             onPressed: () async {
-              await PDFExport.export(form!, startFrom: startFrom);
+              var res = await PDFExport.export(form!, startFrom: startFrom);
+              showResultDialog(context, res);
             },
             child: const Text(Strings.exportToPdf),
           ),
           TextButton(
             onPressed: () async {
-              await DocxExport.export(form!, startFrom: startFrom);
+              var res = await DocxExport.export(form!, startFrom: startFrom);
+              showResultDialog(context, res);
             },
             child: const Text(Strings.exportToDocx),
           ),

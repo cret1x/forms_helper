@@ -45,7 +45,7 @@ class GoogleFormsApi {
     return jsonResponse['formId'];
   }
 
-  Future<void> create(GForm form, String token, {int startFrom = 0}) async {
+  Future<String> create(GForm form, String token, {int startFrom = 0}) async {
     final formId = await _create(form, token);
     final formUrl = '$url/$formId:batchUpdate';
 
@@ -78,7 +78,7 @@ class GoogleFormsApi {
       'requests': [updateInfoJson, updateSettingJson, ...items],
     };
     final res = await _post(formUrl, batchJson, token);
-    print(res.body);
+    return formId;
   }
 
   Future<FormResult> get(String formUrl, String token) async {
@@ -92,7 +92,6 @@ class GoogleFormsApi {
     }
     final formId = match.group(1);
     final resp = await _get("$url/$formId", token);
-    print(resp.body);
     if (resp.statusCode != 200) {
       return FormResult(null, FormsError.AUTH_REQUIRED);
     }
