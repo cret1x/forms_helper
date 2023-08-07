@@ -124,7 +124,6 @@ class _ExportButtonState extends ConsumerState<ExportButton> {
         widget.action();
         form = ref.read(formExportProvider);
         if (form == null) {
-          print('form is null');
           return;
         }
         startFrom = ref.read(numerationProvider).numerate

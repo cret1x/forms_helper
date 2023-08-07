@@ -63,11 +63,6 @@ class _MenuWidgetState extends State<MenuWidget> {
         ),
         SideMenuItem(
           priority: 3,
-          onTap: _itemFunc,
-          icon: const Icon(Icons.upload),
-        ),
-        SideMenuItem(
-          priority: 4,
           onTap: (_, __) async {
             bool? res = await showDialog(
               context: context,
