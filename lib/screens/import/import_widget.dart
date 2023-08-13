@@ -28,8 +28,7 @@ class ImportWidget extends StatefulWidget {
 class _ImportWidgetState extends State<ImportWidget>
     with AutomaticKeepAliveClientMixin<ImportWidget> {
   final TextEditingController _linkController = TextEditingController();
-  final _formsApi =
-      GoogleFormsApi(url: "https://forms.googleapis.com/v1/forms");
+  final _formsApi = GoogleFormsApi();
   final _authApi = GoogleAuthApi();
   GForm? _content;
   bool _importButtonPressed = false;

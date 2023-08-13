@@ -32,9 +32,11 @@ class ChoiceQuestionAnswersWidget extends StatelessWidget {
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ),
-                  Text(
-                    e.value,
-                    style: Theme.of(context).textTheme.titleMedium,
+                  Expanded(
+                    child: Text(
+                      e.value,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
                   ),
                 ],
               )
@@ -50,9 +52,11 @@ class ChoiceQuestionAnswersWidget extends StatelessWidget {
                           .copyWith(color: Colors.green),
                     ),
                   ),
-                  Text(
-                    e.value,
-                    style: Theme.of(context).textTheme.titleMedium,
+                  Expanded(
+                    child: Text(
+                      e.value,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
                   ),
                 ],
               ),

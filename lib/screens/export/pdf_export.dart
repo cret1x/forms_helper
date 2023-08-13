@@ -12,6 +12,17 @@ import 'package:printing/printing.dart';
 import 'package:file_picker/file_picker.dart';
 
 class PDFExport {
+
+  static String getPluralForm(int n) {
+    if (n == 1) {
+      return 'балл';
+    } else if (n < 5) {
+      return 'балла';
+    } else {
+      return 'баллов';
+    }
+  }
+
   static pw.Widget q2w(FormItem item, int index, int startFrom) {
     late List<Answer> options;
     if (item is ChoiceQuestion) {
@@ -34,7 +45,7 @@ class PDFExport {
                           '${index <= startFrom ? "" : "${index - startFrom}. "}${item.title}'),
                 ),
                 (item is QuestionItem && item.required && item.pointValue > 0)
-                    ? pw.Text('(${item.pointValue} балл)')
+                    ? pw.Padding(padding: const pw.EdgeInsets.only(left: 2), child: pw.Text('(${item.pointValue} ${getPluralForm(item.pointValue)})'))
                     : pw.Spacer(),
               ],
             ),
@@ -48,7 +59,7 @@ class PDFExport {
                           .map((e) => pw.Padding(
                               padding:
                                   const pw.EdgeInsets.symmetric(vertical: 4),
-                              child: pw.Text('- ${e.value}')))
+                              child: pw.Text('⬜ ${e.value}')))
                           .toList(),
                     )
                   : pw.Expanded(
@@ -70,14 +81,14 @@ class PDFExport {
   static Future<pw.Document> buildPDF(GForm form, {int startFrom = 0}) async {
     final headerFont = await PdfGoogleFonts.robotoMedium();
     final font = await PdfGoogleFonts.robotoLight();
-    final fallbackFont = await PdfGoogleFonts.openSansRegular();
+    final fallbackFont = await PdfGoogleFonts.notoEmojiMedium();
     final pdf = pw.Document(
       theme: pw.ThemeData(
-        defaultTextStyle: pw.TextStyle(font: font, fontSize: 10, fontFallback: [fallbackFont]),
+        defaultTextStyle: pw.TextStyle(font: font, fontSize: 12, fontFallback: [fallbackFont]),
         header0: pw.TextStyle(font: headerFont, fontFallback: [fallbackFont]),
         header1: pw.TextStyle(font: headerFont, fontSize: 10, fontFallback: [fallbackFont]),
         header2: pw.TextStyle(font: headerFont, fontSize: 18, fontFallback: [fallbackFont]),
-        header3: pw.TextStyle(font: headerFont, fontSize: 10, fontFallback: [fallbackFont]),
+        header3: pw.TextStyle(font: headerFont, fontSize: 14, fontFallback: [fallbackFont]),
       ),
     );
     pdf.addPage(pw.MultiPage(build: (context) {
@@ -99,7 +110,7 @@ class PDFExport {
   }
 
   static Future<bool> export(GForm form, {int startFrom = 0}) async {
-    String? dir = await FilePicker.platform.saveFile(allowedExtensions: ['pdf'], type: FileType.custom, fileName: form.documentTitle);
+    String? dir = await FilePicker.platform.saveFile(allowedExtensions: ['pdf'], type: FileType.custom, fileName: '${form.documentTitle}.pdf');
     if (dir != null) {
       try {
         print(dir);

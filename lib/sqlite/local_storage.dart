@@ -36,7 +36,17 @@ class LocalStorage {
     return pgs.ceil();
   }
 
+  Future<void> loadDBFromCloud() async {
+    final tags = await _firestoreManager.getTags();
+    _importTags(tags);
+    await for (final questions in _firestoreManager.getQuestions()) {
+      _importQuestions(questions);
+      questionsCount += questions.length;
+    }
+  }
+
   Future<void> init() async {
+    print('Local Storage tried to init. Init status: $isInitialized');
     if (isInitialized) {
       return;
     }
@@ -47,16 +57,12 @@ class LocalStorage {
       await dbFile.delete();
     }
     _db = await _dbFactory.openDatabase(path);
-    final tags = await _firestoreManager.getTags();
-    _importTags(tags);
-    await for (final questions in _firestoreManager.getQuestions()) {
-      _importQuestions(questions);
-      questionsCount += questions.length;
-    }
+    await loadDBFromCloud();
     isInitialized = true;
   }
 
   Future<void> update() async {
+    print('Local Storage tried to update Init status: $isInitialized');
     if (!isInitialized) {
       return;
     }
@@ -69,12 +75,7 @@ class LocalStorage {
       await dbFile.delete();
     }
     _db = await _dbFactory.openDatabase(path);
-    final tags = await _firestoreManager.getTags();
-    _importTags(tags);
-    await for (final questions in _firestoreManager.getQuestions()) {
-      _importQuestions(questions);
-      questionsCount += questions.length;
-    }
+    await loadDBFromCloud();
   }
 
   Future<List<QuestionItem>> getQuestions(
@@ -94,7 +95,7 @@ class LocalStorage {
     }
     if (tag != null) {
       var regExp = RegExp(tag.id!, caseSensitive: false);
-      var tagFilter = Filter.matchesRegExp('question.tag', regExp);
+      var tagFilter = Filter.matchesRegExp('question.tag.id', regExp);
       if (filter == null) {
         filter = tagFilter;
       } else {
@@ -143,6 +144,7 @@ class LocalStorage {
     }
     final store = intMapStoreFactory.store('questions');
     _firestoreManager.saveQuestions(questions);
+    questionsCount += questions.length;
     await _db.transaction((transaction) async {
       await store.addAll(transaction, questions.map((e) => e.toMap()).toList());
     });
@@ -162,6 +164,7 @@ class LocalStorage {
     final finder = Finder(filter: filter);
     await store.delete(_db, finder: finder);
     await _firestoreManager.deleteQuestion(questionItem);
+    questionsCount--;
   }
 
   Future<bool> exists(QuestionItem questionItem) async {

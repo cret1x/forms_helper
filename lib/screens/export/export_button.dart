@@ -58,9 +58,9 @@ class _ExportButtonState extends ConsumerState<ExportButton> {
     );
   }
 
-  void saveExportDialog(BuildContext context) async {
+  void saveExportDialog(BuildContext parentContext) async {
     await showDialog(
-      context: context,
+      context: parentContext,
       builder: (context) => AlertDialog(
         actionsPadding: EdgeInsets.all(12),
         shape: const RoundedRectangleBorder(
@@ -95,14 +95,14 @@ class _ExportButtonState extends ConsumerState<ExportButton> {
           TextButton(
             onPressed: () async {
               var res = await PDFExport.export(form!, startFrom: startFrom);
-              showResultDialog(context, res);
+              showResultDialog(parentContext, res);
             },
             child: const Text(Strings.exportToPdf),
           ),
           TextButton(
             onPressed: () async {
               var res = await DocxExport.export(form!, startFrom: startFrom);
-              showResultDialog(context, res);
+              showResultDialog(parentContext, res);
             },
             child: const Text(Strings.exportToDocx),
           ),

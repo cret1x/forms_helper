@@ -23,10 +23,11 @@ class FirestoreManager {
   FirestoreManager._internal();
 
   Future<QuestionItemPage> _getPage({String? nextPageToken}) async {
+    print('getPage called!');
     final questionsCollection = Firestore.instance.collection('questions');
     final questions = <QuestionItem>[];
     Page<Document> questionDocuments;
-    if (nextPageToken == null) {
+    if (nextPageToken == null || nextPageToken.isEmpty) {
       questionDocuments = await questionsCollection.get(pageSize: pageSize);
     } else {
       questionDocuments = await questionsCollection.get(pageSize: pageSize, nextPageToken: nextPageToken);
@@ -49,9 +50,15 @@ class FirestoreManager {
   Stream<List<QuestionItem>> getQuestions() async* {
     var page = await _getPage();
     yield page.questions;
-    while(page.nextPageToken != null) {
-      page = await _getPage();
+    int requestedPagesCount = 1;
+    while(page.nextPageToken != null && page.nextPageToken!.isNotEmpty) {
+      requestedPagesCount++;
+      print('Next page token: ${page.nextPageToken}');
+      page = await _getPage(nextPageToken: page.nextPageToken);
       yield page.questions;
+      if (requestedPagesCount > 1000) {
+        return;
+      }
     }
   }
   
@@ -90,6 +97,7 @@ class FirestoreManager {
   }
 
   Future<List<Tag>> getTags() async {
+    print('getTags called!');
     final tagsCollection = Firestore.instance.collection('tags');
     final documents = await tagsCollection.get();
     List<Tag> tags = [];
@@ -100,6 +108,7 @@ class FirestoreManager {
   }
 
   Future<void> createTag(Tag tag) async {
+    print(tag.value);
     final tagsCollection = Firestore.instance.collection('tags');
     await tagsCollection.add(tag.toMap());
   }

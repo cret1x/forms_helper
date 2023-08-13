@@ -48,7 +48,7 @@ class _QuestionEditWidgetState extends ConsumerState<QuestionEditWidget> {
   String? _choiceType;
   List<_AnswerInfo> _answers = [];
   bool _shuffle = false;
-  final Uuid _uuid = Uuid();
+  final Uuid _uuid = const Uuid();
 
   @override
   void initState() {
@@ -60,6 +60,7 @@ class _QuestionEditWidgetState extends ConsumerState<QuestionEditWidget> {
         _dropdownValue = widget.question!.tag;
       }
       _required = widget.question!.required;
+      _points = widget.question!.pointValue;
       if (widget.question! is ChoiceQuestion) {
         _type = Strings.choiceQuestion;
         _shuffle = (widget.question as ChoiceQuestion).shuffle;

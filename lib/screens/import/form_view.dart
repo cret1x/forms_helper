@@ -40,7 +40,7 @@ class _FormViewState extends ConsumerState<FormView> {
   @override
   Widget build(BuildContext context) {
     _dropdownValue ??= _nullTag;
-    _qWidgets ??= widget.form.items!
+    _qWidgets = widget.form.items!
         .whereType<QuestionItem>()
         .map(
           (e) => QuestionItemWidget(

@@ -63,7 +63,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
-    local.init();
     super.initState();
   }
 
@@ -100,7 +99,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     }
                     if (snapshot.hasData) {
                       if (snapshot.data!) {
-                        Future.delayed(const Duration(seconds: 1), () {
+                        Future.delayed(const Duration(seconds: 1), () async {
+                          await local.init();
                           Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -113,6 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     }
                     return InkWell(
                       onTap: () async {
+                        await local.init();
                         await auth.getAccessToken();
                         Navigator.push(
                             context,
