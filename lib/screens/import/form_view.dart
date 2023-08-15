@@ -14,13 +14,11 @@ import '../../entities/question_item.dart';
 import '../../entities/question_tag.dart';
 
 class FormView extends ConsumerStatefulWidget {
-  final GForm form;
   final PageController pageController;
   final SideMenuController menuController;
 
   const FormView(
-      {required this.form,
-      required this.pageController,
+      {required this.pageController,
       required this.menuController,
       super.key});
 
@@ -36,11 +34,31 @@ class _FormViewState extends ConsumerState<FormView> {
   final Tag _nullTag = Tag(id: "", value: Strings.notSelected);
   List<Tag>? _disciplines;
   Tag? _dropdownValue;
+  late GForm _form;
 
   @override
+  void initState() {
+    super.initState();
+  
+    _form = ref.read(formTransferProvider)!;
+  }
+  
+  @override
   Widget build(BuildContext context) {
+    ref.listen(formTransferProvider, (prev, next) {
+      _form = ref.read(formTransferProvider)!;
+      _qWidgets = _form.items!
+          .whereType<QuestionItem>()
+          .map(
+            (e) => QuestionItemWidget(
+          question: e,
+          fromImportScreen: true,
+        ),
+      ).toList();
+      _disciplines = ref.watch(disciplinesProvider);
+    });
     _dropdownValue ??= _nullTag;
-    _qWidgets = widget.form.items!
+    _qWidgets ??= _form.items!
         .whereType<QuestionItem>()
         .map(
           (e) => QuestionItemWidget(
@@ -74,7 +92,7 @@ class _FormViewState extends ConsumerState<FormView> {
                     ),
                     Expanded(
                       child: SelectableText(
-                        widget.form.documentTitle,
+                        _form.documentTitle,
                         style: Theme.of(context).textTheme.displaySmall,
                         minLines: 1,
                         maxLines: 18,
@@ -99,7 +117,7 @@ class _FormViewState extends ConsumerState<FormView> {
                     ),
                     Expanded(
                       child: SelectableText(
-                        widget.form.title,
+                        _form.title,
                         style: Theme.of(context).textTheme.displaySmall,
                         minLines: 1,
                         maxLines: 18,
@@ -124,7 +142,7 @@ class _FormViewState extends ConsumerState<FormView> {
                     ),
                     Expanded(
                       child: SelectableText(
-                        widget.form.description,
+                        _form.description,
                         style: Theme.of(context).textTheme.displaySmall,
                         minLines: 1,
                         maxLines: 18,
@@ -149,7 +167,7 @@ class _FormViewState extends ConsumerState<FormView> {
                     ),
                     Expanded(
                       child: Text(
-                        widget.form.isQuiz ? Strings.yes : Strings.no,
+                        _form.isQuiz ? Strings.yes : Strings.no,
                         style: Theme.of(context).textTheme.displaySmall,
                         textAlign: TextAlign.end,
                       ),
@@ -213,7 +231,7 @@ class _FormViewState extends ConsumerState<FormView> {
                   children: [
                     Expanded(
                       child: ExportButton(showImportForms: false, action: () {
-                        ref.read(formExportProvider.notifier).setForm(widget.form);
+                        ref.read(formExportProvider.notifier).setForm(_form);
                       },),
                     ),
                     const SizedBox(
@@ -269,7 +287,7 @@ class _FormViewState extends ConsumerState<FormView> {
                           if (res == null) {
                             return;
                           } else if (res) {
-                            questions = widget.form.items!
+                            questions = _form.items!
                                 .whereType<QuestionItem>()
                                 .toList();
                           } else {
@@ -326,7 +344,7 @@ class _FormViewState extends ConsumerState<FormView> {
                             return;
                           }
 
-                          ref.read(formInfoProvider).import(widget.form);
+                          ref.read(formInfoProvider).import(_form);
                           ref
                               .read(constructorQuestionsProvider.notifier)
                               .setQuestions(questions);

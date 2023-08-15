@@ -44,3 +44,5 @@ final formInfoProvider = ChangeNotifierProvider<FormInfoNotifier>((ref) => FormI
 final numerationProvider = ChangeNotifierProvider<NumerationNotifier>((ref) => NumerationNotifier());
 
 final formExportProvider = StateNotifierProvider<ExportStateNotifier, GForm?>((ref) => ExportStateNotifier());
+
+final formTransferProvider = StateNotifierProvider<ExportStateNotifier, GForm?>((ref) => ExportStateNotifier());

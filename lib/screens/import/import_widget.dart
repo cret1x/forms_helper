@@ -2,14 +2,16 @@
 
 import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:forms_helper/entities/form.dart';
+import 'package:forms_helper/global_providers.dart';
 import 'package:forms_helper/google_api/auth.dart';
 import 'package:forms_helper/google_api/forms.dart';
 import 'package:forms_helper/screens/import/form_view.dart';
 import '../../common/strings.dart';
 import '../../common/themes.dart';
 
-class ImportWidget extends StatefulWidget {
+class ImportWidget extends ConsumerStatefulWidget {
   final PageController pageController;
   final SideMenuController menuController;
 
@@ -20,17 +22,16 @@ class ImportWidget extends StatefulWidget {
   });
 
   @override
-  State<StatefulWidget> createState() {
+  ConsumerState<ConsumerStatefulWidget> createState() {
     return _ImportWidgetState();
   }
 }
 
-class _ImportWidgetState extends State<ImportWidget>
+class _ImportWidgetState extends ConsumerState<ImportWidget>
     with AutomaticKeepAliveClientMixin<ImportWidget> {
   final TextEditingController _linkController = TextEditingController();
   final _formsApi = GoogleFormsApi();
   final _authApi = GoogleAuthApi();
-  GForm? _content;
   bool _importButtonPressed = false;
 
   @override
@@ -60,15 +61,19 @@ class _ImportWidgetState extends State<ImportWidget>
                       });
                       final token = await _authApi.getAccessToken();
                       final result =
-                      await _formsApi.get(_linkController.text, token);
+                          await _formsApi.get(_linkController.text, token);
                       setState(() {
                         _importButtonPressed = false;
                       });
                       switch (result.error) {
                         case FormsError.OK:
-                          setState(() {
-                            _content = result.form;
-                          });
+                          if (result.form != null) {
+                            setState(() {
+                              ref
+                                  .read(formTransferProvider.notifier)
+                                  .setForm(result.form!);
+                            });
+                          }
                           break;
                         case FormsError.AUTH_REQUIRED:
                           await showDialog(
@@ -187,9 +192,13 @@ class _ImportWidgetState extends State<ImportWidget>
                           });
                           switch (result.error) {
                             case FormsError.OK:
-                              setState(() {
-                                _content = result.form;
-                              });
+                              if (result.form != null) {
+                                setState(() {
+                                  ref
+                                      .read(formTransferProvider.notifier)
+                                      .setForm(result.form!);
+                                });
+                              }
                               break;
                             case FormsError.AUTH_REQUIRED:
                               await showDialog(
@@ -273,9 +282,8 @@ class _ImportWidgetState extends State<ImportWidget>
             const SizedBox(
               height: 24,
             ),
-            _content != null
+            ref.read(formTransferProvider) != null
                 ? FormView(
-                    form: _content!,
                     pageController: widget.pageController,
                     menuController: widget.menuController,
                   )
