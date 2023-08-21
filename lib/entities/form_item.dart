@@ -25,8 +25,9 @@ class FormItem {
   }
 
   Map<String, dynamic> toGoogleFormJson({String index = ''}) {
+    final cleanedTitle = title.replaceAll('\n', ' ');
     return {
-      'title': '$index$title',
+      'title': '$index$cleanedTitle',
       'description': description,
     };
   }

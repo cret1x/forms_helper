@@ -78,6 +78,7 @@ class GoogleFormsApi {
       'requests': [updateInfoJson, updateSettingJson, ...items],
     };
     final res = await _post(formUrl, batchJson, token);
+    print(res.body);
     return formId;
   }
 
