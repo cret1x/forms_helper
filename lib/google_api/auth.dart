@@ -12,8 +12,7 @@ class GoogleAuthApi {
   static const refreshTokenPath = 'FormsHelper/token.txt';
   static final GoogleAuthApi _googleAuthApi = GoogleAuthApi._internal();
   static final id = ClientId(
-    "120174249921-0r8bghb3a89v2j3g729ka7mq1h6bgccm.apps.googleusercontent.com",
-    "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",
+   //TODO: get keys back
   );
   static final scopes = [
     'https://www.googleapis.com/auth/forms.body',
